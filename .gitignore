@@ -1,0 +1,7 @@
+!*.c
+!*.h
+!Makefile
+
+*.dSYM/
+*.dat
+*.o
