@@ -1,4 +1,4 @@
-/* unix_copy.c
+/* win_copy.c
  * Enrique Gavidia
  * CSC 415, Spring 2012
  * Homework 1: File Copy
@@ -6,8 +6,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
+//#include <unistd.h>
+//#include <fcntl.h>
+#include <windows.h>
+#include <winerror.h>
 #include <string.h>
 
 #define buffer_size  11
@@ -17,12 +19,12 @@
 #define debug_output 0
 
 // check if an expression is true, otherwise close the opened files and kill the program
-void check(int expression, char *message, int in_fd, int out_fd) {
+void check(int expression, char *message, HANDLE in_handle, HANDLE out_handle, int return_code) {
     if (!expression) {
-        perror(message);
-        close(in_fd);
-        close(out_fd);
-        exit(-1);
+        printf("%s: %x\n", message, GetLastError());
+        CloseHandle(in_handle);
+        CloseHandle(out_handle);
+        return return_code;
     }
 }
 
@@ -31,19 +33,19 @@ void get_input(char *buffer) {
     // and catch the return value of the scanf call in case it fails
     int input = scanf("%s", buffer);
     // check to make sure that 'fgets' didn't throw an error, otherwise exit the program
-    check(input != EOF, "[ERROR] Input read failed", -1, -1);
+    check(input != EOF, "[ERROR] Input read failed", NULL, NULL, ERROR_READ_FAULT);
 }
 
 
 void copy_file(char *input_file, char *output_file) {
     // Open the input file with read permissions
-    int in_fd = open(input_file, O_RDONLY);
-    check(in_fd != -1, "[ERROR] Failed to open input file", in_fd, -1);
+    HANDLE in_handle = CreateFile(input_file, GENERIC_READ, 0, NULL, OPEN_ALWAYS, 0, NULL);
+    check(in_handle != INVALID_HANDLE_VALUE, "[ERROR] Failed to open input file", in_handle, NULL, ERROR_FILE_NOT_FOUND);
 
     // Open the output file with write permissions (create it if it doesn't already exist),
     // and give the user read/write permissions as well
-    int out_fd = open(output_file, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
-    check(out_fd != -1, "[ERROR] Failed to open output file", in_fd, out_fd);
+    HANDLE out_handle = CreateFile(input_file, GENERIC_WRITE, 0, NULL, CREATE_NEW, 0, NULL);
+    check(out_handle != INVALID_HANDLE_VALUE, "[ERROR] Failed to open output file", in_handle, out_handle, ERROR_CANNOT_MAKE);
 
     // ensure the buffer is always null-terminated
     char buffer[buffer_size+1];
@@ -56,13 +58,13 @@ void copy_file(char *input_file, char *output_file) {
         memset(buffer, '\0', buffer_size);
 
         // read in 'buffer_size' bytes of data from the input file and store it in the buffer
-        bytes_read = read(in_fd, buffer, buffer_size);
-        check(bytes_read != -1, "[ERROR] Failed to read input file", in_fd, out_fd);
+        ReadFile(in_handle, buffer, buffer_size, bytes_read, NULL);
+        check(bytes_read != -1, "[ERROR] Failed to read input file", in_fd, out_fd, ERROR_READ_FAULT);
 
         // write the contents of the buffer to the output file, but limit it to the amount of
         // bytes actually read during the read system call
-        bytes_written = write(out_fd, buffer, bytes_read);
-        check(bytes_written != -1, "[ERROR] Failed to write output file", in_fd, out_fd);
+        WriteFile(out_handle, buffer, bytes_read, bytes_written, NULL);
+        check(bytes_written != -1, "[ERROR] Failed to write output file", in_fd, out_fd, ERROR_WRITE_FAULT);
 
         bytes_copied += bytes_written;
 
@@ -75,8 +77,8 @@ void copy_file(char *input_file, char *output_file) {
 
     } while (bytes_read > 0);
 
-    close(in_fd);
-    close(out_fd);
+    CloseHandle(in_handle);
+    CloseHandle(out_handle);
     printf("File copy successful, %d bytes copied\n", bytes_copied);
 }
 

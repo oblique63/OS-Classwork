@@ -3,6 +3,7 @@
 \usepackage{setspace}
 \usepackage{minted}
 \usepackage{fancyvrb}
+\usepackage{listings}
 
 \usepackage[margin=0.75in]{geometry}
 \pagestyle{empty}
@@ -212,9 +213,72 @@ Files unix_copy.c and unix_copy2.c are identical
 \end{shelloutput}
 
 \subsection*{Strace}
+%\begin{shelloutput}
+\lstset{ literate={~} {$\sim$}{1} }
+\begin{lstlisting}[numbers=left, breaklines=true, basicstyle=\scriptsize]
+oblique@netlab4 ~/hw1 $ strace -e trace=open,read,write  ./unix_copy
+open("/etc/ld.so.cache", O_RDONLY)      = 3
+open("/lib/libc.so.6", O_RDONLY)        = 3
+read(3, "\\177ELF\\1\\1\\1\\0\\\0\\\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\200\242\1\0004\0\0\0"..., 512
+) = 512
+write(1, "Welcome to the TEE Copy Program "..., 52Welcome to the TEE Copy Program by Enrique
+ Gavidia!
+) = 52
+write(1, "Enter the name of the file to co"..., 41Enter the name of the file to copy from:
+) = 41
+read(0, Makefile
+"Makefile\n", 1024)             = 9
+write(1, "Enter the name of the file to co"..., 39Enter the name of the file to copy to:
+) = 39
+read(0, Makefile_copy
+"Makefile_copy\n", 1024)        = 14
+open("Makefile", O_RDONLY)              = 3
+open("Makefile_copy", O_WRONLY|O_CREAT, 0600) = 4
+read(3, "CFLAGS=-Wal", 11)              = 11
+write(4, "CFLAGS=-Wal", 11)             = 11
+read(3, "l -Wextra -", 11)              = 11
+write(4, "l -Wextra -", 11)             = 11
+read(3, "g\n\nFILES = ", 11)            = 11
+write(4, "g\n\nFILES = ", 11)           = 11
+write(1, "CFLAGS=-Wall -Wextra -g\n\n", 25CFLAGS=-Wall -Wextra -g
+
+) = 25
+read(3, "unix_copy\n\n", 11)            = 11
+write(4, "unix_copy\n\n", 11)           = 11
+write(1, "FILES = unix_copy\n\n", 19FILES = unix_copy
+
+)   = 19
+read(3, "all: $(FILE", 11)              = 11
+write(4, "all: $(FILE", 11)             = 11
+read(3, "S)\n\nclean:\n", 11)           = 11
+write(4, "S)\n\nclean:\n", 11)          = 11
+write(1, "all: $(FILES)\n\nclean:\n", 22all: $(FILES)
+
+clean:
+) = 22
+read(3, "\trm -f $(FI", 11)             = 11
+write(4, "\trm -f $(FI", 11)            = 11
+read(3, "LES)\n\nwith-", 11)            = 11
+write(4, "LES)\n\nwith-", 11)           = 11
+write(1, "\trm -f $(FILES)\n\n", 17	rm -f $(FILES)
+
+)    = 17
+read(3, "clean: clea", 11)              = 11
+write(4, "clean: clea", 11)             = 11
+read(3, "n\n\tmake\n", 11)              = 8
+write(4, "n\n\tmake\n", 8)              = 8
+write(1, "with-clean: clean\n\tmake\n", 24with-clean: clean
+	make
+) = 24
+read(3, "", 11)                         = 0
+write(4, "", 0)                         = 0
+write(1, "File copy successful, 107 bytes "..., 39File copy successful, 107 bytes copied
+) = 39
+\end{lstlisting}
+
 
 \append{III} {Windows Source Code}
-%\includesource{c}{win_copy.c}
+\includesource{c}{win_copy.c}
 
 
 \append{IV} {Windows Output}
