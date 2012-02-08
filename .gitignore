@@ -1,7 +1,9 @@
-!*.c
-!*.h
-!Makefile
-
 *.dSYM/
 *.dat
 *.o
+
+# LaTeX output
+*.pdf
+*.aux
+*.log
+*.pyg

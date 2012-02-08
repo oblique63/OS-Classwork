@@ -1,0 +1,225 @@
+\documentclass[12pt]{article}
+
+\usepackage{setspace}
+\usepackage{minted}
+\usepackage{fancyvrb}
+
+\usepackage[margin=0.75in]{geometry}
+\pagestyle{empty}
+
+\def \name       {Enrique Gavidia}
+\def \coursenum  {CSC 415}
+\def \coursename {Operating Systems Principles}
+\def \instructor {Prof. Murphy}
+\def \semester   {Spring 2012}
+\def \assignment {Homework \# 1}
+\def \duedate    {February 8, 2012}
+
+\newcommand {\includesource}[2] {\inputminted[linenos, fontsize=\scriptsize, frame=lines]{#1}{#2}}
+\newcommand {\append}[2] {\section*{Appendix #1} \textsl{\large #2}}
+\newcommand {\filename}[1] {\flushleft \textbf{#1}}
+\newcommand {\comment}[1] {\textcolor{red}{#1}}
+\newcommand {\mytilde} {$\sim$}
+
+\DefineVerbatimEnvironment {shelloutput} {Verbatim} {fontsize=\scriptsize, numbers=left, commandchars=\\\{\}}
+
+
+\begin{document}
+
+%---{ Cover Page }------------------------------------------
+\begin{titlepage}
+  \begin{center}
+
+    {\LARGE \coursenum, \semester \\ \coursename}\\
+    {\Large \instructor}\\
+
+    \vfill
+    \textbf{\Huge \assignment}\\
+    \vfill
+    
+    {\Large \name}\\ 
+    {\large \duedate}
+    
+  \end{center}
+\end{titlepage}
+
+
+%---{ Main Content }----------------------------------------
+
+
+
+%---{ Appendices }------------------------------------------
+\append{I} {Unix Source Code}
+\includesource{c}{unix_copy.c}
+
+
+\append{II} {Unix Output}
+\subsection*{Small Files}
+
+\filename{smallfile1}
+\begin{shelloutput}
+oblique@netlab4 \mytilde/hw1 $ ./unix_copy
+Welcome to the TEE Copy Program by Enrique Gavidia!
+Enter the name of the file to copy from:
+smallfile1
+Enter the name of the file to copy to:
+smallcopy1
+
+\comment{The buffer dumps in the debug output contain a maximum of 11 characters, as was designated in `buffer\_size' }
+--------
+BUFFER: abcdefghijk
+--------
+abcdefghijk
+--------
+BUFFER: lmnopqrstuv
+--------
+\comment{The normal printout of the buffer has no additional formatting, so as to act as a continuous stream to `stdout'} 
+\comment{and replicate the contents of the file exactly on the user's screen. Here however, it is being interrupted by }
+\comment{the debug output.}
+lmnopqrstuv
+--------
+BUFFER: wxyz
+123456
+--------
+wxyz
+123456
+--------
+BUFFER: 7890
+
+--------
+7890
+File copy successful, 38 bytes copied
+
+\textcolor{red}{The `-s' flag makes diff report when files are the same}
+oblique@netlab4 \mytilde/hw1 $ diff -s smallfile1 smallcopy1
+Files smallfile1 and smallcopy1 are identical
+\end{shelloutput}
+
+
+\filename{smallfile2}
+\begin{shelloutput}
+oblique@netlab4 \mytilde/hw1 $ ./unix_copy
+Welcome to the TEE Copy Program by Enrique Gavidia!
+Enter the name of the file to copy from:
+smallfile2
+Enter the name of the file to copy to:
+smallcopy2
+
+--------
+BUFFER: This is a t
+--------
+This is a t
+--------
+BUFFER: est for the
+--------
+est for the
+--------
+BUFFER:  csc 415 fi
+--------
+ csc 415 fi
+--------
+BUFFER: le-copy ass
+--------
+le-copy ass
+--------
+BUFFER: ignment.
+
+--------
+ignment.
+File copy successful, 53 bytes copied
+
+oblique@netlab4 \mytilde/hw1 $ diff -s smallfile2 smallcopy2
+Files smallfile2 and smallcopy2 are identical
+\end{shelloutput}
+
+
+\filename{smallfile3}
+\begin{shelloutput}
+oblique@netlab4 \mytilde/hw1 $ ./unix_copy
+Welcome to the TEE Copy Program by Enrique Gavidia!
+Enter the name of the file to copy from:
+smallfile3
+Enter the name of the file to copy to:
+smallcopy3
+
+--------
+BUFFER: meow meow m
+--------
+meow meow m
+--------
+BUFFER: eow meow me
+--------
+eow meow me
+--------
+BUFFER: ow meow meo
+--------
+ow meow meo
+--------
+BUFFER: w meow
+
+--------
+w meow
+File copy successful, 40 bytes copied
+
+oblique@netlab4 \mytilde/hw1 $ diff -s smallfile3 smallcopy3
+Files smallfile3 and smallcopy3 are identical
+\end{shelloutput}
+
+
+
+\subsection*{Large Files}
+
+\filename{Makefile}
+\begin{shelloutput}
+oblique@netlab4 \mytilde/hw1 $ ./unix_copy
+Welcome to the TEE Copy Program by Enrique Gavidia!
+Enter the name of the file to copy from:
+Makefile
+Enter the name of the file to copy to:
+Makefile_copy
+\comment{The debug output is off for the larger files, so the buffer is dumped without any additional formatting,}
+\comment{preserving the file's original formatting, and replicating it's contents exactly on the screen.}
+CFLAGS=-Wall -Wextra -g
+
+FILES = unix_copy
+
+all: $(FILES)
+
+clean:
+	rm -f $(FILES)
+
+with-clean: clean
+	make
+File copy successful, 107 bytes copied
+
+oblique@netlab4 \mytilde/hw1 $ diff -s Makefile Makefile_copy
+Files Makefile and Makefile_copy are identical
+\end{shelloutput}
+
+
+\filename{unix\_copy.c}
+\begin{shelloutput}
+oblique@netlab4 \mytilde/hw1 $ ./unix_copy
+Welcome to the TEE Copy Program by Enrique Gavidia!
+Enter the name of the file to copy from:
+unix_copy.c
+Enter the name of the file to copy to:
+unix_copy2.c
+
+
+oblique@netlab4 \mytilde/hw1 $ diff -s unix_copy.c unix_copy2.c
+Files unix_copy.c and unix_copy2.c are identical
+\end{shelloutput}
+
+\subsection*{Strace}
+
+\append{III} {Windows Source Code}
+%\includesource{c}{win_copy.c}
+
+
+\append{IV} {Windows Output}
+\subsection*{Small Files}
+\subsection*{Large Files}
+\subsection*{StraceNT}
+
+\end{document}
