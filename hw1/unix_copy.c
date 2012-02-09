@@ -45,7 +45,7 @@ void copy_file(char *input_file, char *output_file) {
     int out_fd = open(output_file, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
     check(out_fd != -1, "[ERROR] Failed to open output file", in_fd, out_fd);
 
-    // ensure the buffer is always null-terminated
+    // ensure the buffer is always null-terminated by setting the last byte permanently to a null-character
     char buffer[buffer_size+1];
     buffer[buffer_size] = '\0';
 
