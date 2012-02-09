@@ -9,21 +9,20 @@
 \pagestyle{empty}
 
 \def \name       {Enrique Gavidia}
-\def \coursenum  {CSC 415}
+\def \coursenum  {CSC 415.01}
 \def \coursename {Operating Systems Principles}
 \def \instructor {Prof. Murphy}
 \def \semester   {Spring 2012}
 \def \assignment {Homework \# 1}
 \def \duedate    {February 8, 2012}
 
-\newcommand {\includesource}[2] {\inputminted[linenos, fontsize=\scriptsize, frame=lines]{#1}{#2}}
-\newcommand {\append}[2] {\section*{Appendix #1} \textsl{\large #2}}
-\newcommand {\filename}[1] {\flushleft \textbf{#1}}
-\newcommand {\comment}[1] {\textcolor{red}{#1}}
 \newcommand {\mytilde} {$\sim$}
+\newcommand {\comment}[1] {\textcolor{red}{#1}}
+\newcommand {\filename}[1] {\flushleft \textbf{#1}}
+\newcommand {\append}[2] {\section*{Appendix #1} \textsl{\large #2}}
+\newcommand {\includesource}[2] {\inputminted[linenos, fontsize=\scriptsize, frame=lines]{#1}{#2}}
 
-\DefineVerbatimEnvironment {shelloutput} {Verbatim} {fontsize=\scriptsize, numbers=left, commandchars=\\\{\}}
-
+\DefineVerbatimEnvironment {shelloutput} {Verbatim} {fontsize=\scriptsize, numbers=left, commandchars=\#\{\}}
 
 \begin{document}
 
@@ -46,10 +45,44 @@
 
 
 %---{ Main Content }----------------------------------------
+\section*{Assignment Description}
+This assignment was an introductory exercise in programming in C with low-level system calls in two contrasting operating 
+system environments; a Unix derived system, and the Windows environment. The goal of the program was to make copies of files 
+using the native operating system APIs, while providing a command line interface for users using C's formatted I/O library of
+functions.  The interaction between the program and the user consists of a simple prompt asking the user which file is to be copied,
+and what file the copy should be output to, followed by a printout of the file contents and the amount of bytes successfully copied.
+The option to display debugging information is also provided, to demonstrate how the program is performing its read/write operations
+via incremental buffer reads.  Similarly, the code is also reassured with extensive error handling features which display useful feedback
+in the event that something goes wrong, and return the appropriate error codes to the operating system.
 
+This code has been tested to work under \textsl{Windows}, \textsl{Gentoo Linux}, and \textsl{Mac OSX}. 
+The source for the Unix implementation is listed in \textbf{Appendix I}, and \textbf{Appendix III} for the Windows version.
+
+
+\section*{Design \& Implementation}
+I wrote the entirety of this program with my own original code and decided to go with a rather modular approach in its design, delegating the key 
+parts of the program to external methods outside the `main' function.  Although not entirely necessary given the simple nature of the requirements, 
+it made it easier to experiment with certain approaches in isolation; i.e. once I established the user interface code, the organization made it easier 
+to switch focus completely to the I/O portion of the assignment without worrying about `the whole'.  On a similar note, I also avoid using too many 
+compound operations (such as performing an I/O call in the invariant of a loop) for the sake of readability.  When it comes to platform-specific 
+eccentricities, such as the Win32 datatypes or Linux's strict `printf' implementation that requires a null-terminator, I made sure to document the code 
+as clearly as possible to convey what is happening; either through comments, or descriptive variable names. 
+
+Due to this emphasis on clear coding practice, debugging and testing were not too big of an issue, however for when they were necessary, I implemented
+a debug flag option to be passed to the executable at runtime to easily switch between debugging and non-debugging modes. With the flag set, I would
+monitor any variables and values that interested me via print statements, like the buffer dump debug option required by the assignment. 
+
+
+\section*{Improvements}
+To improve the program, I would essentially just make it more robust by double-checking to make sure that the file copied correctly instead of
+having to rely of an external diff tool; by giving more detailed error messages; and by giving users the option to view and overwrite any existing 
+copies of the output file, as opposed to just aborting the operation if the file exists.  Implementation-wise, I might also remove some of the extra 
+code-bloat that came as a result of keeping the implementation overly modular and `DRY' (i.e. `get\_input' function that consists of only 2-lines). 
 
 
 %---{ Appendices }------------------------------------------
+\newpage
+
 \append{I} {Unix Source Code}
 \includesource{c}{unix_copy.c}
 
@@ -59,15 +92,15 @@
 
 \filename{smallfile1}
 \begin{shelloutput}
-\comment{The debug flag `-d' is enabled for the small files, to print out the debug statements}
-oblique@netlab4 \mytilde/hw1 $ ./unix_copy -d
+=comment{The debug flag `-d' is enabled for the small files, to print out the debug statements}
+oblique@netlab4 #mytilde/hw1 $ ./unix_copy -d
 Welcome to the TEE Copy Program by Enrique Gavidia!
 Enter the name of the file to copy from:
 smallfile1
 Enter the name of the file to copy to:
 smallcopy1
 
-\comment{The buffer dumps in the debug output contain a maximum of 11 characters, as was designated in `buffer\_size' }
+#comment{The buffer dumps in the debug output contain a maximum of 11 characters, as was designated in `buffer\_size' }
 --------
 BUFFER: abcdefghijk
 --------
@@ -75,9 +108,9 @@ abcdefghijk
 --------
 BUFFER: lmnopqrstuv
 --------
-\comment{The normal printout of the buffer has no additional formatting, so as to act as a continuous stream to `stdout'} 
-\comment{and replicate the contents of the file exactly on the user's screen. Here however, it is being interrupted by }
-\comment{the debug output.}
+#comment{The normal printout of the buffer has no additional formatting, so as to act as a continuous stream to `stdout'} 
+#comment{and replicate the contents of the file exactly on the user's screen. Here however, it is being interrupted by }
+#comment{the debug output.}
 lmnopqrstuv
 --------
 BUFFER: wxyz
@@ -92,15 +125,15 @@ BUFFER: 7890
 7890
 File copy successful, 38 bytes copied
 
-\comment{The `-s' flag makes diff report when files are the same}
-oblique@netlab4 \mytilde/hw1 $ diff -s smallfile1 smallcopy1
+#comment{The `-s' flag makes diff report when files are the same}
+oblique@netlab4 @-mytilde/hw1 $ diff -s smallfile1 smallcopy1
 Files smallfile1 and smallcopy1 are identical
 \end{shelloutput}
 
 
 \filename{smallfile2}
 \begin{shelloutput}
-oblique@netlab4 \mytilde/hw1 $ ./unix_copy -d
+oblique@netlab4 #mytilde/hw1 $ ./unix_copy -d
 Welcome to the TEE Copy Program by Enrique Gavidia!
 Enter the name of the file to copy from:
 smallfile2
@@ -130,14 +163,14 @@ BUFFER: ignment.
 ignment.
 File copy successful, 53 bytes copied
 
-oblique@netlab4 \mytilde/hw1 $ diff -s smallfile2 smallcopy2
+oblique@netlab4 #mytilde/hw1 $ diff -s smallfile2 smallcopy2
 Files smallfile2 and smallcopy2 are identical
 \end{shelloutput}
 
 
 \filename{smallfile3}
 \begin{shelloutput}
-oblique@netlab4 \mytilde/hw1 $ ./unix_copy -d
+oblique@netlab4 #mytilde/hw1 $ ./unix_copy -d
 Welcome to the TEE Copy Program by Enrique Gavidia!
 Enter the name of the file to copy from:
 smallfile3
@@ -163,7 +196,7 @@ BUFFER: w meow
 w meow
 File copy successful, 40 bytes copied
 
-oblique@netlab4 \mytilde/hw1 $ diff -s smallfile3 smallcopy3
+oblique@netlab4 #mytilde/hw1 $ diff -s smallfile3 smallcopy3
 Files smallfile3 and smallcopy3 are identical
 \end{shelloutput}
 
@@ -173,13 +206,13 @@ Files smallfile3 and smallcopy3 are identical
 
 \filename{largefile1}
 \begin{shelloutput}
-oblique@netlab4 \mytilde/hw1 $ ./unix_copy
+oblique@netlab4 #mytilde/hw1 $ ./unix_copy
 Welcome to the TEE Copy Program by Enrique Gavidia!
 Enter the name of the file to copy from:
 largefile1
 Enter the name of the file to copy to:
 largecopy1
-\comment{larger files were executed without the debug flag, thus maintaining their original formatting when printed to stdout}
+#comment{larger files were executed without the debug flag, thus maintaining their original formatting when printed to stdout}
 Delicious Black Bean Burritos
 =============================
 
@@ -208,14 +241,14 @@ stirring occasionally. Pour beans into skillet, cook 3 minutes stirring.
 
 4) Spoon mixture evenly down center of warmed tortilla and roll tortillas up. Serve immediately.
 File copy successful, 946 bytes copied
-oblique@netlab4 ~/hw1 $ diff -s largefile1 largecopy1
+oblique@netlab4 #mytilde/hw1 $ diff -s largefile1 largecopy1
 Files largefile1 and largecopy1 are identical
 \end{shelloutput}
 
 
 \filename{largefile2}
 \begin{shelloutput}
-oblique@netlab4 \mytilde/hw1 $ ./unix_copy
+oblique@netlab4 #mytilde/hw1 $ ./unix_copy
 Welcome to the TEE Copy Program by Enrique Gavidia!
 Enter the name of the file to copy from:
 largefile2
@@ -237,7 +270,7 @@ Metallica - Master Of Puppets
 |-0-1---0-1---0-1---0-1---0-1-----0-1---0-1---0-1---0-1---0-1--------|
 
 File copy successful, 884 bytes copied
-oblique@netlab4 ~/hw1 $ diff -s largefile2 largecopy2
+oblique@netlab4 #mytilde/hw1 $ diff -s largefile2 largecopy2
 Files largefile2 and largecopy2 are identical
 
 \end{shelloutput}
@@ -245,7 +278,7 @@ Files largefile2 and largecopy2 are identical
 
 \filename{largefile3}
 \begin{shelloutput}
-oblique@netlab4 ~/hw1 $ ./unix_copy
+oblique@netlab4 #mytilde/hw1 $ ./unix_copy
 Welcome to the TEE Copy Program by Enrique Gavidia!
 Enter the name of the file to copy from:
 largefile3
@@ -286,36 +319,41 @@ largecopy3
 !!!!!!!!!!!!!!!!!!!!!:...                      .::!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 File copy successful, 2550 bytes copied
-oblique@netlab4 ~/hw1 $ diff -s largefile3 largecopy3
+oblique@netlab4 #mytilde/hw1 $ diff -s largefile3 largecopy3
 Files largefile3 and largecopy3 are identical
 \end{shelloutput}
 
 
 
 \subsection*{Strace}
-%\begin{shelloutput}
-\lstset{ literate={~} {$\sim$}{1} }
-\begin{lstlisting}[numbers=left, breaklines=true, basicstyle=\scriptsize, escapechar={#\}]
-#\comment{The `-e' flag enables the ability to tell which system calls strace should watch}
-oblique@netlab4 ~/hw1 $ strace -e trace=open,read,write  ./unix_copy
+\begin{shelloutput}
+#comment{The `-e' flag enables the ability to tell which system calls strace should watch}
+oblique@netlab4 #mytilde/hw1 $ strace -e trace=open,read,write  ./unix_copy
 open("/etc/ld.so.cache", O_RDONLY)      = 3
 open("/lib/libc.so.6", O_RDONLY)        = 3
 read(3, "\\177ELF\\1\\1\\1\\0\\\0\\\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\200\242\1\0004\0\0\0"..., 512
 ) = 512
-#\comment{This is the first system call in the file; a write to stdout via `puts'}
+#comment{This is the first system call in the file; a write to stdout via `puts'}
 write(1, "Welcome to the TEE Copy Program "..., 52Welcome to the TEE Copy Program by Enrique
  Gavidia!
 ) = 52
 write(1, "Enter the name of the file to co"..., 41Enter the name of the file to copy from:
 ) = 41
+
+#comment{Here is the read call to stdin performed by `sprintf'}
 read(0, Makefile
 "Makefile\n", 1024)             = 9
 write(1, "Enter the name of the file to co"..., 39Enter the name of the file to copy to:
 ) = 39
 read(0, Makefile_copy
 "Makefile_copy\n", 1024)        = 14
+
+#comment{These are the open system calls that were performed directly by the code once the file names were obtained}
 open("Makefile", O_RDONLY)              = 3
 open("Makefile_copy", O_WRONLY|O_CREAT, 0600) = 4
+
+#comment{Here is where the read+write loop starts, and as the strace output demonstrates, the calls were each reading}
+#comment{and writing 11 bytes, the size designated by the `buffer_size' constant}
 read(3, "CFLAGS=-Wal", 11)              = 11
 write(4, "CFLAGS=-Wal", 11)             = 11
 read(3, "l -Wextra -", 11)              = 11
@@ -353,10 +391,12 @@ write(1, "with-clean: clean\n\tmake\n", 24with-clean: clean
 	make
 ) = 24
 read(3, "", 11)                         = 0
+#comment{The loop then terminates upon reading/writing 0 bytes, and the code proceeds to print out the total number of}
+#comment{bytes read via `printf'}
 write(4, "", 0)                         = 0
 write(1, "File copy successful, 107 bytes "..., 39File copy successful, 107 bytes copied
 ) = 39
-\end{lstlisting}
+\end{shelloutput}
 
 
 \append{III} {Windows Source Code}
@@ -394,6 +434,9 @@ BUFFER:
 
 File copy successful, 37 bytes copied
 
+#comment{The windows output is the same as the Unix output, as it should be, however to verify that}
+#comment{the files are in fact identical, the windows equivalent of the `diff' command is used: `comp'.}
+#comment{And similarly to `diff', it doesn't output very much when the files are indeed identical.}
 C:\Users\Enrique\School\OS-Classwork\hw1>comp smallfile1 smallcopy1
 Comparing smallfile1 and smallcopy1...
 Files compare OK

@@ -2,6 +2,7 @@
 *.dat
 *.o
 *.obj
+*.out
 *.exe
 
 # LaTeX output
