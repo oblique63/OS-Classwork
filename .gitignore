@@ -1,6 +1,8 @@
 *.dSYM/
 *.dat
 *.o
+*.obj
+*.exe
 
 # LaTeX output
 *.pdf
