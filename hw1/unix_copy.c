@@ -13,8 +13,8 @@
 #define buffer_size  11
 #define max_filename 80
 
-// for the small input files
-#define debug_output 0
+// option to print debug statements for smaller input files
+int debug_output = 0;
 
 // check if an expression is true, otherwise close the opened files and kill the program
 void check(int expression, char *message, int in_fd, int out_fd) {
@@ -33,7 +33,6 @@ void get_input(char *buffer) {
     // check to make sure that 'fgets' didn't throw an error, otherwise exit the program
     check(input != EOF, "[ERROR] Input read failed", -1, -1);
 }
-
 
 void copy_file(char *input_file, char *output_file) {
     // Open the input file with read permissions
@@ -68,8 +67,9 @@ void copy_file(char *input_file, char *output_file) {
 
         // print the contents of the buffer
         if (debug_output) {
+            puts("\n--------");
+            printf("BUFFER: %s\n", buffer);
             puts("--------");
-            printf("\nBUFFER: %s\n", buffer);
         }
         printf("%s", buffer);
 
@@ -80,11 +80,14 @@ void copy_file(char *input_file, char *output_file) {
     printf("File copy successful, %d bytes copied\n", bytes_copied);
 }
 
-
-int main() {
+int main(int argc, char *argv[]) {
     char input_file[max_filename];
     char output_file[max_filename];
 
+    // Allow a debug flag for displaying debug output
+    if (argc > 1 && strcmp(argv[1], "-d") == 0)
+        debug_output = 1;
+    
     puts("Welcome to the TEE Copy Program by Enrique Gavidia!");
     puts("Enter the name of the file to copy from:");
     get_input(input_file);

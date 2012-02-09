@@ -59,7 +59,8 @@
 
 \filename{smallfile1}
 \begin{shelloutput}
-oblique@netlab4 \mytilde/hw1 $ ./unix_copy
+\comment{The debug flag `-d' is enabled for the small files, to print out the debug statements}
+oblique@netlab4 \mytilde/hw1 $ ./unix_copy -d
 Welcome to the TEE Copy Program by Enrique Gavidia!
 Enter the name of the file to copy from:
 smallfile1
@@ -99,7 +100,7 @@ Files smallfile1 and smallcopy1 are identical
 
 \filename{smallfile2}
 \begin{shelloutput}
-oblique@netlab4 \mytilde/hw1 $ ./unix_copy
+oblique@netlab4 \mytilde/hw1 $ ./unix_copy -d
 Welcome to the TEE Copy Program by Enrique Gavidia!
 Enter the name of the file to copy from:
 smallfile2
@@ -136,7 +137,7 @@ Files smallfile2 and smallcopy2 are identical
 
 \filename{smallfile3}
 \begin{shelloutput}
-oblique@netlab4 \mytilde/hw1 $ ./unix_copy
+oblique@netlab4 \mytilde/hw1 $ ./unix_copy -d
 Welcome to the TEE Copy Program by Enrique Gavidia!
 Enter the name of the file to copy from:
 smallfile3
@@ -170,57 +171,138 @@ Files smallfile3 and smallcopy3 are identical
 
 \subsection*{Large Files}
 
-\filename{Makefile}
+\filename{largefile1}
 \begin{shelloutput}
 oblique@netlab4 \mytilde/hw1 $ ./unix_copy
 Welcome to the TEE Copy Program by Enrique Gavidia!
 Enter the name of the file to copy from:
-Makefile
+largefile1
 Enter the name of the file to copy to:
-Makefile_copy
-\comment{The debug output is off for the larger files, so the buffer is dumped without any additional formatting,}
-\comment{preserving the file's original formatting, and replicating it's contents exactly on the screen.}
-CFLAGS=-Wall -Wextra -g
+largecopy1
+\comment{larger files were executed without the debug flag, thus maintaining their original formatting when printed to stdout}
+Delicious Black Bean Burritos
+=============================
 
-FILES = unix_copy
+Ingredients
 
-all: $(FILES)
+2 (10 inch) flour tortillas
+2 tablespoons vegetable oil
+1 small onion, chopped
+1/2 red bell pepper, chopped
+1 teaspoon minced garlic
+1 (15 ounce) can black beans, rinsed and drained
+1 teaspoon minced jalapeno peppers
+3 ounces cream cheese
+1/2 teaspoon salt
+2 tablespoons chopped fresh cilantro
 
-clean:
-	rm -f $(FILES)
 
-with-clean: clean
-	make
-File copy successful, 107 bytes copied
+Directions
 
-oblique@netlab4 \mytilde/hw1 $ diff -s Makefile Makefile_copy
-Files Makefile and Makefile_copy are identical
+1) Wrap tortillas in foil and place in oven heated to 350 degrees F (175 degrees C). Bake for 15 minutes or until heated through.
+
+2) Heat oil in a 10-inch skillet over medium heat. Place onion, bell pepper, garlic and jalapenos in skillet, cook for 2 minutes
+stirring occasionally. Pour beans into skillet, cook 3 minutes stirring.
+
+3) Cut cream cheese into cubes and add to skillet with salt. Cook for 2 minutes stirring occasionally. Stir cilantro into mixture.
+
+4) Spoon mixture evenly down center of warmed tortilla and roll tortillas up. Serve immediately.
+File copy successful, 946 bytes copied
+oblique@netlab4 ~/hw1 $ diff -s largefile1 largecopy1
+Files largefile1 and largecopy1 are identical
 \end{shelloutput}
 
 
-\filename{unix\_copy.c}
+\filename{largefile2}
 \begin{shelloutput}
 oblique@netlab4 \mytilde/hw1 $ ./unix_copy
 Welcome to the TEE Copy Program by Enrique Gavidia!
 Enter the name of the file to copy from:
-unix_copy.c
+largefile2
 Enter the name of the file to copy to:
-unix_copy2.c
+largecopy2
+Metallica - Master Of Puppets
+|--------------------------------------------------------------------|
+|--------------------------------------------------------------------|
+|--------------------------------------------------------------------|
+|--------------------------------------------------------------------|
+|-----2-----3-----4-----3-----2-2-----2-----3------5\4---5\4---5\4---|
+|-0-1---0-1---0-1---0-1---0-1-----0-1---0-1---0-0--3\2-0-3\2-0-3\2---|
 
+|--------------------------------------------------------------------|
+|--------------------------------------------------------------------|
+|-------------------------------------------------------------4------|
+|-------------------------------------------------------------4------|
+|-----2-----3-----4-----3-----2-2-----2-----3-----4-----3-----2------|
+|-0-1---0-1---0-1---0-1---0-1-----0-1---0-1---0-1---0-1---0-1--------|
 
-oblique@netlab4 \mytilde/hw1 $ diff -s unix_copy.c unix_copy2.c
-Files unix_copy.c and unix_copy2.c are identical
+File copy successful, 884 bytes copied
+oblique@netlab4 ~/hw1 $ diff -s largefile2 largecopy2
+Files largefile2 and largecopy2 are identical
+
 \end{shelloutput}
+
+
+\filename{largefile3}
+\begin{shelloutput}
+oblique@netlab4 ~/hw1 $ ./unix_copy
+Welcome to the TEE Copy Program by Enrique Gavidia!
+Enter the name of the file to copy from:
+largefile3
+Enter the name of the file to copy to:
+largecopy3
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!`   `4!!!!!!!!!!~4!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   <~:   ~!!!~   ..  4!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  ~~~~~~~  '  ud$$$$$  !!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  ~~~~~~~~~: ?$$$$$$$$$  !!!!!!!!!!!!!!
+!!!!!!!!!!!`     ``~!!!!!!!!!!!!!!  ~~~~~          "*$$$$$k `!!!!!!!!!!!!!
+!!!!!!!!!!  $$$$$bu.  '~!~`     .  '~~~~      :~~~~          `4!!!!!!!!!!!
+!!!!!!!!!  $$$$$$$$$$$c  .zW$$$$$E ~~~~      ~~~~~~~~  ~~~~~:  '!!!!!!!!!!
+!!!!!!!!! d$$$$$$$$$$$$$$$$$$$$$$E ~~~~~    '~~~~~~~~    ~~~~~  !!!!!!!!!!
+!!!!!!!!> 9$$$$$$$$$$$$$$$$$$$$$$$ '~~~~~~~ '~~~~~~~~     ~~~~  !!!!!!!!!!
+!!!!!!!!> $$$$$$$$$$$$$$$$$$$$$$$$b   ~~~    '~~~~~~~     '~~~ '!!!!!!!!!!
+!!!!!!!!> $$$$$$$$$$$$$$$$$$$$$$$$$$$cuuue$$N.   ~        ~~~  !!!!!!!!!!!
+!!!!!!!!! **$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$Ne  ~~~~~~~~  `!!!!!!!!!!!
+!!!!!!!!!  J$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$N  ~~~~~  zL '!!!!!!!!!!
+!!!!!!!!  d$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$c     z$$$c `!!!!!!!!!
+!!!!!!!> <$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$> 4!!!!!!!!
+!!!!!!!  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$  !!!!!!!!
+!!!!!!! <$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*"   ....:!!
+!!!!!!~ 9$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$e@$N '!!!!!!!
+!!!!!!  9$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$  !!!!!!!
+!!!!!!  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$""$$$$$$$$$$$~ ~~4!!!!
+!!!!!!  9$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$    $$$$$$$Lue  :::!!!!
+!!!!!!> 9$$$$$$$$$$$$" '$$$$$$$$$$$$$$$$$$$$$$$$$$$    $$$$$$$$$$  !!!!!!!
+!!!!!!! '$$*$$$$$$$$E   '$$$$$$$$$$$$$$$$$$$$$$$$$$$u.@$$$$$$$$$E '!!!!!!!
+!!!!~`   .eeW$$$$$$$$   :$$$$$$$$$$$$$***$$$$$$$$$$$$$$$$$$$$u.    `~!!!!!
+!!> .:!h '$$$$$$$$$$$$ed$$$$$$$$$$$$Fz$$b $$$$$$$$$$$$$$$$$$$$$F '!h.  !!!
+!!!!!!!!L '$**$$$$$$$$$$$$$$$$$$$$$$ *$$$ $$$$$$$$$$$$$$$$$$$$F  !!!!!!!!!
+!!!!!!!!!   d$$$$$$$$$$$$$$$$$$$$$$$$buud$$$$$$$$$$$$$$$$$$$$"  !!!!!!!!!!
+!!!!!!! .<!  #$$*"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*  :!!!!!!!!!!!
+!!!!!!!!!!!!:   d$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$#  :!!!!!!!!!!!!!
+!!!!!!!!!!!~  :  '#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*"    !!!!!!!!!!!!!!!
+!!!!!!!!!!  !!!!!:   ^"**$$$$$$$$$$$$$$$$$$$$**#"     .:<!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!:...                      .::!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+File copy successful, 2550 bytes copied
+oblique@netlab4 ~/hw1 $ diff -s largefile3 largecopy3
+Files largefile3 and largecopy3 are identical
+\end{shelloutput}
+
+
 
 \subsection*{Strace}
 %\begin{shelloutput}
 \lstset{ literate={~} {$\sim$}{1} }
-\begin{lstlisting}[numbers=left, breaklines=true, basicstyle=\scriptsize]
+\begin{lstlisting}[numbers=left, breaklines=true, basicstyle=\scriptsize, escapechar={#\}]
+#\comment{The `-e' flag enables the ability to tell which system calls strace should watch}
 oblique@netlab4 ~/hw1 $ strace -e trace=open,read,write  ./unix_copy
 open("/etc/ld.so.cache", O_RDONLY)      = 3
 open("/lib/libc.so.6", O_RDONLY)        = 3
 read(3, "\\177ELF\\1\\1\\1\\0\\\0\\\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\200\242\1\0004\0\0\0"..., 512
 ) = 512
+#\comment{This is the first system call in the file; a write to stdout via `puts'}
 write(1, "Welcome to the TEE Copy Program "..., 52Welcome to the TEE Copy Program by Enrique
  Gavidia!
 ) = 52
@@ -283,7 +365,240 @@ write(1, "File copy successful, 107 bytes "..., 39File copy successful, 107 byte
 
 \append{IV} {Windows Output}
 \subsection*{Small Files}
+
+\filename{smallfile1}
+\begin{shelloutput}
+C:\Users\Enrique\School\OS-Classwork\hw1>win_copy -d
+Welcome to the TEE Copy Program by Enrique Gavidia!
+Enter the name of the file to copy from:
+smallfile1
+Enter the name of the file to copy to:
+smallcopy1
+
+--------
+BUFFER: abcdefghijk
+abcdefghijk
+--------
+BUFFER: lmnopqrstuv
+lmnopqrstuv
+--------
+BUFFER: wxyz
+123456
+wxyz
+123456
+--------
+BUFFER: 7890
+7890
+--------
+BUFFER:
+
+File copy successful, 37 bytes copied
+
+C:\Users\Enrique\School\OS-Classwork\hw1>comp smallfile1 smallcopy1
+Comparing smallfile1 and smallcopy1...
+Files compare OK
+
+\end{shelloutput}
+
+
+
+\filename{smallfile2}
+\begin{shelloutput}
+C:\Users\Enrique\School\OS-Classwork\hw1>win_copy -d
+Welcome to the TEE Copy Program by Enrique Gavidia!
+Enter the name of the file to copy from:
+smallfile2
+Enter the name of the file to copy to:
+smallcopy2
+
+--------
+BUFFER: this is a t
+this is a t
+--------
+BUFFER: est for the
+est for the
+--------
+BUFFER:  csc 415 fi
+ csc 415 fi
+--------
+BUFFER: le-copy ass
+le-copy ass
+--------
+BUFFER: ignment.
+ignment.
+--------
+BUFFER:
+
+File copy successful, 52 bytes copied
+
+C:\Users\Enrique\School\OS-Classwork\hw1>comp smallfile2 smallcopy2
+Comparing smallfile2 and smallcopy2...
+Files compare OK
+\end{shelloutput}
+
+
+\filename{smallfile3}
+\begin{shelloutput}
+C:\Users\Enrique\School\OS-Classwork\hw1>win_copy -d
+Welcome to the TEE Copy Program by Enrique Gavidia!
+Enter the name of the file to copy from:
+smallfile3
+Enter the name of the file to copy to:
+smallcopy3
+
+--------
+BUFFER: meow meow m
+meow meow m
+--------
+BUFFER: eow meow me
+eow meow me
+--------
+BUFFER: ow meow meo
+ow meow meo
+--------
+BUFFER: w meow
+w meow
+--------
+BUFFER:
+
+File copy successful, 39 bytes copied
+
+C:\Users\Enrique\School\OS-Classwork\hw1>comp smallfile3 smallcopy3
+Comparing smallfile3 and smallcopy3...
+Files compare OK
+\end{shelloutput}
+
+
 \subsection*{Large Files}
-\subsection*{StraceNT}
+
+\filename{largefile1}
+\begin{shelloutput}
+C:\Users\Enrique\School\OS-Classwork\hw1>win_copy
+Welcome to the TEE Copy Program by Enrique Gavidia!
+Enter the name of the file to copy from:
+largefile1
+Enter the name of the file to copy to:
+largecopy1
+Delicious Black Bean Burritos
+=============================
+
+Ingredients
+
+2 (10 inch) flour tortillas
+2 tablespoons vegetable oil
+1 small onion, chopped
+1/2 red bell pepper, chopped
+1 teaspoon minced garlic
+1 (15 ounce) can black beans, rinsed and drained
+1 teaspoon minced jalapeno peppers
+3 ounces cream cheese
+1/2 teaspoon salt
+2 tablespoons chopped fresh cilantro
+
+
+Directions
+
+1) Wrap tortillas in foil and place in oven heated to 350 degrees F (175 degrees C). Bake for 15 minutes or until heated thro
+ugh.
+
+2) Heat oil in a 10-inch skillet over medium heat. Place onion, bell pepper, garlic and jalapenos in skillet, cook for 2 minu
+tes
+stirring occasionally. Pour beans into skillet, cook 3 minutes stirring.
+
+3) Cut cream cheese into cubes and add to skillet with salt. Cook for 2 minutes stirring occasionally. Stir cilantro into mix
+ture.
+
+4) Spoon mixture evenly down center of warmed tortilla and roll tortillas up. Serve immediately.
+File copy successful, 971 bytes copied
+
+C:\Users\Enrique\School\OS-Classwork\hw1>comp largefile1 largecopy1
+Comparing largefile1 and largecopy1...
+Files compare OK
+
+\end{shelloutput}
+
+
+\filename{largefile2}
+\begin{shelloutput}
+C:\Users\Enrique\School\OS-Classwork\hw1>win_copy
+Welcome to the TEE Copy Program by Enrique Gavidia!
+Enter the name of the file to copy from:
+largefile2
+Enter the name of the file to copy to:
+largecopy2
+Metallica - Master Of Puppets
+|--------------------------------------------------------------------|
+|--------------------------------------------------------------------|
+|--------------------------------------------------------------------|
+|--------------------------------------------------------------------|
+|-----2-----3-----4-----3-----2-2-----2-----3------5\4---5\4---5\4---|
+|-0-1---0-1---0-1---0-1---0-1-----0-1---0-1---0-0--3\2-0-3\2-0-3\2---|
+
+|--------------------------------------------------------------------|
+|--------------------------------------------------------------------|
+|-------------------------------------------------------------4------|
+|-------------------------------------------------------------4------|
+|-----2-----3-----4-----3-----2-2-----2-----3-----4-----3-----2------|
+|-0-1---0-1---0-1---0-1---0-1-----0-1---0-1---0-1---0-1---0-1--------|
+
+
+File copy successful, 899 bytes copied
+
+C:\Users\Enrique\School\OS-Classwork\hw1>comp largefile2 largecopy2
+Comparing largefile2 and largecopy2...
+Files compare OK
+
+\end{shelloutput}
+
+
+\filename{largefile3}
+\begin{shelloutput}
+C:\Users\Enrique\School\OS-Classwork\hw1>win_copy
+Welcome to the TEE Copy Program by Enrique Gavidia!
+Enter the name of the file to copy from:
+largefile3
+Enter the name of the file to copy to:
+largecopy3
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!`   `4!!!!!!!!!!~4!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   <~:   ~!!!~   ..  4!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  ~~~~~~~  '  ud$$$$$  !!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  ~~~~~~~~~: ?$$$$$$$$$  !!!!!!!!!!!!!!
+!!!!!!!!!!!`     ``~!!!!!!!!!!!!!!  ~~~~~          "*$$$$$k `!!!!!!!!!!!!!
+!!!!!!!!!!  $$$$$bu.  '~!~`     .  '~~~~      :~~~~          `4!!!!!!!!!!!
+!!!!!!!!!  $$$$$$$$$$$c  .zW$$$$$E ~~~~      ~~~~~~~~  ~~~~~:  '!!!!!!!!!!
+!!!!!!!!! d$$$$$$$$$$$$$$$$$$$$$$E ~~~~~    '~~~~~~~~    ~~~~~  !!!!!!!!!!
+!!!!!!!!> 9$$$$$$$$$$$$$$$$$$$$$$$ '~~~~~~~ '~~~~~~~~     ~~~~  !!!!!!!!!!
+!!!!!!!!> $$$$$$$$$$$$$$$$$$$$$$$$b   ~~~    '~~~~~~~     '~~~ '!!!!!!!!!!
+!!!!!!!!> $$$$$$$$$$$$$$$$$$$$$$$$$$$cuuue$$N.   ~        ~~~  !!!!!!!!!!!
+!!!!!!!!! **$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$Ne  ~~~~~~~~  `!!!!!!!!!!!
+!!!!!!!!!  J$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$N  ~~~~~  zL '!!!!!!!!!!
+!!!!!!!!  d$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$c     z$$$c `!!!!!!!!!
+!!!!!!!> <$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$> 4!!!!!!!!
+!!!!!!!  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$  !!!!!!!!
+!!!!!!! <$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*"   ....:!!
+!!!!!!~ 9$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$e@$N '!!!!!!!
+!!!!!!  9$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$  !!!!!!!
+!!!!!!  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$""$$$$$$$$$$$~ ~~4!!!!
+!!!!!!  9$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$    $$$$$$$Lue  :::!!!!
+!!!!!!> 9$$$$$$$$$$$$" '$$$$$$$$$$$$$$$$$$$$$$$$$$$    $$$$$$$$$$  !!!!!!!
+!!!!!!! '$$*$$$$$$$$E   '$$$$$$$$$$$$$$$$$$$$$$$$$$$u.@$$$$$$$$$E '!!!!!!!
+!!!!~`   .eeW$$$$$$$$   :$$$$$$$$$$$$$***$$$$$$$$$$$$$$$$$$$$u.    `~!!!!!
+!!> .:!h '$$$$$$$$$$$$ed$$$$$$$$$$$$Fz$$b $$$$$$$$$$$$$$$$$$$$$F '!h.  !!!
+!!!!!!!!L '$**$$$$$$$$$$$$$$$$$$$$$$ *$$$ $$$$$$$$$$$$$$$$$$$$F  !!!!!!!!!
+!!!!!!!!!   d$$$$$$$$$$$$$$$$$$$$$$$$buud$$$$$$$$$$$$$$$$$$$$"  !!!!!!!!!!
+!!!!!!! .<!  #$$*"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*  :!!!!!!!!!!!
+!!!!!!!!!!!!:   d$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$#  :!!!!!!!!!!!!!
+!!!!!!!!!!!~  :  '#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*"    !!!!!!!!!!!!!!!
+!!!!!!!!!!  !!!!!:   ^"**$$$$$$$$$$$$$$$$$$$$**#"     .:<!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!:...                      .::!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+File copy successful, 2582 bytes copied
+
+C:\Users\Enrique\School\OS-Classwork\hw1>comp largefile3 largecopy3
+Comparing largefile3 and largecopy3...
+Files compare OK
+
+\end{shelloutput}
 
 \end{document}
