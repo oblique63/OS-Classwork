@@ -30,15 +30,15 @@
 \begin{titlepage}
   \begin{center}
 
-    {\LARGE \coursenum, \semester \\ \coursename}\\
-    {\Large \instructor}\\
+    \LARGE{\coursenum, \semester \\ \coursename}\\
+    \Large{\instructor}\\
 
     \vfill
     \textbf{\Huge \assignment}\\
     \vfill
     
-    {\Large \name}\\ 
-    {\large \duedate}
+    \Large{\name}\\ 
+    \large{\duedate}
     
   \end{center}
 \end{titlepage}
@@ -92,7 +92,7 @@ code-bloat that came as a result of keeping the implementation overly modular an
 
 \filename{smallfile1}
 \begin{shelloutput}
-=comment{The debug flag `-d' is enabled for the small files, to print out the debug statements}
+#comment{The debug flag `-d' is enabled for the small files, to print out the debug statements}
 oblique@netlab4 #mytilde/hw1 $ ./unix_copy -d
 Welcome to the TEE Copy Program by Enrique Gavidia!
 Enter the name of the file to copy from:
@@ -340,7 +340,7 @@ write(1, "Welcome to the TEE Copy Program "..., 52Welcome to the TEE Copy Progra
 write(1, "Enter the name of the file to co"..., 41Enter the name of the file to copy from:
 ) = 41
 
-#comment{Here is the read call to stdin performed by `sprintf'}
+#comment{Here is the read call to stdin performed by `printf'}
 read(0, Makefile
 "Makefile\n", 1024)             = 9
 write(1, "Enter the name of the file to co"..., 39Enter the name of the file to copy to:
