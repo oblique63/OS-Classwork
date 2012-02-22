@@ -1,12 +1,19 @@
-*.dSYM/
-*.dat
-*.o
-*.obj
-*.out
-*.exe
+*
+
+!*.c
+!*.h
+!*Makefile
+!*.tex
+
+#*.dSYM/
+#*.dat
+#*.o
+#*.obj
+#*.out
+#*.exe
 
 # LaTeX output
-*.pdf
-*.aux
-*.log
-*.pyg
+#*.pdf
+#*.aux
+#*.log
+#*.pyg

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
 void check(int expression, char *message) {
     if (!expression) {
@@ -16,7 +17,7 @@ int main() {
     const int MAX_ARGS = 100;
 
     char *input, *tokens, *args[MAX_ARGS];
-    int input_len, arg_len, arg_count, pid, return_code;
+    int input_len, arg_len, arg_count, pid, child_status, return_code;
     int background = 0;
 
     while (1) {
@@ -30,17 +31,17 @@ int main() {
 
             arg_count = 0;
             tokens = strdup(input);
-
+            
             for (args[arg_count]=strtok(tokens, " ");  args[arg_count];  args[arg_count]=strtok(NULL, " ")) {
                 arg_count++;
             }
 
             arg_len = strlen(args[arg_count-1]);
             background = args[arg_count-1][arg_len-1] == '&';
-
             if (background)
                 args[arg_count-1][arg_len-1] = '\0';
 
+            
             if (strcasecmp(args[0], "exit") == 0 || strcasecmp(args[0], "quit") == 0) {
                 exit(0);
             }
@@ -48,21 +49,23 @@ int main() {
 
             pid = fork();
             check(pid != -1, "Fork failed");
-
+            
             if (pid == 0) {
                 return_code = execvp(args[0], args);
                 check(return_code != -1, "ERROR");
+                exit(0);
             }
 
             else if (background) {
-                waitpid(-1, 0, WNOHANG | WUNTRACED);
+                waitpid(WAIT_ANY, &child_status, WNOHANG | WUNTRACED);
             }
 
             else {
-                waitpid(pid, 0, 0);
+                waitpid(pid, &child_status, 0);
             }
 
         }
+        
     }
 
     return 0;

@@ -5,6 +5,8 @@ PDF = hw2.tex
 
 all: $(FILES)
 
+run: all
+	./unix_shell
 tex:
 	pdflatex -shell-escape $(PDF)
 	rm -f *.log *.aux *.pyg
