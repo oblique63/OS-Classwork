@@ -46,40 +46,38 @@
 
 %---{ Main Content }----------------------------------------
 \section*{Assignment Description}
-This assignment was an introductory exercise in programming in C with low-level system calls in two contrasting operating 
-system environments; a Unix derived system, and the Windows environment. The goal of the program was to make copies of files 
-using the native operating system APIs, while providing a command line interface for users using C's formatted I/O library of
-functions.  The interaction between the program and the user consists of a simple prompt asking the user which file is to be copied,
-and what file the copy should be output to, followed by a printout of the file contents and the amount of bytes successfully copied.
-The option to display debugging information is also provided, to demonstrate how the program is performing its read/write operations
-via incremental buffer reads.  Similarly, the code is also reassured with extensive error handling features which display useful feedback
-in the event that something goes wrong, and return the appropriate error codes to the operating system.
+In this assignment, the goal was to create an interactive shell interface on top of the native Unix and Windows shell environments, that
+demonstrated basic concurrency and process management. For the Unix environment, the shell takes advantage of the operating system's 
+\texttt{PATH} variable to search for executable commands, making it a rather useful shell interface. On a Windows system however, the shell 
+is only able to search for executables in the current directory, making it a bit limited for actual use. In both cases, the commands are 
+executed (with all of their intended arguments) as child processes of the parent shell process, and the user has the option to set these commands 
+to run in the background using the `\&` character in traditional Unix fashion. When set to run in the background, a process executes without 
+interrupting the user's interaction with the shell; the child is allowed to finish its execution at its own pace, but launches the user straight 
+back into the shell prompt to run more commands. 
 
 This code has been tested to work under \textsl{Windows}, \textsl{Gentoo Linux}, and \textsl{Mac OSX}. 
-The source for the Unix implementation is listed in \textbf{Appendix I}, and \textbf{Appendix III} for the Windows version.
-
+The source for the Unix implementation under listed in \textbf{Appendix I}, and \textbf{Appendix III} for the Windows version.
 
 \section*{Design \& Implementation}
-I wrote the entirety of this program with my own original code and decided to go with a rather modular approach in its design, delegating the key 
-parts of the program to external methods outside the `main' function.  Although not entirely necessary given the simple nature of the requirements, 
-it made it easier to experiment with certain approaches in isolation; i.e. once I established the user interface code, the organization made it easier 
-to switch focus completely to the I/O portion of the assignment without worrying about `the whole'.  On a similar note, I also avoid using too many 
-compound operations (such as performing an I/O call in the invariant of a loop) for the sake of readability.  When it comes to platform-specific 
-eccentricities, such as the Win32 datatypes or Linux's strict `printf' implementation that requires a null-terminator, I made sure to document the code 
-as clearly as possible to convey what is happening; either through comments, or descriptive variable names. 
-
-Due to this emphasis on clear coding practice, debugging and testing were not too big of an issue, however for when they were necessary, I implemented
-a debug flag option to be passed to the executable at runtime to easily switch between debugging and non-debugging modes. With the flag set, I would
-monitor any variables and values that interested me via print statements, like the buffer dump debug option required by the assignment. 
-
+I decided to keep the implementation of this shell as minimal and simple as possible. The entire program is essentially within the
+confines of a simple 'read-eval-print-loop', where I perform basic operations to check whether the user input a special command (such as the
+\texttt{exit}/\texttt{quit} commands) or entered a directive to spawn a background process. When it came to the operations performed inside 
+this loop, I also kept it minimal, attempting to spawn child processes and execute commands only if provided with usable input that the shell itself 
+can't directly handle (as in with \texttt{exit}). I also added a couple conveniences to the Windows implementation to make it easier to test. I added 
+support for the native Windows \texttt{tasklist} command so that I could use it to demonstrate concurrency with background child processes within my 
+same shell, much like how I could call the \texttt{ps} command in the Unix implementation. In addition to that, I also implemented support for optionally 
+typing out executable names without their `.exe' extensions, like how is possible in the native Windows command prompt.
+These minor conveniences I implemented on the Windows side were a great help to me when testing and debugging my code on that platform. In general however,
+having quick printouts of the modified input string were my main means of debugging for both environments, as they clearly described what I was attempting
+to create a child process for. 
 
 \section*{Improvements}
 This is a rather primitive shell implementation, so there are various ways in which I could improve it. As of now, there is no support for cursor movement
 in the unix implementation, thus adding support for it would greatly improve it's usability. Tab-completion would also be a welcome addition for better 
 usability. This shell is also lacking the ability to change directories, making it rather limited in usefulness. On the windows side, even though I have
 automatic '.exe' insertion, it would still greatly benefit from gaining access to the system path to use actual windows commands instead of just searching
-for executables in the current directory (which you cannot even change).
-
+for executables in the current directory (which you cannot even change). And aside from piping and output redirection, a scripting interface like \texttt{Bash} or 
+Windows' texttt{PowerShell} have, would also be a logical next step for improvement.
 
 %---{ Appendices }------------------------------------------
 \newpage
@@ -89,7 +87,49 @@ for executables in the current directory (which you cannot even change).
 
 
 \append{II} {Unix Output}
+\begin{shelloutput}
+oblique@netlab4 #mytilde/hw2 $ ./unix_shell 
+#comment{Executing a standard unix command}
+Myshell> cat Makefile
+CFLAGS=-Wall -Wextra -g
 
+FILES = unix_shell
+
+all: $(FILES)
+
+run: all
+	./unix_shell
+
+clean:
+	rm -f $(FILES)
+	rm -rf *.dSYM
+
+with-clean: clean
+	make
+#comment{Executing a command with arguments}
+Myshell> ls -l
+total 20
+-rw-r--r-- 1 oblique oblique   147 Feb 21 22:10 Makefile
+-rwx------ 1 oblique oblique 10283 Feb 22 22:05 unix_shell
+-rw-r--r-- 1 oblique oblique  2446 Feb 22 22:05 unix_shell.c
+Myshell> ls -l unix_shell.c
+-rw-r--r-- 1 oblique oblique 2446 Feb 22 22:05 unix_shell.c
+#comment{Executing a command as a background process}
+Myshell> ls&
+#comment{Instantly returnd to the shell prompt before the command finishes its output, because the}
+#comment{shell doesn't wait for its child process to finish executing when it's in the background}
+Myshell> Makefile  unix_shell  unix_shell.c
+
+#comment{Running the 'ps' command to demonstrate the processes being executed concurrently}
+Myshell> ps
+  PID TTY          TIME CMD
+24919 pts/14   00:00:00 bash
+#comment{28556 pts/14   00:00:00 unix_shell   <--- Parent}
+#comment{31204 pts/14   00:00:00 ls <defunct>   <--- Child}
+31459 pts/14   00:00:00 ps
+Myshell> exit
+oblique@netlab4 #mytilde/hw2 $ 
+\end{shelloutput}
 
 
 \append{III} {Windows Source Code}
@@ -104,8 +144,8 @@ Myshell> hello
 Hello, world!
 #comment{Implemented a feature so that the '.exe' extension  would be automatically implied}
 Myshell> cat
-meow meow meow meow, meow meow meow meow, meow meow meow meow meow meow meow m
-w, meow, meow, meow
+meow meow meow meow, meow meow meow meow, meow meow meow meow meow meow meow 
+meow, meow, meow, meow
 #comment{Example of a program that takes arguments}
 Myshell> count
 Must provide a number to count up to.
@@ -121,7 +161,7 @@ Myshell> count 10
 9
 10
 #comment{Example of a background process}
-Myshell> background_ex\&
+Myshell> background_ex&
 #comment{Instantly returned back to the prompt. Now running 'tasklist' windows command to display the concurrent processes.}
 Myshell> tasklist
 
@@ -143,3 +183,5 @@ Myshell> exit
 #comment{Return back to native windows shell}
 C:\Users\Enrique\School\OS-Classwork\hw2>
 \end{shelloutput}
+
+\end{document}

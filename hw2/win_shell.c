@@ -79,6 +79,7 @@ int main() {
                                     NULL, NULL,
                                     &startup_info, &process_info);
 
+            // Check whether CreateProcess succeeded, but do not halt the execution of the shell
             if (!success) {
                 fprintf(stderr, "Could not execute file '%s.exe'.\n", command);
             }
