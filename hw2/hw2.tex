@@ -1,0 +1,143 @@
+\documentclass[12pt]{article}
+
+\usepackage{setspace}
+\usepackage{minted}
+\usepackage{fancyvrb}
+\usepackage{listings}
+
+\usepackage[margin=0.75in]{geometry}
+\pagestyle{empty}
+
+\def \name       {Enrique Gavidia}
+\def \coursenum  {CSC 415.01}
+\def \coursename {Operating Systems Principles}
+\def \instructor {Prof. Murphy}
+\def \semester   {Spring 2012}
+\def \assignment {Homework \# 2}
+\def \duedate    {February 22, 2012}
+
+\newcommand {\mytilde} {$\sim$}
+\newcommand {\comment}[1] {\textcolor{red}{#1}}
+\newcommand {\filename}[1] {\flushleft \textbf{#1}}
+\newcommand {\append}[2] {\section*{Appendix #1} \textsl{\large #2}}
+\newcommand {\includesource}[2] {\inputminted[linenos, fontsize=\scriptsize, frame=lines]{#1}{#2}}
+
+\DefineVerbatimEnvironment {shelloutput} {Verbatim} {fontsize=\scriptsize, numbers=left, commandchars=\#\{\}}
+
+\begin{document}
+
+%---{ Cover Page }------------------------------------------
+\begin{titlepage}
+  \begin{center}
+
+    \LARGE{\coursenum, \semester \\ \coursename}\\
+    \Large{\instructor}\\
+
+    \vfill
+    \textbf{\Huge \assignment}\\
+    \vfill
+    
+    \Large{\name}\\ 
+    \large{\duedate}
+    
+  \end{center}
+\end{titlepage}
+
+
+%---{ Main Content }----------------------------------------
+\section*{Assignment Description}
+This assignment was an introductory exercise in programming in C with low-level system calls in two contrasting operating 
+system environments; a Unix derived system, and the Windows environment. The goal of the program was to make copies of files 
+using the native operating system APIs, while providing a command line interface for users using C's formatted I/O library of
+functions.  The interaction between the program and the user consists of a simple prompt asking the user which file is to be copied,
+and what file the copy should be output to, followed by a printout of the file contents and the amount of bytes successfully copied.
+The option to display debugging information is also provided, to demonstrate how the program is performing its read/write operations
+via incremental buffer reads.  Similarly, the code is also reassured with extensive error handling features which display useful feedback
+in the event that something goes wrong, and return the appropriate error codes to the operating system.
+
+This code has been tested to work under \textsl{Windows}, \textsl{Gentoo Linux}, and \textsl{Mac OSX}. 
+The source for the Unix implementation is listed in \textbf{Appendix I}, and \textbf{Appendix III} for the Windows version.
+
+
+\section*{Design \& Implementation}
+I wrote the entirety of this program with my own original code and decided to go with a rather modular approach in its design, delegating the key 
+parts of the program to external methods outside the `main' function.  Although not entirely necessary given the simple nature of the requirements, 
+it made it easier to experiment with certain approaches in isolation; i.e. once I established the user interface code, the organization made it easier 
+to switch focus completely to the I/O portion of the assignment without worrying about `the whole'.  On a similar note, I also avoid using too many 
+compound operations (such as performing an I/O call in the invariant of a loop) for the sake of readability.  When it comes to platform-specific 
+eccentricities, such as the Win32 datatypes or Linux's strict `printf' implementation that requires a null-terminator, I made sure to document the code 
+as clearly as possible to convey what is happening; either through comments, or descriptive variable names. 
+
+Due to this emphasis on clear coding practice, debugging and testing were not too big of an issue, however for when they were necessary, I implemented
+a debug flag option to be passed to the executable at runtime to easily switch between debugging and non-debugging modes. With the flag set, I would
+monitor any variables and values that interested me via print statements, like the buffer dump debug option required by the assignment. 
+
+
+\section*{Improvements}
+This is a rather primitive shell implementation, so there are various ways in which I could improve it. As of now, there is no support for cursor movement
+in the unix implementation, thus adding support for it would greatly improve it's usability. Tab-completion would also be a welcome addition for better 
+usability. This shell is also lacking the ability to change directories, making it rather limited in usefulness. On the windows side, even though I have
+automatic '.exe' insertion, it would still greatly benefit from gaining access to the system path to use actual windows commands instead of just searching
+for executables in the current directory (which you cannot even change).
+
+
+%---{ Appendices }------------------------------------------
+\newpage
+
+\append{I} {Unix Source Code}
+\includesource{c}{unix_shell.c}
+
+
+\append{II} {Unix Output}
+
+
+
+\append{III} {Windows Source Code}
+\includesource{c}{win_shell.c}
+
+
+\append{IV} {Windows Output}
+\begin{shelloutput}
+C:\Users\Enrique\School\OS-Classwork\hw2>win_shell
+#comment{Running simple example programs, due to inability to access native windows commands}
+Myshell> hello
+Hello, world!
+#comment{Implemented a feature so that the '.exe' extension  would be automatically implied}
+Myshell> cat
+meow meow meow meow, meow meow meow meow, meow meow meow meow meow meow meow m
+w, meow, meow, meow
+#comment{Example of a program that takes arguments}
+Myshell> count 10
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+#comment{Example of a background process}
+Myshell> background_ex\&
+#comment{Instantly returned back to the prompt. Now running 'tasklist' windows command to display the concurrent processes.}
+Myshell> tasklist
+
+Image Name                     PID Session Name        Session#    Mem Usage
+========================= ======== ================ =========== ============
+System Idle Process              0 Services                   0         24 K
+System                           4 Services                   0      5,700 K
+dwm.exe                       2288 Console                    1     33,260 K
+explorer.exe                  2312 Console                    1     69,828 K
+#comment{ ... Some output excluded for brevity ...}
+#comment{win_shell.exe                 3404 Console                    1      2,180 K   <--- Parent}
+SearchProtocolHost.exe         868 Services                   0      7,812 K
+SearchFilterHost.exe          4812 Services                   0      5,780 K
+#comment{background_ex.exe             1156 Console                    1      1,724 K   <--- Child}
+tasklist.exe                  1416 Console                    1      5,276 K
+MpCmdRun.exe                  4192 Services                   0      5,180 K
+WmiPrvSE.exe                  4684 Services                   0      6,096 K
+Myshell> exit
+#comment{Return back to native windows shell}
+C:\Users\Enrique\School\OS-Classwork\hw2>
+\end{shelloutput}
