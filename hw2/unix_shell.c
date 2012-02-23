@@ -4,6 +4,8 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
+#define MAX_ARGS 100
+
 void check(int expression, char *message) {
     if (!expression) {
         perror(message);
@@ -12,17 +14,14 @@ void check(int expression, char *message) {
 }
 
 int main() {
-
-    size_t max_line = 0;
-    const int MAX_ARGS = 100;
-
+    size_t max_input = 0;
     char *input, *tokens, *args[MAX_ARGS];
     int input_len, arg_len, arg_count, pid, child_status, return_code;
     int background = 0;
 
     while (1) {
         printf("Myshell> ");
-        getline(&input, &max_line, stdin);
+        getline(&input, &max_input, stdin);
 
         input_len = strlen(input)-1;
         input[input_len] = '\0';
