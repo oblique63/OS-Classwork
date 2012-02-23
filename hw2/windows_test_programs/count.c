@@ -6,7 +6,7 @@ int main(int argc, char *argv[]) {
     int i;
     
     if (argc < 2) {
-        puts("Must provide a number to count upto.");
+        puts("Must provide a number to count up to.");
         return -1;
     }
 

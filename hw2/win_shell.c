@@ -1,9 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
 #include <windows.h>
-#include <direct.h>
 
 #define MAX_BUFFER 512
 
