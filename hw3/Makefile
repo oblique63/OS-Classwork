@@ -1,6 +1,6 @@
 CFLAGS=-Wall -Wextra -g
 
-FILES = unix_processes_v1 unix_processes_v2 unix_processes_v3 unix_processes_v4
+FILES = unix_processes_v1 unix_processes_v2 unix_processes_v3 unix_processes_v4 unix_processes_v5
 PDF = hw3.tex
 
 all: $(FILES)
