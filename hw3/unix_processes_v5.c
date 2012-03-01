@@ -15,7 +15,7 @@ void check(int expression, char *message) {
 }
 
 int main() {
-    int i, pid, child_status;
+    int i, pid;
     char pid_str[100], temp[100];
 
     for (i=1; i <= PROCESSES; i++) {
@@ -27,11 +27,10 @@ int main() {
             exit(0);
         }
         else {
-            if (i > 1)
-                strcpy(temp, pid_str);
-            
             memset(pid_str, '\0', 100);
             sprintf(pid_str, "%s%d: %d\n", temp, i, pid);
+            // copy pid_str into temp for the sprintf in the next iteration
+            strcpy(temp, pid_str);
         }
     }
     
