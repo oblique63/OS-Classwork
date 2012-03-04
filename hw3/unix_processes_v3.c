@@ -22,7 +22,8 @@ int main() {
 
         if (pid == 0) {
             pid = getpid();
-            
+
+            // A single printf for all the values
             fprintf(stderr, "[Process #%d] \t ID: %d \t Values:\n%s\n", i, pid, values);            
             
             sleep(1);

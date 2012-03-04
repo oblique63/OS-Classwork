@@ -14,11 +14,16 @@ void check(int expression, char *message) {
 }
 
 void add_10() {
-    counter += 10;
-    thread_num += 1;
     unsigned long thread_id = -(unsigned long) pthread_self();
     
-    printf("[Thread #%d] \t ID: %ld \t Counter Value: %d\n", thread_num, thread_id, counter);
+    thread_num += 1;
+    int thread = thread_num;
+    int local_counter = counter;
+
+    printf("[Thread #%d] \t ID: %ld \t Counter Before: %d\n", thread, thread_id, local_counter);
+    local_counter += 10;
+    printf("[Thread #%d] \t ID: %ld \t Counter After: %d\n", thread, thread_id, local_counter);
+    counter = local_counter;
 }
 
 int main() {

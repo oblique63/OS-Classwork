@@ -5,6 +5,7 @@
 #include <sys/wait.h>
 
 #define PROCESSES 10
+#define OUTPUT_SIZE 256
 #define STDERR_FD 2
 
 // Ensure that an expression is true, otherwise safely exit the program
@@ -17,7 +18,7 @@ void check(int expression, char *message) {
 
 int main() {
     int i, pid;
-    char output[256], *values = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10";;
+    char output[OUTPUT_SIZE], *values = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10";;
 
     for (i=1; i <= PROCESSES; i++) {
         pid = fork();
@@ -26,7 +27,7 @@ int main() {
         if (pid == 0) {
             pid = getpid();
 
-            memset(output, '\0', 256);
+            memset(output, '\0', OUTPUT_SIZE);
             sprintf(output, "[Process #%d] \t ID: %d \t Values:\n%s\n",  i, pid, values);
             write(STDERR_FD, output, sizeof(output));
 
