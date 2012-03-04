@@ -16,7 +16,7 @@ void check(int expression, char *message) {
 
 int main() {
     int i, pid;
-    char *temp;
+    char *output, *values = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10";;
 
     for (i=1; i <= PROCESSES; i++) {
         pid = fork();
@@ -25,16 +25,13 @@ int main() {
         if (pid == 0) {
             pid = getpid();
             
-            sprintf(temp, "%d: %d\n",  i, pid);
-            fputs(temp, stderr);
-            
+            asprintf(&output, "[Process #%d] \t ID: %d \t Values:\n%s\n",  i, pid, values);
+            fputs(output, stderr);
+
             sleep(1);
             exit(0);
         }
     }
 
-    //waitpid(pid, &child_status, 0);
-    //fputs(pid_str, stderr);
-    
     return 0;
 }

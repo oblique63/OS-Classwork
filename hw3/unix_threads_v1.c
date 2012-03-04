@@ -1,6 +1,6 @@
+#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <pthread.h>
 
 #define THREADS 10
 int counter = 0;
@@ -16,19 +16,23 @@ void check(int expression, char *message) {
 void add_10() {
     counter += 10;
     thread_num += 1;
-    printf("Hello, I'm thread #%d.  ID: %ld   Counter Value: %d\n", thread_num, (unsigned long int) pthread_self(), counter);
+    unsigned long thread_id = -(unsigned long) pthread_self();
+    
+    printf("[Thread #%d] \t ID: %ld \t Counter Value: %d\n", thread_num, thread_id, counter);
 }
 
 int main() {
     int i, return_code;
     pthread_t threads[THREADS];
-    
+
     for (i=0; i < THREADS; i++) {
         return_code = pthread_create(&threads[i], NULL, (void*) add_10, NULL);
         check(return_code == 0, "Thread Failed");
-        pthread_join(threads[i], NULL);
     }
 
-    printf("Counter Total: %d\n", counter);
+    for (i=0; i < THREADS; i++)
+        pthread_join(threads[i], NULL);
+    
+    printf("\tCounter Total: %d\n", counter);
     return 0;
 }

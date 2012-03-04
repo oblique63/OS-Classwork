@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <sys/wait.h>
 
 #define PROCESSES 10
 
@@ -14,23 +13,22 @@ void check(int expression, char *message) {
 }
 
 int main() {
-    int i, child_status;
-    int pids[PROCESSES];
+    int i, pid;
+    char *values = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10";
+    
+    for (i=1; i <= PROCESSES; i++) {
+        pid = fork();
+        check(pid != -1, "Fork Failed");
 
-    for (i=0; i < PROCESSES; i++) {
-        pids[i] = fork();
-        check(pids[i] != -1, "Fork Failed");
-
-        if (pids[i] == 0) {
-            pids[i] = getpid();
+        if (pid == 0) {
+            pid = getpid();
+            
+            fprintf(stderr, "[Process #%d] \t ID: %d \t Values:\n%s\n", i, pid, values);            
+            
             sleep(1);
             exit(0);
         }
     }
 
-    waitpid(pids[PROCESSES-1], &child_status, 0);
-    fprintf(stderr, "1: %d  \n2: %d  \n3: %d  \n4: %d  \n5: %d  \n6: %d  \n7: %d  \n8: %d  \n9: %d  \n10: %d  \n",
-                     pids[0], pids[1], pids[2], pids[3], pids[4], pids[5], pids[6], pids[7], pids[8], pids[9]);
-    
     return 0;
 }

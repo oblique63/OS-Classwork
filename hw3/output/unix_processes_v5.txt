@@ -1,0 +1,111 @@
+$ ./unix_processes_v5
+[Process #1]     ID: 41052   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #2]     ID: 41053   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #4]     ID: 41055   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #5]     ID: 41056   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #6]     ID: 41057   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #7]     ID: 41058   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #8]     ID: 41059   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #9]     ID: 41060   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #10]    ID: 41061   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #3]     ID: 41054   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10

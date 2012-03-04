@@ -1,0 +1,111 @@
+$ ./unix_processes_v3
+[Process #1]     ID: 42092   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #3]     ID: 42094   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #4]     ID: 42095   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #5]     ID: 42096   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #6]     ID: 42097   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #7]     ID: 42098   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #8]     ID: 42099   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #9]     ID: 42100   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #10]    ID: 42101   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #2]     ID: 42093   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10

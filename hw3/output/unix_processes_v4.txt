@@ -1,0 +1,111 @@
+$ ./unix_processes_v4
+[Process #1]     ID: 41445   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #2]     ID: 41446   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #3]     ID: 41447   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #4]     ID: 41448   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #5]     ID: 41449   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #6]     ID: 41450   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #7]     ID: 41451   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #9]     ID: 41453   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #10]    ID: 41454   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+[Process #8]     ID: 41452   Values:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
