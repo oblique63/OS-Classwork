@@ -1,4 +1,4 @@
-$ ./unix_threads_v1
+$ ./unix_threads
 [Thread #1] 	 ID: 1218073744 	 Counter Before: 0
 [Thread #1] 	 ID: 1218073744 	 Counter After: 10
 [Thread #3] 	 ID: 1234859152 	 Counter Before: 0

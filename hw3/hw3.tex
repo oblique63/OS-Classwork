@@ -1,0 +1,130 @@
+\documentclass[12pt]{article}
+
+\usepackage{setspace}
+\usepackage{minted}
+\usepackage{fancyvrb}
+\usepackage{listings}
+
+\usepackage[margin=0.75in]{geometry}
+\pagestyle{empty}
+
+\def \name       {Enrique Gavidia}
+\def \coursenum  {CSC 415.01}
+\def \coursename {Operating Systems Principles}
+\def \instructor {Prof. Murphy}
+\def \semester   {Spring 2012}
+\def \assignment {Homework \# 3}
+\def \duedate    {March 5, 2012}
+
+\newcommand {\mytilde} {$\sim$}
+\newcommand {\comment}[1] {\textcolor{red}{#1}}
+\newcommand {\filename}[1] {\flushleft \textbf{#1}}
+\newcommand {\append}[2] {\section*{Appendix #1} \textsl{\large #2}}
+
+\newcommand {\makecover} {
+  \begin{titlepage}
+    \begin{center}
+     
+      \LARGE{\coursenum, \semester \\ \coursename}\\
+      \Large{\instructor}\\
+     
+      \vfill
+      \textbf{\Huge \assignment}\\
+      \vfill
+      
+      \Large{\name}\\ 
+      \large{\duedate}
+      
+    \end{center}
+  \end{titlepage}
+}
+
+\DefineVerbatimEnvironment {shelloutput} {Verbatim} {fontsize=\scriptsize, numbers=left, frame=lines, commandchars=\%\{\}}
+
+\newcommand {\includesource}[2] {\inputminted[linenos, fontsize=\scriptsize, frame=lines]{#1}{#2}}
+\newcommand {\includeoutput}[1] {\VerbatimInput[fontsize=\scriptsize, numbers=left, frame=lines, commandchars=\%\{\}]{#1}}
+
+\begin{document}
+
+\makecover
+
+%---{ Main Content }----------------------------------------
+\section*{Assignment Description}
+In this assignment, the goal was to create an interactive shell interface on top of the native Unix and Windows shell environments, that
+demonstrated basic concurrency and process management. For the Unix environment, the shell takes advantage of the operating system's 
+\texttt{PATH} variable to search for executable commands, making it a rather useful shell interface. On a Windows system however, the shell 
+is only able to search for executables in the current directory, making it a bit limited for actual use. In both cases, the commands are 
+executed (with all of their intended arguments) as child processes of the parent shell process, and the user has the option to set these commands 
+to run in the background using the `\&` character in traditional Unix fashion. When set to run in the background, a process executes without 
+interrupting the user's interaction with the shell; the child is allowed to finish its execution at its own pace, but launches the user straight 
+back into the shell prompt to run more commands. 
+
+This code has been tested to work under \textsl{Windows}, \textsl{Gentoo Linux}, and \textsl{Mac OSX}. 
+The source for the Unix implementation under listed in \textbf{Appendix I}, and \textbf{Appendix III} for the Windows version.
+
+\section*{Design \& Implementation}
+I decided to keep the implementation of this shell as minimal and simple as possible. The entire program is essentially within the
+confines of a simple 'read-eval-print-loop', where I perform basic operations to check whether the user input a special command (such as the
+\texttt{exit}/\texttt{quit} commands) or entered a directive to spawn a background process. When it came to the operations performed inside 
+this loop, I also kept it minimal, attempting to spawn child processes and execute commands only if provided with usable input that the shell itself 
+can't directly handle (as in with \texttt{exit}). I also added a couple conveniences to the Windows implementation to make it easier to test. I added 
+support for the native Windows \texttt{tasklist} command so that I could use it to demonstrate concurrency with background child processes within my 
+same shell, much like how I could call the \texttt{ps} command in the Unix implementation. In addition to that, I also implemented support for optionally 
+typing out executable names without their `.exe' extensions, like how is possible in the native Windows command prompt.
+These minor conveniences I implemented on the Windows side were a great help to me when testing and debugging my code on that platform. In general however,
+having quick printouts of the modified input string were my main means of debugging for both environments, as they clearly described what I was attempting
+to create a child process for. 
+
+\section*{Improvements}
+This is a rather primitive shell implementation, so there are various ways in which I could improve it. As of now, there is no support for cursor movement
+in the unix implementation, thus adding support for it would greatly improve it's usability. Tab-completion would also be a welcome addition for better 
+usability. This shell is also lacking the ability to change directories, making it rather limited in usefulness. On the windows side, even though I have
+automatic '.exe' insertion, it would still greatly benefit from gaining access to the system path to use actual windows commands instead of just searching
+for executables in the current directory (which you cannot even change). And aside from piping and output redirection, a scripting interface like \texttt{Bash} or 
+Windows' texttt{PowerShell} have, would also be a logical next step for improvement.
+
+%---{ Appendices }------------------------------------------
+\newpage
+
+\append{I} {Unix Source Code}
+\filename{Version 1: Multiple \texttt{fprintf}'s}
+\includesource{c}{unix_processes_v1.c}
+
+\filename{Version 2: Multiple \texttt{fprintf}'s with \texttt{sleep}}
+\includesource{c}{unix_processes_v2.c}
+
+\filename{Version 3: Single \texttt{fprintf}}
+\includesource{c}{unix_processes_v3.c}
+
+\filename{Version 4: \texttt{fputs}}
+\includesource{c}{unix_processes_v4.c}
+
+\filename{Version 5: \texttt{sprintf} + \texttt{write} system-call}
+\includesource{c}{unix_processes_v5.c}
+
+
+\append{II} {Unix Output}
+\filename{Version 1: Multiple \texttt{fprintf}'s}
+\includeoutput{output/unix_processes_v1.txt}
+
+\filename{Version 2: Multiple \texttt{fprintf}'s with \texttt{sleep}}
+\includeoutput{output/unix_processes_v2.txt}
+ 
+\filename{Version 3: Single \texttt{fprintf}}
+\includeoutput{output/unix_processes_v3.txt}
+ 
+\filename{Version 4: \texttt{fputs}}
+\includeoutput{output/unix_processes_v4.txt}
+ 
+\filename{Version 5: \texttt{sprintf} + \texttt{write} system-call}
+\includeoutput{output/unix_processes_v5.txt}
+
+
+\append{III} {Windows Source Code}
+%\includesource{c}{win_shell.c}
+
+
+\append{IV} {Windows Output}
+
+
+\end{document}

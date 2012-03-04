@@ -1,5 +1,5 @@
 $ ./unix_processes_v1
-[Process #1]     ID: 41326   Value: 1
+[Process #1]     ID: 41326   Value: 1    %comment{THIS IS A COMMENT}
 [Process #1]     ID: 41326   Value: 2
 [Process #1]     ID: 41326   Value: 3
 [Process #1]     ID: 41326   Value: 4
