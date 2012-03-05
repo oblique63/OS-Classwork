@@ -15,7 +15,7 @@ void check(int expression, char *message) {
 int main() {
     int i, pid;
     char *values = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10";
-    
+
     for (i=1; i <= PROCESSES; i++) {
         pid = fork();
         check(pid != -1, "Fork Failed");
@@ -24,8 +24,8 @@ int main() {
             pid = getpid();
 
             // A single printf for all the values
-            fprintf(stderr, "[Process #%d] \t ID: %d \t Values:\n%s\n", i, pid, values);            
-            
+            fprintf(stderr, "[Process #%d] \t ID: %d \t Values:\n%s\n", i, pid, values);
+
             sleep(1);
             exit(0);
         }

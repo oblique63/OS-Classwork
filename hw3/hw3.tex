@@ -87,6 +87,7 @@ Windows' texttt{PowerShell} have, would also be a logical next step for improvem
 \newpage
 
 \append{I} {Unix Source Code}
+\subsection*{Processes}
 \filename{Version 1: Multiple \texttt{fprintf}'s}
 \includesource{c}{unix_processes_v1.c}
 
@@ -102,8 +103,11 @@ Windows' texttt{PowerShell} have, would also be a logical next step for improvem
 \filename{Version 5: \texttt{sprintf} + \texttt{write} system-call}
 \includesource{c}{unix_processes_v5.c}
 
+\subsection*{Threads}
+
 
 \append{II} {Unix Output}
+\subsection*{Processes}
 \filename{Version 1: Multiple \texttt{fprintf}'s}
 \includeoutput{output/unix_processes_v1.txt}
 
@@ -120,11 +124,41 @@ Windows' texttt{PowerShell} have, would also be a logical next step for improvem
 \includeoutput{output/unix_processes_v5.txt}
 
 
+\subsection*{Threads}
+
+
 \append{III} {Windows Source Code}
-%\includesource{c}{win_shell.c}
+\subsection*{Processes}
+
+\filename{Parent Program}
+\includesource{c}{win_processes_main.c}
+
+\filename{Child Program}
+\includesource{c}{win_processes.c}
+
+
+\subsection*{Threads}
 
 
 \append{IV} {Windows Output}
+\subsection*{Processes}
+\filename{Version 1: Multiple \texttt{fprintf}'s}
+%\includeoutput{output/win_processes_v1.txt}
+
+\filename{Version 2: Multiple \texttt{fprintf}'s with \texttt{sleep}}
+%\includeoutput{output/win_processes_v2.txt}
+ 
+\filename{Version 3: Single \texttt{fprintf}}
+%\includeoutput{output/win_processes_v3.txt}
+ 
+\filename{Version 4: \texttt{fputs}}
+%\includeoutput{output/win_processes_v4.txt}
+ 
+\filename{Version 5: \texttt{sprintf} + \texttt{write} system-call}
+%\includeoutput{output/win_processes_v5.txt}
+
+
+\subsection*{Threads}
 
 
 \end{document}
