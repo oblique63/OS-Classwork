@@ -20,3 +20,27 @@ $ ./unix_threads
 [Thread #7] 	 ID: 1276822672 	 Counter After: 10
 [Thread #8] 	 ID: 1260037264 	 Counter After: 10
 	Counter Total: 10
+
+%comment{Alternate run:}
+$ ./unix_threads
+[Thread #1] 	 ID: 1218790544 	 Counter Before: 0
+[Thread #1] 	 ID: 1218790544 	 Counter After: 10
+[Thread #5] 	 ID: 1285932176 	 Counter Before: 0
+[Thread #5] 	 ID: 1285932176 	 Counter After: 10
+[Thread #6] 	 ID: 1260754064 	 Counter Before: 0
+[Thread #4] 	 ID: 1243968656 	 Counter Before: 0
+[Thread #4] 	 ID: 1243968656 	 Counter After: 10
+[Thread #7] 	 ID: 1269146768 	 Counter Before: 0
+[Thread #3] 	 ID: 1235575952 	 Counter Before: 0
+[Thread #3] 	 ID: 1235575952 	 Counter After: 10
+[Thread #6] 	 ID: 1260754064 	 Counter After: 10
+[Thread #10] 	 ID: 1294324880 	 Counter Before: 0
+[Thread #8] 	 ID: 1277539472 	 Counter Before: 0
+[Thread #8] 	 ID: 1277539472 	 Counter After: 10
+[Thread #7] 	 ID: 1269146768 	 Counter After: 10
+[Thread #10] 	 ID: 1294324880 	 Counter After: 10
+[Thread #2] 	 ID: 1227183248 	 Counter Before: 0
+[Thread #2] 	 ID: 1227183248 	 Counter After: 10
+[Thread #9] 	 ID: 1252361360 	 Counter Before: 0
+[Thread #9] 	 ID: 1252361360 	 Counter After: 10
+	Counter Total: 10

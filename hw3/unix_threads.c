@@ -15,7 +15,9 @@ void check(int expression, char *message) {
 }
 
 void add_10() {
-    unsigned long thread_id = -(unsigned long) pthread_self();
+    // Get the absolute value of the thread id, because it might come back
+    // negative on some systems.
+    unsigned long thread_id = abs((unsigned long) pthread_self());
     
     thread_num += 1;
     int thread = thread_num;
@@ -24,7 +26,8 @@ void add_10() {
     printf("[Thread #%d] \t ID: %ld \t Counter Before: %d\n", thread, thread_id, local_counter);
     local_counter += 10;
     printf("[Thread #%d] \t ID: %ld \t Counter After: %d\n", thread, thread_id, local_counter);
-
+    // Ensure race conditions by waiting to update the counter
+    sleep(1);
     counter = local_counter;
 }
 

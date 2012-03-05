@@ -24,17 +24,13 @@
 \newcommand {\makecover} {
   \begin{titlepage}
     \begin{center}
-     
       \LARGE{\coursenum, \semester \\ \coursename}\\
       \Large{\instructor}\\
-     
       \vfill
       \textbf{\Huge \assignment}\\
       \vfill
-      
       \Large{\name}\\ 
       \large{\duedate}
-      
     \end{center}
   \end{titlepage}
 }
@@ -48,7 +44,7 @@
 
 \makecover
 
-%---{ Main Content }----------------------------------------
+%---{ Main Content }--------------------------------------------------------------------
 \section*{Assignment Description}
 In this assignment, the goal was to create an interactive shell interface on top of the native Unix and Windows shell environments, that
 demonstrated basic concurrency and process management. For the Unix environment, the shell takes advantage of the operating system's 
@@ -83,9 +79,10 @@ automatic '.exe' insertion, it would still greatly benefit from gaining access t
 for executables in the current directory (which you cannot even change). And aside from piping and output redirection, a scripting interface like \texttt{Bash} or 
 Windows' texttt{PowerShell} have, would also be a logical next step for improvement.
 
-%---{ Appendices }------------------------------------------
+%---{ Appendices }-----------------------------------------------------------------------
 \newpage
 
+%----{ UNIX }----------------------------------------------------------------------------
 \append{I} {Unix Source Code}
 \subsection*{Processes}
 \filename{Version 1: Multiple \texttt{fprintf}'s}
@@ -104,7 +101,7 @@ Windows' texttt{PowerShell} have, would also be a logical next step for improvem
 \includesource{c}{unix_processes_v5.c}
 
 \subsection*{Threads}
-
+\includesource{c}{unix_threads.c}
 
 \append{II} {Unix Output}
 \subsection*{Processes}
@@ -125,8 +122,10 @@ Windows' texttt{PowerShell} have, would also be a logical next step for improvem
 
 
 \subsection*{Threads}
+\includeoutput{output/unix_threads.txt}
 
 
+%----{ WINDOWS }-------------------------------------------------------------------------
 \append{III} {Windows Source Code}
 \subsection*{Processes}
 
@@ -138,14 +137,14 @@ Windows' texttt{PowerShell} have, would also be a logical next step for improvem
 
 
 \subsection*{Threads}
-
+\includesource{c}{win_threads.c}
 
 \append{IV} {Windows Output}
 \subsection*{Processes}
 \filename{Version 1: Multiple \texttt{fprintf}'s}
 %\includeoutput{output/win_processes_v1.txt}
 
-\filename{Version 2: Multiple \texttt{fprintf}'s with \texttt{sleep}}
+\filename{Version 2: Multiple \texttt{fprintf}'s with \texttt{Sleep}}
 %\includeoutput{output/win_processes_v2.txt}
  
 \filename{Version 3: Single \texttt{fprintf}}
@@ -154,7 +153,7 @@ Windows' texttt{PowerShell} have, would also be a logical next step for improvem
 \filename{Version 4: \texttt{fputs}}
 %\includeoutput{output/win_processes_v4.txt}
  
-\filename{Version 5: \texttt{sprintf} + \texttt{write} system-call}
+\filename{Version 5: \texttt{sprintf} + \texttt{WriteFile} system-call}
 %\includeoutput{output/win_processes_v5.txt}
 
 
