@@ -1,50 +1,52 @@
 #include <stdio.h>
 #include <windows.h>
 
-void version1(DWORD pid, int iteration) {
+void version1(DWORD pid, int process_num) {
     int j;
     for (j=1; j <= 10; j++)
-        fprintf(stderr, "[Process #%d] \t ID: %d \t Value: %d\n", iteration+1, pid, j);
+        fprintf(stderr, "[Process #%d] \t ID: %d \t Value: %d\n", process_num, pid, j);
 }
 
-void version2(DWORD pid, int iteration) {
+void version2(DWORD pid, int process_num) {
     int j;
     for (j=1; j <= 10; j++) {
-        fprintf(stderr, "[Process #%d] \t ID: %d \t Value: %d\n", iteration+1, pid, j);
+        fprintf(stderr, "[Process #%d] \t ID: %d \t Value: %d\n", process_num, pid, j);
         Sleep(1);
     }
 }
 
-void version3(DWORD pid, int iteration) {
+void version3(DWORD pid, int process_num) {
     char *values = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10";
 
-    fprintf(stderr, "[Process #%d] \t ID: %d \t Values:\n%s\n", iteration+1, pid, values);
+    fprintf(stderr, "[Process #%d] \t ID: %d \t Values:\n%s\n", process_num, pid, values);
     Sleep(1);
 }
 
-void version4(DWORD pid, int iteration) {
+void version4(DWORD pid, int process_num) {
     char *output;
     char *values = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10";
 
-    asprintf(&output, "[Process #%d] \t ID: %d \t Values:\n%s\n",  iteration+1, pid, values);
-    fputs(output, STD_ERROR_HANDLE);
+    sprintf(output, "[Process #%d] \t ID: %d \t Values:\n%s\n",  process_num, pid, values);
+    fputs(output, stderr);
     Sleep(1);
 }
 
-void version5(DWORD pid, int iteration) {
+void version5(DWORD pid, int process_num) {
     char output[256];
     char *values = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10";
+    int output_length;
 
-    sprintf(output, "[Process #%d] \t ID: %d \t Values:\n%s\n",  iteration+1, pid, values);
-    WriteFile(GetStdHandle(STD_ERROR_HANDLE), &output, sizeof(output), NULL, NULL);
+    memset(output, '\0', 256);
+    sprintf(output, "[Process #%d] \t ID: %d \t Values:\n%s\n",  process_num, pid, values);
     
+    WriteFile(GetStdHandle(STD_ERROR_HANDLE), &output, strlen(output), NULL, NULL);
     Sleep(1);
 }
 
 int main(int argc, char *argv[]) {
     int version = atoi(argv[1]);
-    int iteration = atoi(argv[2]);
-    DWORD pid = GetProcessID();
+    int iteration = atoi(argv[2])+1;
+    DWORD pid = GetCurrentProcessId();
     
     if (version == 1)
         version1(pid, iteration);

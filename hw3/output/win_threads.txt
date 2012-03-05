@@ -1,0 +1,22 @@
+> win_threads
+[Thread #1]      ID: 3848        Counter Before: 0
+[Thread #1]      ID: 3848        Counter After: 10
+[Thread #2]      ID: 2500        Counter Before: 0
+[Thread #2]      ID: 2500        Counter After: 10
+[Thread #3]      ID: 3092        Counter Before: 0
+[Thread #3]      ID: 3092        Counter After: 10
+[Thread #4]      ID: 4596        Counter Before: 0
+[Thread #4]      ID: 4596        Counter After: 10
+[Thread #6]      ID: 4752        Counter Before: 0
+[Thread #6]      ID: 4752        Counter After: 10
+[Thread #10]     ID: 4996        Counter Before: 10
+[Thread #10]     ID: 4996        Counter After: 20
+[Thread #9]      ID: 4888        Counter Before: 10
+[Thread #9]      ID: 4888        Counter After: 20
+[Thread #7]      ID: 3640        Counter Before: 10
+[Thread #7]      ID: 3640        Counter After: 20
+[Thread #5]      ID: 3876        Counter Before: 0
+[Thread #5]      ID: 3876        Counter After: 10
+[Thread #8]      ID: 1808        Counter Before: 10
+[Thread #8]      ID: 1808        Counter After: 20
+        Counter Total: 10

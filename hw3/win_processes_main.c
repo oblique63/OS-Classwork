@@ -11,14 +11,14 @@ void close_process(PROCESS_INFORMATION process) {
 
 void check(int expression, char *message, PROCESS_INFORMATION process) {
     if (!expression) {
-        fprintf(stderr, "%s: %x\n", message, GetLastError());
+        DWORD error = GetLastError();
+        fprintf(stderr, "%s: %x\n", message, error);
         close_process(process);
-        exit(return_code);
+        exit(error);
     }
 }
 
 int main(int argc, char *argv[]) {
-
     int version = atoi(argv[1]);
     
     int i, j, pid;
@@ -26,22 +26,27 @@ int main(int argc, char *argv[]) {
     DWORD return_code;
     STARTUPINFO startup_info;
     PROCESS_INFORMATION processes[PROCESSES];
-
-    const char *path = strcat( _getcwd(NULL, 0), "\\win_processes.exe" );
+    
+    char path[256];
     char args[256];
 
+    GetStartupInfo(&startup_info);
+
+    // the 'win_processes' program handles all the printing of values for all the versions
+    _getcwd(&path, 256);
+    strcat(path, "\\win_processes.exe" );
+    
     for (i=0; i < PROCESSES; i++) {
         memset(args, '\0', sizeof(args));
-        // the 'win_processes.exe' program handles all the printing of values
         sprintf(args, "%s %d %d", path, version, i);
         
         success = CreateProcess(path, args,
                                 NULL, NULL,
                                 TRUE, 0,
                                 NULL, NULL,
-                                &startup_info, &process[i]);
+                                &startup_info, &processes[i]);
 
-        check(success, "Failed to create process.", processes[i]);
+        check(success != NULL, "Failed to create process", processes[i]);
     }
 
     for (i=0; i < PROCESSES; i++) {

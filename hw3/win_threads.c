@@ -7,9 +7,10 @@ int thread_num = 0;
 
 void check(int expression, char *message, HANDLE thread) {
     if (!expression) {
-        fprintf(stderr, "%s: %x\n", message, GetLastError());
+        DWORD error = GetLastError();
+        fprintf(stderr, "%s: %x\n", message, error);
         CloseHandle(thread);
-        exit(return_code);
+        exit(error);
     }
 }
 
@@ -32,7 +33,7 @@ int main(int argc, char *argv[]) {
     HANDLE threads[THREADS];
 
     for (i=0; i < THREADS; i++) {
-        threads[i] = CreateThread(NULL, 0, add_10, NULL, 0, NULL);
+        threads[i] = CreateThread(NULL, 0, (void *) add_10, NULL, 0, NULL);
         
         check(threads[i] != NULL, "Failed to create thread.", threads[i]);
     }
@@ -42,5 +43,6 @@ int main(int argc, char *argv[]) {
         CloseHandle(threads[i]);
     }
 
+    printf("\tCounter Total: %d\n", counter);
     return 0;
 }
