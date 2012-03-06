@@ -22,7 +22,9 @@ void add_10() {
     printf("[Thread #%d] \t ID: %ld \t Counter Before: %d\n", thread, thread_id, local_counter);
     local_counter += 10;
     printf("[Thread #%d] \t ID: %ld \t Counter After: %d\n", thread, thread_id, local_counter);
-    // Ensure race conditions by waiting to update the counter
+    // Ensure race conditions by waiting to update the counter.
+    // This should delay it enough so that other threads end up assigning the old counter value
+    // to their local variables.
     Sleep(1);
     counter = local_counter;
 }

@@ -1,4 +1,6 @@
 $ ./unix_processes_v3
+%comment{Since each process has only a single call to 'fprintf', the processes can print out their entire output}
+%comment{without interrupting any of the other process' output streams. The processes themselves are also more ordered.}
 [Process #1]     ID: 42092   Values:
 1
 2

@@ -44,6 +44,7 @@ void version5(DWORD pid, int process_num) {
 }
 
 int main(int argc, char *argv[]) {
+    // Selects which implementation to run based on the first argument
     int version = atoi(argv[1]);
     int iteration = atoi(argv[2])+1;
     DWORD pid = GetCurrentProcessId();

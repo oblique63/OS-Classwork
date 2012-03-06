@@ -1,4 +1,7 @@
 > win_processes_main 2
+%comment{The 'sleep' call between the 'fprintf's allows some processes to catch up to each other,}
+%comment{resulting in all the outputs being interleaved, as processes print out roughly the same values }
+%comment{during each of the 'fprintf' iterations.}
 [Process #1]     ID: 2356        Value: 1
 [Process #3]     ID: 3548        Value: 1
 [Process #5]     ID: 3732        Value: 1

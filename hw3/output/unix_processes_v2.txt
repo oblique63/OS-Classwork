@@ -1,4 +1,7 @@
 $ ./unix_processes_v2
+%comment{The 'sleep' call between the 'fprintf's allows the processes to catch up to each other,}
+%comment{resulting in all the output being interleaved, as processes print out the same value }
+%comment{during each 'fprintf' iteration. The processes themselves however, are not executed in any sequential order.}
 [Process #1]     ID: 41282   Value: 1
 [Process #2]     ID: 41283   Value: 1
 [Process #3]     ID: 41284   Value: 1

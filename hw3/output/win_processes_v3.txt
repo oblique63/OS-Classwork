@@ -1,4 +1,6 @@
 > win_processes_main 3
+%comment{Since each process has only a single call to 'fprintf', the processes can print out their entire output without getting}
+%comment{interleaved with the output streams of other processes. The processes themselves are also more ordered.}
 [Process #1]     ID: 3848        Values:
 1
 2

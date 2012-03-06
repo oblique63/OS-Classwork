@@ -3,7 +3,6 @@
 
 #define PROCESSES 10
 
-// Make sure to properly end the processes when exiting
 void close_process(PROCESS_INFORMATION process) {
     CloseHandle(process.hProcess);
     CloseHandle(process.hThread);
@@ -19,6 +18,8 @@ void check(int expression, char *message, PROCESS_INFORMATION process) {
 }
 
 int main(int argc, char *argv[]) {
+    // The first argument is the implementation version number that corresponds to the function to be
+    // executed in the 'win_processes' program
     int version = atoi(argv[1]);
     
     int i, j, pid;

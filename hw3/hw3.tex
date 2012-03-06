@@ -46,38 +46,45 @@
 
 %---{ Main Content }--------------------------------------------------------------------
 \section*{Assignment Description}
-In this assignment, the goal was to create an interactive shell interface on top of the native Unix and Windows shell environments, that
-demonstrated basic concurrency and process management. For the Unix environment, the shell takes advantage of the operating system's
-\texttt{PATH} variable to search for executable commands, making it a rather useful shell interface. On a Windows system however, the shell
-is only able to search for executables in the current directory, making it a bit limited for actual use. In both cases, the commands are
-executed (with all of their intended arguments) as child processes of the parent shell process, and the user has the option to set these commands
-to run in the background using the `\&` character in traditional Unix fashion. When set to run in the background, a process executes without
-interrupting the user's interaction with the shell; the child is allowed to finish its execution at its own pace, but launches the user straight
-back into the shell prompt to run more commands.
+This assignment was centered around the behavior of multiple concurrent processes and threads, and the subtle pitfalls which can introduce
+unwanted race conditions into a program. The goal was to intentionally write programs with as many race conditions as possible, and observe
+their output. For the Process portion, this involved printing the digits 1 through 10 to \texttt{stderr} in each child process; whereas in
+the Thread program, the threads were to attempt and increment a shared global variable by 10 each time they were spawned. The printing of 
+output for the Processes was implemented 5 different ways, to experiment and analyze what might be the best way to present output from
+concurrent processes, and combat race conditions.
 
 This code has been tested to work under \textsl{Windows}, \textsl{Gentoo Linux}, and \textsl{Mac OSX}.
 The source for the Unix implementation under listed in \textbf{Appendix I}, and \textbf{Appendix III} for the Windows version.
 
 \section*{Design \& Implementation}
-I decided to keep the implementation of this shell as minimal and simple as possible. The entire program is essentially within the
-confines of a simple 'read-eval-print-loop', where I perform basic operations to check whether the user input a special command (such as the
-\texttt{exit}/\texttt{quit} commands) or entered a directive to spawn a background process. When it came to the operations performed inside
-this loop, I also kept it minimal, attempting to spawn child processes and execute commands only if provided with usable input that the shell itself
-can't directly handle (as in with \texttt{exit}). I also added a couple conveniences to the Windows implementation to make it easier to test. I added
-support for the native Windows \texttt{tasklist} command so that I could use it to demonstrate concurrency with background child processes within my
-same shell, much like how I could call the \texttt{ps} command in the Unix implementation. In addition to that, I also implemented support for optionally
-typing out executable names without their `.exe' extensions, like how is possible in the native Windows command prompt.
-These minor conveniences I implemented on the Windows side were a great help to me when testing and debugging my code on that platform. In general however,
-having quick printouts of the modified input string were my main means of debugging for both environments, as they clearly described what I was attempting
-to create a child process for.
+In general, I kept these programs as minimal as possible, but due to time constraints, I followed two distinct implementation styles for the 
+Windows and Unix versions. For the Unix portion, I implemented each version of the Processes experiment in a separate program,
+whereas in my Windows implementation, I combined all the versions into one program that selectively executes the appropriate version via the
+arguments passed to it.  This design decision came about due to the Win32 API's lack of separate \texttt{fork} and \texttt{exec} functions,
+which requires separate programs for the child processes. Thus to minimize the amount of programs needed (i.e. 5 different child process implementations
+with corresponding parent programs), I simply implemented a single main parent program that accepts the implementation version number, and a single child 
+program that gets spawned repeatedly, which also accepts the version number as an argument to tell it which implementation to execute.  As far as testing
+goes, it helped greatly that I formatted my output to be terse and tab-separated, and included the number of the process (i.e. the order in which it was
+spawned) instead of just relying on the PID to determine when it was spawned/executed.
+
 
 \section*{Improvements}
-This is a rather primitive shell implementation, so there are various ways in which I could improve it. As of now, there is no support for cursor movement
-in the unix implementation, thus adding support for it would greatly improve it's usability. Tab-completion would also be a welcome addition for better
-usability. This shell is also lacking the ability to change directories, making it rather limited in usefulness. On the windows side, even though I have
-automatic '.exe' insertion, it would still greatly benefit from gaining access to the system path to use actual windows commands instead of just searching
-for executables in the current directory (which you cannot even change). And aside from piping and output redirection, a scripting interface like \texttt{Bash} or
-Windows' texttt{PowerShell} have, would also be a logical next step for improvement.
+The main thing I would improve would be the unix implementation of the Process part, so that it is more of a self-contained test suite like the Windows 
+implementation, instead of a group of lose files. I would also probably add in the option to perform all the version tests at once (including the Threading
+program) to quickly compare the differences between each approach. Different types of additional concurrency/race condition tests would also be a good addition, 
+especially ones involving database access or file I/O.
+
+
+\section*{Printing To \texttt{stderr} From Concurrent Processes}
+For the first part of the assignment, when exploring methods for printing to \texttt{stderr} from concurrent processes, each version demonstrated how race conditions
+can be subtly induced or minimized. In the first version (using multiple \texttt{fprintf}'s), the process ID's are assigned incrementally in the order the processes 
+were spawned by the parent, but the output suggests they were not executed in that same order; they did however, manage to print out their values mostly in order with
+a few race conditions. When adding the \texttt{sleep} call in the second version, the processes did execute more sequentially (closer to the order in which they were spawned),
+but their outputs were heavily interleaved, as the \texttt{sleep} calls gave all the threads a chance to print out their values before continuing on to the next \texttt{fprintf}
+iteration. For the version with the single \texttt{fprintf}, the outputs are no longer interleaved, and the processes are executed more sequentially than they were before. Similarly,
+the output with the \texttt{fputs} and \texttt{write} system-call versions also had no interleaving output, and each improved upon the previous when it came to the order the
+processes were executed in.  The best approach to output to \texttt{stderr} from multiple concurrent processes seems to be any method which dumps the output all at once, so that you 
+don't rely on multiple print statements which can manifest as confusing, interleaved output.
 
 %---{ Appendices }-----------------------------------------------------------------------
 \newpage

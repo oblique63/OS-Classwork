@@ -24,7 +24,8 @@ int main() {
 
         if (pid == 0) {
             pid = getpid();
-            
+
+            // Build the string, then output the completed string with fputs
             asprintf(&output, "[Process #%d] \t ID: %d \t Values:\n%s\n",  i, pid, values);
             fputs(output, stderr);
 

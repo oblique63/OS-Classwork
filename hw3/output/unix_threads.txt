@@ -1,28 +1,8 @@
 $ ./unix_threads
-[Thread #1] 	 ID: 1218073744 	 Counter Before: 0
-[Thread #1] 	 ID: 1218073744 	 Counter After: 10
-[Thread #3] 	 ID: 1234859152 	 Counter Before: 0
-[Thread #3] 	 ID: 1234859152 	 Counter After: 10
-[Thread #4] 	 ID: 1243251856 	 Counter Before: 0
-[Thread #4] 	 ID: 1243251856 	 Counter After: 10
-[Thread #9] 	 ID: 1285215376 	 Counter Before: 10
-[Thread #9] 	 ID: 1285215376 	 Counter After: 20
-[Thread #10] 	 ID: 1268429968 	 Counter Before: 20
-[Thread #10] 	 ID: 1268429968 	 Counter After: 30
-[Thread #2] 	 ID: 1226466448 	 Counter Before: 0
-[Thread #2] 	 ID: 1226466448 	 Counter After: 10
-[Thread #6] 	 ID: 1293608080 	 Counter Before: 0
-[Thread #6] 	 ID: 1293608080 	 Counter After: 10
-[Thread #8] 	 ID: 1260037264 	 Counter Before: 0
-[Thread #5] 	 ID: 1251644560 	 Counter Before: 0
-[Thread #5] 	 ID: 1251644560 	 Counter After: 10
-[Thread #7] 	 ID: 1276822672 	 Counter Before: 0
-[Thread #7] 	 ID: 1276822672 	 Counter After: 10
-[Thread #8] 	 ID: 1260037264 	 Counter After: 10
-	Counter Total: 10
-
-%comment{Alternate run:}
-$ ./unix_threads
+%comment{The 'sleep' call effectively produced race conditions which prevented the counter from increasing beyond 10.}
+%comment{Since 'sleep' is called right before storing the new value back into the global variable, the delay causes other}
+%comment{threads to use the old counter value when they get executed, thus incrementingb and saving the wrong value back into}
+%comment{the global variable.}
 [Thread #1] 	 ID: 1218790544 	 Counter Before: 0
 [Thread #1] 	 ID: 1218790544 	 Counter After: 10
 [Thread #5] 	 ID: 1285932176 	 Counter Before: 0

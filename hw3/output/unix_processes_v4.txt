@@ -1,4 +1,6 @@
 $ ./unix_processes_v4
+%comment{Since the 'fputs' function is simpler than the 'fprintf' command, it executes quicker, making race conditions}
+%comment{a rarer occurrence, letting the processes execute [mostly] sequentially, and producing no interleaved output.}
 [Process #1]     ID: 41445   Values:
 1
 2

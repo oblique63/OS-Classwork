@@ -1,4 +1,7 @@
 > win_threads
+%comment{Since 'sleep' is called right before storing the new value back into the global variable, the delay causes other}
+%comment{threads to use the old counter value when they get executed, thus incrementingb and saving the wrong value back into}
+%comment{the global variable.}
 [Thread #1]      ID: 3848        Counter Before: 0
 [Thread #1]      ID: 3848        Counter After: 10
 [Thread #2]      ID: 2500        Counter Before: 0
@@ -8,8 +11,8 @@
 [Thread #4]      ID: 4596        Counter Before: 0
 [Thread #4]      ID: 4596        Counter After: 10
 [Thread #6]      ID: 4752        Counter Before: 0
-[Thread #6]      ID: 4752        Counter After: 10
-[Thread #10]     ID: 4996        Counter Before: 10
+[Thread #6]      ID: 4752        Counter After: 10   %comment{<-- Process manages to store value to the global variable without race conditions,}
+[Thread #10]     ID: 4996        Counter Before: 10  %comment{    processes #7-10 seem to have stored this new value to their local variables}
 [Thread #10]     ID: 4996        Counter After: 20
 [Thread #9]      ID: 4888        Counter Before: 10
 [Thread #9]      ID: 4888        Counter After: 20
@@ -19,4 +22,4 @@
 [Thread #5]      ID: 3876        Counter After: 10
 [Thread #8]      ID: 1808        Counter Before: 10
 [Thread #8]      ID: 1808        Counter After: 20
-        Counter Total: 10
+        Counter Total: 10                            %comment{<-- Another thread has overwritten the value that was stored in the counter by this point}
