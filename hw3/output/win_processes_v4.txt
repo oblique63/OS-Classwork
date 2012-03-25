@@ -1,5 +1,6 @@
 > win_processes_main 4
-%comment{The 'fputs' function has similar results to the 'fprintf' version; no interleaved output, but processes are executed somewhat out of order}
+%comment{The 'fputs' function has similar results to the 'fprintf' version; no interleaved output, but processes are}
+%comment{executed somewhat out of order}
 [Process #1]     ID: 4660        Values:
 1
 2

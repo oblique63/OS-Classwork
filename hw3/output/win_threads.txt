@@ -11,9 +11,9 @@
 [Thread #4]      ID: 4596        Counter Before: 0
 [Thread #4]      ID: 4596        Counter After: 10
 [Thread #6]      ID: 4752        Counter Before: 0
-[Thread #6]      ID: 4752        Counter After: 10   %comment{<-- Process manages to store value to the global variable without race conditions,}
-[Thread #10]     ID: 4996        Counter Before: 10  %comment{    processes #7-10 seem to have stored this new value to their local variables}
-[Thread #10]     ID: 4996        Counter After: 20
+[Thread #6]      ID: 4752        Counter After: 10   %comment{<-- Process manages to store value to the global variable without race}
+[Thread #10]     ID: 4996        Counter Before: 10  %comment{    conditions, processes #7-10 seem to have stored this new value to}
+[Thread #10]     ID: 4996        Counter After: 20   %comment{    their local variables}
 [Thread #9]      ID: 4888        Counter Before: 10
 [Thread #9]      ID: 4888        Counter After: 20
 [Thread #7]      ID: 3640        Counter Before: 10
@@ -22,4 +22,5 @@
 [Thread #5]      ID: 3876        Counter After: 10
 [Thread #8]      ID: 1808        Counter Before: 10
 [Thread #8]      ID: 1808        Counter After: 20
-        Counter Total: 10                            %comment{<-- Another thread has overwritten the value that was stored in the counter by this point}
+        Counter Total: 10                            %comment{<-- Another thread has overwritten the value that was stored in the counter} 
+                                                     %comment{    by this point}
