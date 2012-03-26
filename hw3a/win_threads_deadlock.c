@@ -36,7 +36,9 @@ void add_10() {
     Sleep(1);
     counter = local_counter;
 
-    ReleaseMutex(mutex_lock);
+    // By not unlocking the mutex, other threads will be stuck, perpetually
+    // waiting for their turn to access the shared data.
+    //ReleaseMutex(mutex_lock);
 }
 
 int main(int argc, char *argv[]) {
