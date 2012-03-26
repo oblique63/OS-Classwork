@@ -17,9 +17,6 @@ void check(int expression, char *message) {
 }
 
 void print_values() {
-    //if (process_index < PROCESSES-1)
-    //    signal(SIGHUP, print_values);
-    
     int pid = getpid();
     int j = 0;
     for (j=1; j <= 10; j++) {
