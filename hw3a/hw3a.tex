@@ -1,0 +1,158 @@
+\documentclass[12pt]{article}
+
+\usepackage{setspace}
+\usepackage{minted}
+\usepackage{fancyvrb}
+\usepackage{listings}
+
+\usepackage[margin=0.75in]{geometry}
+\pagestyle{empty}
+
+\def \name       {Enrique Gavidia}
+\def \coursenum  {CSC 415.01}
+\def \coursename {Operating Systems Principles}
+\def \instructor {Prof. Murphy}
+\def \semester   {Spring 2012}
+\def \assignment {Homework \# 3A}
+\def \duedate    {March 26, 2012}
+
+\newcommand {\mytilde} {$\sim$}
+\newcommand {\comment}[1] {\textcolor{red}{#1}}
+\newcommand {\filename}[1] {\flushleft \textbf{#1}}
+\newcommand {\append}[2] {\section*{Appendix #1} \textsl{\large #2}}
+
+\newcommand {\makecover} {
+  \begin{titlepage}
+    \begin{center}
+      \LARGE{\coursenum, \semester \\ \coursename}\\
+      \Large{\instructor}\\
+      \vfill
+      \textbf{\Huge \assignment}\\
+      \vfill
+      \Large{\name}\\
+      \large{\duedate}
+    \end{center}
+  \end{titlepage}
+}
+
+\DefineVerbatimEnvironment {shelloutput} {Verbatim} {fontsize=\scriptsize, numbers=left, frame=lines, commandchars=\%\{\}}
+
+\newcommand {\includesource}[2] {\inputminted[linenos, fontsize=\scriptsize, frame=lines]{#1}{#2}}
+\newcommand {\includeoutput}[1] {\VerbatimInput[fontsize=\scriptsize, numbers=left, frame=lines, commandchars=\%\{\}]{#1}}
+
+\begin{document}
+
+\makecover
+
+%---{ Main Content }--------------------------------------------------------------------
+\section*{Assignment Description}
+This assignment was centered around the behavior of multiple concurrent processes and threads, and the subtle pitfalls which can introduce
+unwanted race conditions into a program. The goal was to intentionally write programs with as many race conditions as possible, and observe
+their output. For the Process portion, this involved printing the digits 1 through 10 to \texttt{stderr} in each child process; whereas in
+the Thread program, the threads were to attempt and increment a shared global variable by 10 each time they were spawned. The printing of 
+output for the Processes was implemented 5 different ways, to experiment and analyze what might be the best way to present output from
+concurrent processes, and combat race conditions.
+
+This code has been tested to work under \textsl{Windows}, \textsl{Gentoo Linux}, and \textsl{Mac OSX}.
+The source for the Unix implementation under listed in \textbf{Appendix I}, and \textbf{Appendix III} for the Windows version.
+
+\section*{Design \& Implementation}
+In general, I kept these programs as minimal as possible, but due to time constraints, I followed two distinct implementation styles for the 
+Windows and Unix versions. For the Unix portion, I implemented each version of the Processes experiment in a separate program,
+whereas in my Windows implementation, I combined all the versions into one program that selectively executes the appropriate version via the
+arguments passed to it.  This design decision came about due to the Win32 API's lack of separate \texttt{fork} and \texttt{exec} functions,
+which requires separate programs for the child processes. Thus to minimize the amount of programs needed (i.e. 5 different child process implementations
+with corresponding parent programs), I simply implemented a single main parent program that accepts the implementation version number, and a single child 
+program that gets spawned repeatedly, which also accepts the version number as an argument to tell it which implementation to execute.  As far as testing
+goes, it helped greatly that I formatted my output to be terse and tab-separated, and included the number of the process (i.e. the order in which it was
+spawned) instead of just relying on the PID to determine when it was spawned/executed.
+
+
+\section*{Improvements}
+The main thing I would improve would be the unix implementation of the Process part, so that it is more of a self-contained test suite like the Windows 
+implementation, instead of a group of lose files. I would also probably add in the option to perform all the version tests at once (including the Threading
+program) to quickly compare the differences between each approach. Different types of additional concurrency/race condition tests would also be a good addition, 
+especially ones involving database access or file I/O.
+
+
+\section*{Printing To \texttt{stderr} From Concurrent Processes}
+For the first part of the assignment, when exploring methods for printing to \texttt{stderr} from concurrent processes, each version demonstrated how race conditions
+can be subtly induced or minimized. In the first version (using multiple \texttt{fprintf}'s), the process ID's are assigned incrementally in the order the processes 
+were spawned by the parent, but the output suggests they were not executed in that same order; they did however, manage to print out their values mostly in order with
+a few race conditions. When adding the \texttt{sleep} call in the second version, the processes did execute more sequentially (closer to the order in which they were spawned),
+but their outputs were heavily interleaved, as the \texttt{sleep} calls gave all the threads a chance to print out their values before continuing on to the next \texttt{fprintf}
+iteration. For the version with the single \texttt{fprintf}, the outputs are no longer interleaved, and the processes are executed more sequentially than they were before. Similarly,
+the output with the \texttt{fputs} and \texttt{write} system-call versions also had no interleaving output, and each improved upon the previous when it came to the order the
+processes were executed in.  The best approach to output to \texttt{stderr} from multiple concurrent processes seems to be any method which dumps the output all at once, so that you 
+don't rely on multiple print statements which can manifest as confusing, interleaved output.
+
+%---{ Appendices }-----------------------------------------------------------------------
+
+%----{ Pseudo Code }---------------------------------------------------------------------
+\append{II} {Pseudo Code}
+\subsection*{Processes}
+
+
+\subsection*{Threads}
+
+
+%----{ UNIX }----------------------------------------------------------------------------
+\append{II} {Unix Source Code}
+
+\subsection*{Processes}
+\includesource{c}{unix_processes.c}
+
+\filename{Deadlocked Version}
+\includesource{c}{unix_processes_deadlock.c}
+
+\subsection*{Threads}
+\includesource{c}{unix_threads.c}
+
+\filename{Deadlocked Version}
+\includesource{c}{unix_threads_deadlock.c}
+
+
+\append{III} {Unix Output}
+
+\subsection*{Processes}
+\includeoutput{output/unix_processes.txt}
+
+\filename{Deadlocked Version}
+\includeoutput{output/unix_processes_deadlock.txt}
+
+\subsection*{Threads}
+\includeoutput{output/unix_threads.txt}
+
+\filename{Deadlocked Version}
+\includeoutput{output/unix_threads_deadlock.txt}
+
+
+%----{ WINDOWS }-------------------------------------------------------------------------
+\append{IV} {Windows Source Code}
+
+%\subsection*{Processes}
+%\filename{Parent Program}
+%\includesource{c}{win_processes_main.c}
+% 
+%\filename{Child Program}
+%\includesource{c}{win_processes.c}
+
+\subsection*{Threads}
+\includesource{c}{win_threads.c}
+
+\filename{Deadlocked Version}
+\includesource{c}{win_threads_deadlock.c}
+
+
+\append{IV} {Windows Output}
+
+%\subsection*{Processes}
+%\includeoutput{output/win_processes.txt}
+
+\subsection*{Threads}
+\includeoutput{output/win_threads.txt}
+
+\filename{Deadlocked Version}
+\includeoutput{output/win_threads_deadlock.txt}
+
+\end{document}
