@@ -54,7 +54,7 @@ output for the Processes was implemented 5 different ways, to experiment and ana
 concurrent processes, and combat race conditions.
 
 This code has been tested to work under \textsl{Windows}, \textsl{Gentoo Linux}, and \textsl{Mac OSX}.
-The source for the Unix implementation under listed in \textbf{Appendix I}, and \textbf{Appendix III} for the Windows version.
+The source for the Unix implementation under listed in \textbf{Appendix II}, and \textbf{Appendix IV} for the Windows version.
 
 \section*{Design \& Implementation}
 In general, I kept these programs as minimal as possible, but due to time constraints, I followed two distinct implementation styles for the 
@@ -91,9 +91,95 @@ don't rely on multiple print statements which can manifest as confusing, interle
 %----{ Pseudo Code }---------------------------------------------------------------------
 \append{II} {Pseudo Code}
 \subsection*{Processes}
+\begin{verbatim}
+semaphore s;
+int pids[10];
+
+main() {
+    s = 1;
+    for (index from 10 to 1) {
+        pids[index] = fork();
+        if (in child)
+          break;
+    }
+
+    if (in child) {
+        if (index == 0) {
+           // do task
+           v(s);
+        }
+        else {
+            p(s);
+            // do task
+            v(s);
+        }
+    }
+}
+\end{verbatim}
+
+\filename{Deadlocked Version}
+\begin{verbatim}
+semaphore s;
+int pids[10];
+
+main() {
+    s = 1;
+    for (index from 10 to 1) {
+        pids[index] = fork();
+        if (in child)
+          break;
+    }
+
+    if (in child) {
+        if (index == 0) {
+           // do task
+           v(s);
+        }
+        else {
+            p(s);
+            // do task
+            
+            // don't signal rest of the child processes to start;
+            // induce a p() -> p() deadlock
+        }
+    }
+}
+\end{verbatim}
 
 
 \subsection*{Threads}
+\begin{verbatim}
+semaphore s;
+main() {
+    s = 1;
+    for (1 to 10)
+        create_thread(do_task);
+}
+
+do_task() {
+    p(s);
+    // perform critical section task here
+    v(s);
+}
+\end{verbatim}
+
+\filename{Deadlocked Version}
+\begin{verbatim}
+semaphore s;
+main() {
+    s = 1;
+    for (1 to 10)
+        create_thread(do_task);
+}
+
+do_task() {
+    p(s);
+    // perform critical section task here
+
+    // don't reset the semaphore -- other threads forced to wait
+    // for it to unlock, thus leading to a p()->p() deadlock
+}
+\end{verbatim}
 
 
 %----{ UNIX }----------------------------------------------------------------------------
