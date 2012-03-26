@@ -1,0 +1,12 @@
+$ ./unix_processes_deadlock
+[Process #1] 	 ID: 84585 	 Value: 1
+[Process #1] 	 ID: 84585 	 Value: 2
+[Process #1] 	 ID: 84585 	 Value: 3
+[Process #1] 	 ID: 84585 	 Value: 4
+[Process #1] 	 ID: 84585 	 Value: 5
+[Process #1] 	 ID: 84585 	 Value: 6
+[Process #1] 	 ID: 84585 	 Value: 7
+[Process #1] 	 ID: 84585 	 Value: 8
+[Process #1] 	 ID: 84585 	 Value: 9
+[Process #1] 	 ID: 84585 	 Value: 10
+^C
