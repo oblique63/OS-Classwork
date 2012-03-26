@@ -36,9 +36,7 @@ void add_10() {
     Sleep(1);
     counter = local_counter;
 
-    // By not unlocking the mutex, other threads will be stuck, perpetually
-    // waiting for their turn to access the shared data.
-    //ReleaseMutex(mutex_lock);
+    ReleaseMutex(mutex_lock);
 }
 
 int main(int argc, char *argv[]) {
@@ -48,6 +46,10 @@ int main(int argc, char *argv[]) {
 
     mutex_lock = CreateMutex(NULL, FALSE, NULL);
 
+    // By not unlocking this mutex, the child threads will be stuck, perpetually
+    // waiting for their turn to access the shared data.
+    WaitForSingleObject(mutex_lock, INFINITE);
+    
     for (i=0; i < THREADS; i++) {
         threads[i] = CreateThread(NULL, 0, (void *) add_10, NULL, 0, NULL);
 
