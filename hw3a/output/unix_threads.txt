@@ -1,0 +1,21 @@
+$ ./unix_threads
+[Thread #1]      ID: 217583616   Counter Before: 0
+[Thread #1]      ID: 217583616   Counter After: 10
+[Thread #2]      ID: 218120192   Counter Before: 10
+[Thread #2]      ID: 218120192   Counter After: 20
+[Thread #3]      ID: 218656768   Counter Before: 20
+[Thread #3]      ID: 218656768   Counter After: 30
+[Thread #4]      ID: 219193344   Counter Before: 30
+[Thread #4]      ID: 219193344   Counter After: 40
+[Thread #5]      ID: 219729920   Counter Before: 40
+[Thread #5]      ID: 219729920   Counter After: 50
+[Thread #6]      ID: 220266496   Counter Before: 50
+[Thread #6]      ID: 220266496   Counter After: 60
+[Thread #7]      ID: 220803072   Counter Before: 60
+[Thread #7]      ID: 220803072   Counter After: 70
+[Thread #8]      ID: 221339648   Counter Before: 70
+[Thread #8]      ID: 221339648   Counter After: 80
+[Thread #9]      ID: 221876224   Counter Before: 80
+[Thread #9]      ID: 221876224   Counter After: 90
+[Thread #10]     ID: 222412800   Counter Before: 90
+[Thread #10]     ID: 222412800   Counter After: 100
