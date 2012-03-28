@@ -1,3 +1,7 @@
+%comment{Since the implementation has the first process always perform its task,}
+%comment{the first child prints its output before exiting, and doesn't signal the}
+%comment{next child to continue execution; thus leaving the next child waiting forever}
+%comment{in a deadlock.}
 $ ./unix_processes_deadlock
 [Process #1] 	 ID: 84585 	 Value: 1
 [Process #1] 	 ID: 84585 	 Value: 2
@@ -9,4 +13,5 @@ $ ./unix_processes_deadlock
 [Process #1] 	 ID: 84585 	 Value: 8
 [Process #1] 	 ID: 84585 	 Value: 9
 [Process #1] 	 ID: 84585 	 Value: 10
-^C
+^C 
+%comment{Had to break out of the hanging loop using Ctrl+c}

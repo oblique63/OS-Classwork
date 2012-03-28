@@ -1,3 +1,5 @@
+%comment{The threads are now fully synchronized, and execute their tasks sequentially,}
+%comment{enabling them to successfully increment the counter to 100.}
 > win_threads
 [Thread #1]      ID: 4172        Counter Before: 0
 [Thread #1]      ID: 4172        Counter After: 10

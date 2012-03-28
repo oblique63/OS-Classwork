@@ -1,2 +1,5 @@
+%comment{Since the parent locks the mutex before even executing a child, the second}
+%comment{the first child tries to lock the mutex, the program reaches a 'p()' -> 'p()'}
+%comment{deadlock and the children don't get to print out anything.}
 > win_threads_deadlock
 ^C

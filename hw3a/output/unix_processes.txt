@@ -1,3 +1,6 @@
+%comment{The processes are now synchronized, and not only execute the entirety}
+%comment{of their printf's without interleaving, but also execute in a sequential}
+%comment{order.}
 $ ./unix_processes
 [Process #1]     ID: 84037   Value: 1
 [Process #1]     ID: 84037   Value: 2

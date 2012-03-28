@@ -1,3 +1,5 @@
+%comment{The threads are now fully synchronized, and execute their tasks sequentially,}
+%comment{enabling them to successfully increment the counter to 100.}
 $ ./unix_threads
 [Thread #1]      ID: 217583616   Counter Before: 0
 [Thread #1]      ID: 217583616   Counter After: 10
@@ -19,3 +21,4 @@ $ ./unix_threads
 [Thread #9]      ID: 221876224   Counter After: 90
 [Thread #10]     ID: 222412800   Counter Before: 90
 [Thread #10]     ID: 222412800   Counter After: 100
+        Counter Total: 100

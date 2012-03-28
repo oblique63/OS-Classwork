@@ -1,3 +1,6 @@
+%comment{Similarly to the deadlocked processes, the threads reach a deadlock after}
+%comment{the first child calls 'p()', performs its task, and lets the next child call}
+%comment{'p()' again without calling 'v()' first.}
 $ ./unix_threads_deadlock
 [Thread #1] 	 ID: 54005760 	 Counter Before: 0
 [Thread #1] 	 ID: 54005760 	 Counter After: 10
