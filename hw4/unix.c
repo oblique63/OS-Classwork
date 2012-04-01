@@ -77,10 +77,10 @@ int main(int argc, char *argv[]) {
     printf("Start time: %s\n", ctime(start_time));
     
     for (i = 0; i < producer_count; i++)
-        pthread_create(&producers[i], NULL, producer);
+        pthread_create(&producers[i], NULL, (void *) producer, NULL);
 
     for (i = 0; i < consumer_count; i++)
-        pthread_create(&consumers[i], NULL, consumer);
+        pthread_create(&consumers[i], NULL, (void *) consumer, NULL);
 
 
     for (i = 0; i < producer_count; i++)
