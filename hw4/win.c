@@ -1,9 +1,7 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <pthread.h>
+#include <windows.h>
 
-pthread_mutex_t lock;
+HANDLE mutex_lock;
 
 int buffer_size, producer_count, consumer_count;
 int to_produce, to_consume, p_wait, c_wait;
@@ -12,35 +10,37 @@ int buffer_count = 0;
 
 void check(int expression, char *message) {
     if (!expression) {
-        perror(message);
-        exit(-1);
+        DWORD error = GetLastError();
+        fprintf(stderr, "%s: %x\n", message, error);
+        exit(error);
     }
 }
 
 void producer() {
     fprintf(stderr, "**Producer started**\n");
     do {
-        pthread_mutex_lock(&lock);
+        WaitForSingleObject(mutex_lock, INFINITE);
 
         buffer_count += to_produce;
         fprintf(stderr, "[PRODUCER] Buffer count increased \t Count: %d\n", buffer_count);
-        
-        pthread_mutex_unlock(&lock);
-        sleep(p_wait);
+
+        ReleaseMutex(mutex_lock);
+        Sleep(p_wait);
 
     } while (buffer_count < buffer_size);
 }
 
 void consumer() {
     fprintf(stderr, "**Consumer started**\n");
+
     do {
-        pthread_mutex_lock(&lock);
+        WaitForSingleObject(mutex_lock);
 
         buffer_count -= to_consume;
         fprintf(stderr, "[CONSUMER] Buffer count decreased \t Count: %d\n", buffer_count);
-        
-        pthread_mutex_unlock(&lock);
-        sleep(c_wait);
+
+        ReleaseMutex(mutex_lock);
+        Sleep(c_wait);
 
     } while (buffer_count > 0);
 }
@@ -48,7 +48,9 @@ void consumer() {
 
 int main(int argc, char *argv[]) {
 
+    int i;
     time_t start_time, end_time;
+    HANDLE *producers, *consumers;
 
     check(argc == 7,
         "Requires the arguments: \nBuffer Size, # of Producers, # of Consumers, # of Products, P-wait, C-wait\n");
@@ -61,33 +63,34 @@ int main(int argc, char *argv[]) {
     to_consume = producer_count * (to_produce / consumer_count);
 
     printf("Consumers to consume %d counts\n", to_consume);
-    
+
     p_wait = atoi(argv[5]);
     c_wait = atoi(argv[6]);
 
-    pthread_t producers[producer_count];
-    pthread_t consumers[consumer_count];
+    producers = malloc(sizeof(HANDLE) * producer_count);
+    consumers = malloc(sizeof(HANDLE) * consumer_count);
 
-    pthread_mutex_init(&lock, NULL);
+    mutex_lock = CreateMutex(NULL, FALSE, NULL);
 
     start_time = time(NULL);
     printf("Start time: %s", ctime(&start_time));
     printf("====================\n");
 
-    int i;
     for (i = 0; i < producer_count; i++)
-        pthread_create(&producers[i], NULL, (void *) producer, NULL);
+        producers[i] = CreateThread(NULL, 0, (void *) producer, NULL, 0, NULL);
 
     for (i = 0; i < consumer_count; i++)
-        pthread_create(&consumers[i], NULL, (void *) consumer, NULL);
+        consumers[i] = CreateThread(NULL, 0, (void *) consumer, NULL, 0, NULL);
 
 
     for (i = 0; i < producer_count; i++) {
-        pthread_join(producers[i], NULL);
+        WaitForSingleObject(producers[i], INFINITE);
+        CloseHandle(producers[i]);
     }
 
     for (i = 0; i < consumer_count; i++) {
-        pthread_join(consumers[i], NULL);
+        WaitForSingleObject(consumers[i], INFINITE);
+        CloseHandle(consumers[i]);
     }
 
     end_time = time(NULL);
@@ -95,6 +98,8 @@ int main(int argc, char *argv[]) {
     printf("End time: %s", ctime(&end_time));
     printf("Duration: %ld seconds\n", end_time - start_time);
 
-    pthread_mutex_destroy(&lock);
+    free(producers);
+    free(consumers);
+    CloseHandle(mutex_lock);
     return 0;
 }
