@@ -65,35 +65,12 @@ The only minor deviation is in the Windows deadlock version of the threaded prog
 single child (and thus quickly invoke a \texttt{p()}- \texttt{p()} deadlock), as opposed to simply omitting the \texttt{v()} call to send a signal to the following process.
 Aside from that, the Windows and Unix implementations of synchronous multi-threading are virtually identical.
 
-% In general, I kept these programs as minimal as possible, but due to time constraints, I followed two distinct implementation styles for the 
-% Windows and Unix versions. For the Unix portion, I implemented each version of the Processes experiment in a separate program,
-% whereas in my Windows implementation, I combined all the versions into one program that selectively executes the appropriate version via the
-% arguments passed to it.  This design decision came about due to the Win32 API's lack of separate \texttt{fork} and \texttt{exec} functions,
-% which requires separate programs for the child processes. Thus to minimize the amount of programs needed (i.e. 5 different child process implementations
-% with corresponding parent programs), I simply implemented a single main parent program that accepts the implementation version number, and a single child 
-% program that gets spawned repeatedly, which also accepts the version number as an argument to tell it which implementation to execute.  As far as testing
-% goes, it helped greatly that I formatted my output to be terse and tab-separated, and included the number of the process (i.e. the order in which it was
-% spawned) instead of just relying on the PID to determine when it was spawned/executed.
-
-
 \section*{Improvements}
 The main improvement I would probably make, would be to rewrite the Unix process synchronization using a fuller semaphore construct, to make it 
 clearer to see what is going on logically, as opposed to just using the raw \texttt{kill()} and \texttt{signal()} calls. If the programs were also
 to simply stand on their own as examples of concurrent programming, I would take out the various unnecessary elements that were meant to invoke
 race conditions in the previous assignment (such as the calls to \texttt{sleep()}), to prevent unnecessary confusion about the factors in play
 when synchronizing multiple threads/processes.
-
-
-% \section*{Printing To \texttt{stderr} From Concurrent Processes}
-% For the first part of the assignment, when exploring methods for printing to \texttt{stderr} from concurrent processes, each version demonstrated how race conditions
-% can be subtly induced or minimized. In the first version (using multiple \texttt{fprintf}'s), the process ID's are assigned incrementally in the order the processes 
-% were spawned by the parent, but the output suggests they were not executed in that same order; they did however, manage to print out their values mostly in order with
-% a few race conditions. When adding the \texttt{sleep} call in the second version, the processes did execute more sequentially (closer to the order in which they were spawned),
-% but their outputs were heavily interleaved, as the \texttt{sleep} calls gave all the threads a chance to print out their values before continuing on to the next \texttt{fprintf}
-% iteration. For the version with the single \texttt{fprintf}, the outputs are no longer interleaved, and the processes are executed more sequentially than they were before. Similarly,
-% the output with the \texttt{fputs} and \texttt{write} system-call versions also had no interleaving output, and each improved upon the previous when it came to the order the
-% processes were executed in.  The best approach to output to \texttt{stderr} from multiple concurrent processes seems to be any method which dumps the output all at once, so that you 
-% don't rely on multiple print statements which can manifest as confusing, interleaved output.
 
 %---{ Appendices }-----------------------------------------------------------------------
 \newpage
