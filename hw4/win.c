@@ -7,6 +7,7 @@ int buffer_size, producer_count, consumer_count;
 int to_produce, to_consume, p_wait, c_wait;
 
 int buffer_count = 0;
+int *buffer_queue;
 
 void check(int expression, char *message) {
     if (!expression) {
@@ -16,12 +17,32 @@ void check(int expression, char *message) {
     }
 }
 
+// Adds a buffer to the queue
+void push() {
+    if (buffer_count < buffer_size) {
+        buffer_count += 1;
+        buffer_queue[buffer_count] = 1;
+    }
+}
+
+// Removes a buffer from the queue
+void pop() {
+    if (buffer_count > 0) {
+        buffer_count -= 1;
+        buffer_queue[buffer_count] = 0;
+    }
+}
+
 void producer() {
+    int i;
+    
     fprintf(stderr, "**Producer started**\n");
     do {
         WaitForSingleObject(mutex_lock, INFINITE);
 
-        buffer_count += to_produce;
+        for (i = 0; i < to_produce; i++)
+            push();
+        
         fprintf(stderr, "[PRODUCER] Buffer count increased \t Count: %d\n", buffer_count);
 
         ReleaseMutex(mutex_lock);
@@ -31,12 +52,15 @@ void producer() {
 }
 
 void consumer() {
+    int i;
+    
     fprintf(stderr, "**Consumer started**\n");
-
     do {
         WaitForSingleObject(mutex_lock);
 
-        buffer_count -= to_consume;
+        for (i = 0; i < to_consume; i++)
+            pop();
+        
         fprintf(stderr, "[CONSUMER] Buffer count decreased \t Count: %d\n", buffer_count);
 
         ReleaseMutex(mutex_lock);
@@ -56,22 +80,25 @@ int main(int argc, char *argv[]) {
         "Requires the arguments: \nBuffer Size, # of Producers, # of Consumers, # of Products, P-wait, C-wait\n");
 
     buffer_size  = atoi(argv[1]);
+    
     producer_count = atoi(argv[2]);
     consumer_count = atoi(argv[3]);
 
     to_produce = atoi(argv[4]);
     to_consume = producer_count * (to_produce / consumer_count);
 
-    printf("Consumers to consume %d counts\n", to_consume);
-
     p_wait = atoi(argv[5]);
     c_wait = atoi(argv[6]);
 
+    buffer_queue = malloc(sizeof(int) * buffer_size);
+    
     producers = malloc(sizeof(HANDLE) * producer_count);
     consumers = malloc(sizeof(HANDLE) * consumer_count);
 
     mutex_lock = CreateMutex(NULL, FALSE, NULL);
 
+    printf("Consumers to consume %d buffers\n", to_consume);
+    
     start_time = time(NULL);
     printf("Start time: %s", ctime(&start_time));
     printf("====================\n");
@@ -98,6 +125,7 @@ int main(int argc, char *argv[]) {
     printf("End time: %s", ctime(&end_time));
     printf("Duration: %ld seconds\n", end_time - start_time);
 
+    free(buffer_queue);
     free(producers);
     free(consumers);
     CloseHandle(mutex_lock);
