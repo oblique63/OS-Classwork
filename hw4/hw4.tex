@@ -1,0 +1,219 @@
+\documentclass[12pt]{article}
+
+\usepackage{setspace}
+\usepackage{minted}
+\usepackage{fancyvrb}
+\usepackage{listings}
+
+\usepackage[margin=0.75in]{geometry}
+\pagestyle{empty}
+
+\def \name       {Enrique Gavidia}
+\def \coursenum  {CSC 415.01}
+\def \coursename {Operating Systems Principles}
+\def \instructor {Prof. Murphy}
+\def \semester   {Spring 2012}
+\def \assignment {Homework \# 4}
+\def \duedate    {April 2, 2012}
+
+\newcommand {\mytilde} {$\sim$}
+\newcommand {\comment}[1] {\textcolor{red}{#1}}
+\newcommand {\filename}[1] {\flushleft \textbf{#1}}
+\newcommand {\append}[2] {\section*{Appendix #1} \textsl{\large #2}}
+
+\newcommand {\makecover} {
+  \begin{titlepage}
+    \begin{center}
+      \LARGE{\coursenum, \semester \\ \coursename}\\
+      \Large{\instructor}\\
+      \vfill
+      \textbf{\Huge \assignment}\\
+      \vfill
+      \Large{\name}\\
+      \large{\duedate}
+    \end{center}
+  \end{titlepage}
+}
+
+\DefineVerbatimEnvironment {shelloutput} {Verbatim} {fontsize=\scriptsize, numbers=left, frame=lines, commandchars=\%\{\}}
+
+\newcommand {\includesource}[2] {\inputminted[linenos, fontsize=\scriptsize, frame=lines]{#1}{#2}}
+\newcommand {\includeoutput}[1] {\VerbatimInput[fontsize=\scriptsize, numbers=left, frame=lines, commandchars=\%\{\}]{#1}}
+
+\begin{document}
+
+\makecover
+
+%---{ Main Content }--------------------------------------------------------------------
+\section*{Assignment Description}
+
+
+% This assignment built off our last one dealing with multiple concurrent processes and threads; however, now we had to prevent the race
+% conditions we induced in the last assignment. We were to keep the various design choices that led to the unsynchronized, interleaved output 
+% (such as the various \texttt{sleep} calls), and wrap them with signal and mutex based synchronization methods; as the goal was now to learn
+% about how to ensure that a concurrent program executes how we want it to.  The tasks performed by the concurrent child processes/threads 
+% (printing out the values from 1-10 [processes], and adding to 100 [threads]) now make up the critical sections of the code, and their execution
+% is now managed by semaphores (as described in the \textsl{Pseudo Code} in \textbf{Appendix I}), ensuring a synchronized sequential execution.
+% Additionally, we were also asked to induce deadlocks in our newly synchronized solutions, to point out another potential pitfall of concurrent
+% programming.
+%  
+% This code has been tested to work under \textsl{Windows}, \textsl{Gentoo Linux}, and \textsl{Mac OSX}.
+% The source for the Unix implementation under listed in \textbf{Appendix II}, and \textbf{Appendix IV} for the Windows version.
+
+\section*{Design \& Implementation}
+
+% My goal with the design of my implementations was simply to be clear and concise about the mechanics involved, and what is going on in the code.
+% The basic logic for the synchronization closely follows the specifications laid out in the pseudo code for both the Unix and Windows implementations.
+% The only minor deviation is in the Windows deadlock version of the threaded program, where I actively lock the mutex in the parent before executing a
+% single child (and thus quickly invoke a \texttt{p()}- \texttt{p()} deadlock), as opposed to simply omitting the \texttt{v()} call to send a signal to the following process.
+% Aside from that, the Windows and Unix implementations of synchronous multi-threading are virtually identical.
+
+\section*{Improvements}
+
+% The main improvement I would probably make, would be to rewrite the Unix process synchronization using a fuller semaphore construct, to make it 
+% clearer to see what is going on logically, as opposed to just using the raw \texttt{kill()} and \texttt{signal()} calls. If the programs were also
+% to simply stand on their own as examples of concurrent programming, I would take out the various unnecessary elements that were meant to invoke
+% race conditions in the previous assignment (such as the calls to \texttt{sleep()}), to prevent unnecessary confusion about the factors in play
+% when synchronizing multiple threads/processes.
+
+%---{ Appendices }-----------------------------------------------------------------------
+\newpage
+%----{ Pseudo Code }---------------------------------------------------------------------
+\append{I} {Pseudo Code}
+
+\subsection*{Processes}
+
+\begin{scriptsize}
+\begin{verbatim}
+semaphore s;
+int pids[10];
+
+main() {
+    s = 1;
+    for (index from 9 to 0) {
+        pids[index] = fork();
+        if (in child)
+          break;
+    }
+
+    if (in child) {
+        if (index == 0) {
+           // do critical section task
+           v(s);
+        }
+        else {
+            p(s);
+            // do critical section task
+            v(s);
+        }
+    }
+}
+\end{verbatim}
+\end{scriptsize}
+
+\filename{Deadlocked Version}
+\begin{scriptsize}
+\begin{verbatim}
+semaphore s;
+int pids[10];
+
+main() {
+    s = 1;
+    for (index from 9 to 0) {
+        pids[index] = fork();
+        if (in child)
+          break;
+    }
+
+    if (in child) {
+        if (index == 0) {
+           // do critical section task
+           v(s);
+        }
+        else {
+            p(s);
+            // do critical section task
+            
+            // don't signal rest of the child processes to start;
+            // induce a p() -> p() deadlock
+        }
+    }
+}
+\end{verbatim}
+\end{scriptsize}
+
+
+\subsection*{Threads}
+
+\begin{scriptsize}
+\begin{verbatim}
+semaphore s;
+main() {
+    s = 1;
+    for (1 to 10)
+        create_thread(do_task);
+}
+
+do_task() {
+    p(s);
+    // perform critical section task here
+    v(s);
+}
+\end{verbatim}
+\end{scriptsize}
+
+\filename{Deadlocked Version}
+\begin{scriptsize}
+\begin{verbatim}
+semaphore s;
+main() {
+    s = 1;
+    for (1 to 10)
+        create_thread(do_task);
+}
+
+do_task() {
+    p(s);
+    // perform critical section task here
+
+    // don't reset the semaphore -- other threads forced to wait
+    // for it to unlock, thus leading to a p()->p() deadlock
+}
+\end{verbatim}
+\end{scriptsize}
+
+
+%----{ UNIX }----------------------------------------------------------------------------
+\append{II} {Unix Source Code}
+
+\includesource{c}{unix.c}
+
+%\filename{Deadlocked Version}
+%\includesource{c}{unix_deadlock.c}
+
+
+\append{III} {Unix Output}
+
+\includeoutput{output/unix.txt}
+
+%\filename{Deadlocked Version}
+%\includeoutput{output/unix_deadlock.txt}
+
+
+%----{ WINDOWS }-------------------------------------------------------------------------
+\append{IV} {Windows Source Code}
+
+\includesource{c}{win.c}
+
+%\filename{Deadlocked Version}
+%\includesource{c}{win_deadlock.c}
+
+
+\append{V} {Windows Output}
+
+\includeoutput{output/win.txt}
+
+%\filename{Deadlocked Version}
+%\includeoutput{output/win_deadlock.txt}
+
+\end{document}
