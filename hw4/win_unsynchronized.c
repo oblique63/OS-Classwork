@@ -1,74 +1,56 @@
 #include <stdio.h>
 #include <windows.h>
+#include "win_buffer_queue.h"
 
-HANDLE mutex_lock;
+BufferQueue buffer_queue;
 
-int buffer_size, producer_count, consumer_count;
+int producer_count, consumer_count;
 int to_produce, to_consume, p_wait, c_wait;
-
-int buffer_count = 0;
-int *buffer_queue;
 
 void check(int expression, char *message) {
     if (!expression) {
-        DWORD error = GetLastError();
-        fprintf(stderr, "%s: %x\n", message, error);
-        exit(error);
+        perror(message);
+        exit(-1);
     }
 }
 
-// Adds a buffer to the queue
-void push() {
-    if (buffer_count < buffer_size) {
-        buffer_count += 1;
-        buffer_queue[buffer_count] = 1;
-    }
-}
-
-// Removes a buffer from the queue
-void pop() {
-    if (buffer_count > 0) {
-        buffer_count -= 1;
-        buffer_queue[buffer_count] = 0;
-    }
-}
-
-void producer() {
+void producer(void * producer_id) {
     int i;
-    
-    fprintf(stderr, "**Producer started**\n");
+    int id = (int) producer_id;
+
+    fprintf(stderr, "**Producer #%d started**\n", id);
     do {
-        WaitForSingleObject(mutex_lock, INFINITE);
 
         for (i = 0; i < to_produce; i++)
-            push();
-        
-        fprintf(stderr, "[PRODUCER] Buffer count increased \t Count: %d\n", buffer_count);
+            push(buffer_queue, i);  // add a value to the top of the queue
 
-        ReleaseMutex(mutex_lock);
+        fprintf(stderr, "[PRODUCER #%d] Buffer count increased \t Count: %d\n", id, buffer_queue.count);
+
         Sleep(p_wait);
 
-    } while (buffer_count < buffer_size);
+    } while (buffer_queue.count < buffer_queue.size);
+
+    fprintf(stderr, "**Producer #%d exited**\n", id);
 }
 
-void consumer() {
+void consumer(void * consumer_id) {
     int i;
-    
-    fprintf(stderr, "**Consumer started**\n");
+    int id = (int) consumer_id;
+
+    fprintf(stderr, "**Consumer #%d started**\n", id);
     do {
-        WaitForSingleObject(mutex_lock);
 
         for (i = 0; i < to_consume; i++)
-            pop();
-        
-        fprintf(stderr, "[CONSUMER] Buffer count decreased \t Count: %d\n", buffer_count);
+            pop(buffer_queue);  // remove a value from the top of the queue
 
-        ReleaseMutex(mutex_lock);
+        fprintf(stderr, "[CONSUMER #%d] Buffer count decreased \t Count: %d\n", id, buffer_queue.count);
+
         Sleep(c_wait);
 
-    } while (buffer_count > 0);
-}
+    } while (buffer_queue.count > 0);
 
+    fprintf(stderr, "**Consumer #%d exited**\n", id);
+}
 
 int main(int argc, char *argv[]) {
 
@@ -79,8 +61,7 @@ int main(int argc, char *argv[]) {
     check(argc == 7,
         "Requires the arguments: \nBuffer Size, # of Producers, # of Consumers, # of Products, P-wait, C-wait\n");
 
-    buffer_size  = atoi(argv[1]);
-    
+    buffer_queue.size  = atoi(argv[1]);
     producer_count = atoi(argv[2]);
     consumer_count = atoi(argv[3]);
 
@@ -90,12 +71,10 @@ int main(int argc, char *argv[]) {
     p_wait = atoi(argv[5]);
     c_wait = atoi(argv[6]);
 
-    buffer_queue = malloc(sizeof(int) * buffer_size);
-    
+    buffer_queue.queue = malloc(sizeof(Buffer) * buffer_queue.size);
+
     producers = malloc(sizeof(HANDLE) * producer_count);
     consumers = malloc(sizeof(HANDLE) * consumer_count);
-
-    mutex_lock = CreateMutex(NULL, FALSE, NULL);
 
     printf("Consumers to consume %d buffers\n", to_consume);
     
@@ -125,9 +104,9 @@ int main(int argc, char *argv[]) {
     printf("End time: %s", ctime(&end_time));
     printf("Duration: %ld seconds\n", end_time - start_time);
 
-    free(buffer_queue);
     free(producers);
     free(consumers);
-    CloseHandle(mutex_lock);
+    free(buffer_queue.queue);
+    
     return 0;
 }

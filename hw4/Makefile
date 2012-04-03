@@ -1,6 +1,6 @@
-CFLAGS=-Wall -Wextra -g -pthread
+CFLAGS=-Wall -Wextra -g -lpthread
 
-FILES = unix
+FILES = unix_synchronized unix_unsynchronized
 
 PDF = hw4.tex
 
