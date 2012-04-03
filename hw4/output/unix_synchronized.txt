@@ -1,6 +1,6 @@
-$ ./unix_synchronized 8 4 2 6 14 15
+$ ./unix_synchronized 8 4 2 6 12 13
 Consumers to consume 12 buffers
-Start time: Mon Apr  2 17:34:06 2012
+Start time: Mon Apr  2 22:51:34 2012
 ====================
 **Producer #1 started**
 [PRODUCER #1] Buffer count increased 	 Count: 6
@@ -14,57 +14,51 @@ Start time: Mon Apr  2 17:34:06 2012
 [CONSUMER #1] Buffer count decreased 	 Count: 0
 **Consumer #2 started**
 [CONSUMER #2] Buffer count decreased 	 Count: 0
-[PRODUCER #2] Buffer count increased 	 Count: 6
-[PRODUCER #4] Buffer count increased 	 Count: 8
-**Producer #1 exited**
-**Producer #3 exited**
+[PRODUCER #1] Buffer count increased 	 Count: 6
+[PRODUCER #2] Buffer count increased 	 Count: 8
+--Producer #3 exited--
+--Producer #4 exited--
 [CONSUMER #1] Buffer count decreased 	 Count: 0
-**Consumer #2 exited**
-[PRODUCER #2] Buffer count increased 	 Count: 6
-[PRODUCER #4] Buffer count increased 	 Count: 8
-[CONSUMER #1] Buffer count decreased 	 Count: 0
-[PRODUCER #4] Buffer count increased 	 Count: 6
+--Consumer #2 exited--
+[PRODUCER #1] Buffer count increased 	 Count: 6
 [PRODUCER #2] Buffer count increased 	 Count: 8
 [CONSUMER #1] Buffer count decreased 	 Count: 0
-[PRODUCER #4] Buffer count increased 	 Count: 6
+[PRODUCER #1] Buffer count increased 	 Count: 6
 [PRODUCER #2] Buffer count increased 	 Count: 8
 [CONSUMER #1] Buffer count decreased 	 Count: 0
-[PRODUCER #4] Buffer count increased 	 Count: 6
+[PRODUCER #1] Buffer count increased 	 Count: 6
 [PRODUCER #2] Buffer count increased 	 Count: 8
 [CONSUMER #1] Buffer count decreased 	 Count: 0
-[PRODUCER #4] Buffer count increased 	 Count: 6
+[PRODUCER #1] Buffer count increased 	 Count: 6
 [PRODUCER #2] Buffer count increased 	 Count: 8
 [CONSUMER #1] Buffer count decreased 	 Count: 0
-[PRODUCER #2] Buffer count increased 	 Count: 6
-[PRODUCER #4] Buffer count increased 	 Count: 8
-[CONSUMER #1] Buffer count decreased 	 Count: 0
-[PRODUCER #2] Buffer count increased 	 Count: 6
-[PRODUCER #4] Buffer count increased 	 Count: 8
-[CONSUMER #1] Buffer count decreased 	 Count: 0
-[PRODUCER #2] Buffer count increased 	 Count: 6
-[PRODUCER #4] Buffer count increased 	 Count: 8
-[CONSUMER #1] Buffer count decreased 	 Count: 0
-[PRODUCER #2] Buffer count increased 	 Count: 6
-[PRODUCER #4] Buffer count increased 	 Count: 8
-[CONSUMER #1] Buffer count decreased 	 Count: 0
-[PRODUCER #2] Buffer count increased 	 Count: 6
-[PRODUCER #4] Buffer count increased 	 Count: 8
-[CONSUMER #1] Buffer count decreased 	 Count: 0
-[PRODUCER #2] Buffer count increased 	 Count: 6
-[PRODUCER #4] Buffer count increased 	 Count: 8
-[CONSUMER #1] Buffer count decreased 	 Count: 0
-[PRODUCER #2] Buffer count increased 	 Count: 6
-[PRODUCER #4] Buffer count increased 	 Count: 8
-[CONSUMER #1] Buffer count decreased 	 Count: 0
-[PRODUCER #2] Buffer count increased 	 Count: 6
-[PRODUCER #4] Buffer count increased 	 Count: 8
-[CONSUMER #1] Buffer count decreased 	 Count: 0
-[PRODUCER #4] Buffer count increased 	 Count: 6
+[PRODUCER #1] Buffer count increased 	 Count: 6
 [PRODUCER #2] Buffer count increased 	 Count: 8
-**Producer #4 exited**
-**Producer #2 exited**
 [CONSUMER #1] Buffer count decreased 	 Count: 0
-**Consumer #1 exited**
+[PRODUCER #1] Buffer count increased 	 Count: 6
+[PRODUCER #2] Buffer count increased 	 Count: 8
+[CONSUMER #1] Buffer count decreased 	 Count: 0
+[PRODUCER #1] Buffer count increased 	 Count: 6
+[PRODUCER #2] Buffer count increased 	 Count: 8
+[CONSUMER #1] Buffer count decreased 	 Count: 0
+[PRODUCER #1] Buffer count increased 	 Count: 6
+[PRODUCER #2] Buffer count increased 	 Count: 8
+[CONSUMER #1] Buffer count decreased 	 Count: 0
+[PRODUCER #1] Buffer count increased 	 Count: 6
+[PRODUCER #2] Buffer count increased 	 Count: 8
+[CONSUMER #1] Buffer count decreased 	 Count: 0
+[PRODUCER #1] Buffer count increased 	 Count: 6
+[PRODUCER #2] Buffer count increased 	 Count: 8
+[CONSUMER #1] Buffer count decreased 	 Count: 0
+[PRODUCER #1] Buffer count increased 	 Count: 6
+[PRODUCER #2] Buffer count increased 	 Count: 8
+[CONSUMER #1] Buffer count decreased 	 Count: 0
+[PRODUCER #1] Buffer count increased 	 Count: 6
+[PRODUCER #2] Buffer count increased 	 Count: 8
+--Producer #1 exited--
+--Producer #2 exited--
+[CONSUMER #1] Buffer count decreased 	 Count: 0
+--Consumer #1 exited--
 ====================
-End time: Mon Apr  2 17:38:06 2012
-Duration: 240 seconds
+End time: Mon Apr  2 22:54:36 2012
+Duration: 182 seconds

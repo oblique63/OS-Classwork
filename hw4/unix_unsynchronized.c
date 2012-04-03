@@ -23,7 +23,7 @@ void producer(void * producer_id) {
     do {
 
         for (i = 0; i < to_produce; i++)
-            push(buffer_queue, i);  // add a value to the top of the queue
+            push(&buffer_queue, i);  // add a value to the top of the queue
 
         fprintf(stderr, "[PRODUCER #%d] Buffer count increased \t Count: %d\n", id, buffer_queue.count);
 
@@ -31,7 +31,7 @@ void producer(void * producer_id) {
 
     } while (buffer_queue.count < buffer_queue.size);
 
-    fprintf(stderr, "**Producer #%d exited**\n", id);
+    fprintf(stderr, "--Producer #%d exited--\n", id);
 }
 
 void consumer(void * consumer_id) {
@@ -42,7 +42,7 @@ void consumer(void * consumer_id) {
     do {
 
         for (i = 0; i < to_consume; i++)
-            pop(buffer_queue);  // remove a value from the top of the queue
+            pop(&buffer_queue);  // remove a value from the top of the queue
 
         fprintf(stderr, "[CONSUMER #%d] Buffer count decreased \t Count: %d\n", id, buffer_queue.count);
 
@@ -50,7 +50,7 @@ void consumer(void * consumer_id) {
 
     } while (buffer_queue.count > 0);
 
-    fprintf(stderr, "**Consumer #%d exited**\n", id);
+    fprintf(stderr, "--Consumer #%d exited--\n", id);
 }
 
 int main(int argc, char *argv[]) {
