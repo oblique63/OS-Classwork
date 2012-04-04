@@ -14,7 +14,7 @@
 \def \instructor {Prof. Murphy}
 \def \semester   {Spring 2012}
 \def \assignment {Homework \# 4}
-\def \duedate    {April 2, 2012}
+\def \duedate    {April 4, 2012}
 
 \newcommand {\mytilde} {$\sim$}
 \newcommand {\comment}[1] {\textcolor{red}{#1}}
@@ -49,14 +49,14 @@
 
 
 % This assignment built off our last one dealing with multiple concurrent processes and threads; however, now we had to prevent the race
-% conditions we induced in the last assignment. We were to keep the various design choices that led to the unsynchronized, interleaved output 
+% conditions we induced in the last assignment. We were to keep the various design choices that led to the unsynchronized, interleaved output
 % (such as the various \texttt{sleep} calls), and wrap them with signal and mutex based synchronization methods; as the goal was now to learn
-% about how to ensure that a concurrent program executes how we want it to.  The tasks performed by the concurrent child processes/threads 
+% about how to ensure that a concurrent program executes how we want it to.  The tasks performed by the concurrent child processes/threads
 % (printing out the values from 1-10 [processes], and adding to 100 [threads]) now make up the critical sections of the code, and their execution
 % is now managed by semaphores (as described in the \textsl{Pseudo Code} in \textbf{Appendix I}), ensuring a synchronized sequential execution.
 % Additionally, we were also asked to induce deadlocks in our newly synchronized solutions, to point out another potential pitfall of concurrent
 % programming.
-%  
+%
 % This code has been tested to work under \textsl{Windows}, \textsl{Gentoo Linux}, and \textsl{Mac OSX}.
 % The source for the Unix implementation under listed in \textbf{Appendix II}, and \textbf{Appendix IV} for the Windows version.
 
@@ -68,9 +68,12 @@
 % single child (and thus quickly invoke a \texttt{p()}- \texttt{p()} deadlock), as opposed to simply omitting the \texttt{v()} call to send a signal to the following process.
 % Aside from that, the Windows and Unix implementations of synchronous multi-threading are virtually identical.
 
+\section*{Testing Strategy}
+
+
 \section*{Improvements}
 
-% The main improvement I would probably make, would be to rewrite the Unix process synchronization using a fuller semaphore construct, to make it 
+% The main improvement I would probably make, would be to rewrite the Unix process synchronization using a fuller semaphore construct, to make it
 % clearer to see what is going on logically, as opposed to just using the raw \texttt{kill()} and \texttt{signal()} calls. If the programs were also
 % to simply stand on their own as examples of concurrent programming, I would take out the various unnecessary elements that were meant to invoke
 % race conditions in the previous assignment (such as the calls to \texttt{sleep()}), to prevent unnecessary confusion about the factors in play
@@ -81,103 +84,77 @@
 %----{ Pseudo Code }---------------------------------------------------------------------
 \append{I} {Pseudo Code}
 
-\subsection*{Processes}
-
+\filename{Buffer Queue}
 \begin{scriptsize}
 \begin{verbatim}
-semaphore s;
-int pids[10];
 
-main() {
-    s = 1;
-    for (index from 9 to 0) {
-        pids[index] = fork();
-        if (in child)
-          break;
-    }
+BufferQueue {
+    Buffer queue;
+    int size;
+    int count;
 
-    if (in child) {
-        if (index == 0) {
-           // do critical section task
-           v(s);
-        }
-        else {
-            p(s);
-            // do critical section task
-            v(s);
-        }
-    }
+    // Counting semaphores
+    Semaphore empty;
+    Semaphore full;
+
+    // Mutex lock
+    Mutex lock;
 }
+
+enqueue(buffers) {
+    // Wait for some empty buffers
+    P(BufferQueue.empty);
+    // Lock the mutex
+    P(BufferQueue.lock);
+
+    for (buffer in buffers) {
+        BufferQueue.count++;
+        BufferQueue.queue[BufferQueue.count] = buffer;
+    }
+
+    // Unlock the mutex
+    V(BufferQueue.lock);
+    // Signal the new filled buffers
+    V(BufferQueue.full);
+}
+
+dequeue(buffers) {
+    // Wait for some buffers with values
+    P(BufferQueue.full);
+    // Lock the mutex
+    P(BufferQueue.lock);
+
+    for (buffer in buffers) {
+        BufferQueue.count--;
+        BufferQueue.queue[BufferQueue.count] = NULL;
+    }
+    
+    // Unlock the mutex
+    V(BufferQueue.lock);
+    // Signal the new empty buffers
+    V(BufferQueue.empty);
+}
+
 \end{verbatim}
 \end{scriptsize}
 
-\filename{Deadlocked Version}
+\filename{Producer + Consumer}
 \begin{scriptsize}
 \begin{verbatim}
-semaphore s;
-int pids[10];
+producer() {
+    while (BufferQueue.count < BufferQueue.size) {
+        spin_wait();
 
-main() {
-    s = 1;
-    for (index from 9 to 0) {
-        pids[index] = fork();
-        if (in child)
-          break;
-    }
-
-    if (in child) {
-        if (index == 0) {
-           // do critical section task
-           v(s);
-        }
-        else {
-            p(s);
-            // do critical section task
-            
-            // don't signal rest of the child processes to start;
-            // induce a p() -> p() deadlock
-        }
+        enqueue(buffers_to_produce);
     }
 }
-\end{verbatim}
-\end{scriptsize}
 
+consumer() {
+    while (BufferQueue.count < BufferQueue.size) {
+        spin_wait();
 
-\subsection*{Threads}
-
-\begin{scriptsize}
-\begin{verbatim}
-semaphore s;
-main() {
-    s = 1;
-    for (1 to 10)
-        create_thread(do_task);
-}
-
-do_task() {
-    p(s);
-    // perform critical section task here
-    v(s);
-}
-\end{verbatim}
-\end{scriptsize}
-
-\filename{Deadlocked Version}
-\begin{scriptsize}
-\begin{verbatim}
-semaphore s;
-main() {
-    s = 1;
-    for (1 to 10)
-        create_thread(do_task);
-}
-
-do_task() {
-    p(s);
-    // perform critical section task here
-
-    // don't reset the semaphore -- other threads forced to wait
-    // for it to unlock, thus leading to a p()->p() deadlock
+        dequeue(buffers_to_consume);
+    }
 }
 \end{verbatim}
 \end{scriptsize}
@@ -186,34 +163,54 @@ do_task() {
 %----{ UNIX }----------------------------------------------------------------------------
 \append{II} {Unix Source Code}
 
-\includesource{c}{unix.c}
+\filename{Buffer Queue}
+\includesource{c}{unix_buffer_queue.h}
 
-%\filename{Deadlocked Version}
-%\includesource{c}{unix_deadlock.c}
+\filename{Unsynchronized}
+\includesource{c}{unix_unsynchronized.c}
+
+\filename{Synchronized}
+\includesource{c}{unix_synchronized.c}
 
 
 \append{III} {Unix Output}
 
-\includeoutput{output/unix.txt}
+\filename{Unsynchronized}
+\includeoutput{output/unix_unsynchronized.txt}
 
-%\filename{Deadlocked Version}
-%\includeoutput{output/unix_deadlock.txt}
+\filename{Synchronized}
+\includeoutput{output/unix_synchronized.txt}
 
 
 %----{ WINDOWS }-------------------------------------------------------------------------
 \append{IV} {Windows Source Code}
 
-\includesource{c}{win.c}
+\filename{Buffer Queue}
+\includesource{c}{win_buffer_queue.h}
 
-%\filename{Deadlocked Version}
-%\includesource{c}{win_deadlock.c}
+\filename{Unsynchronized}
+\includesource{c}{win_unsynchronized.c}
+
+\filename{Synchronized}
+\includesource{c}{win_synchronized.c}
 
 
 \append{V} {Windows Output}
 
-\includeoutput{output/win.txt}
+\filename{Unsynchronized}
+\includeoutput{output/win_unsynchronized.txt}
 
-%\filename{Deadlocked Version}
-%\includeoutput{output/win_deadlock.txt}
+\filename{Synchronized}
+\includeoutput{output/win_synchronized.txt}
+
+
+%----{ STRACE }--------------------------------------------------------------------------
+\append{VI} {Strace Output}
+
+\filename{Unsynchronized}
+\includeoutput{output/unix_unsynchronized_strace.txt}
+
+\filename{Synchronized}
+\includeoutput{output/unix_synchronized_strace.txt}
 
 \end{document}

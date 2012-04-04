@@ -1,0 +1,79 @@
+$ ./unix_unsynchronized 8 4 2 3 14 15
+Consumers to consume 4 buffers
+Start time: Wed Apr  4 07:48:21 2012
+====================
+**Producer #1 started**
+**Producer #2 started**
+**Producer #3 started**
+**Consumer #2 started**
+**Producer #4 started**
+**Consumer #1 started**
+[PRODUCER #4] Buffer count increased 	 Count: 5
+[PRODUCER #2] Buffer count increased 	 Count: 5
+[PRODUCER #3] Buffer count increased 	 Count: 6
+[PRODUCER #1] Buffer count increased 	 Count: 6
+[CONSUMER #1] Buffer count decreased 	 Count: 6
+[CONSUMER #2] Buffer count decreased 	 Count: 6
+[PRODUCER #2] Buffer count increased 	 Count: 8
+[PRODUCER #4] Buffer count increased 	 Count: 7
+[PRODUCER #3] Buffer count increased 	 Count: 8
+[PRODUCER #1] Buffer count increased 	 Count: 8
+[CONSUMER #2] Buffer count decreased 	 Count: 4
+[CONSUMER #1] Buffer count decreased 	 Count: 4
+[PRODUCER #1] Buffer count increased 	 Count: 8
+[PRODUCER #3] Buffer count increased 	 Count: 8
+[PRODUCER #4] Buffer count increased 	 Count: 8
+[PRODUCER #2] Buffer count increased 	 Count: 8
+[CONSUMER #2] Buffer count decreased 	 Count: 0
+[CONSUMER #1] Buffer count decreased 	 Count: 0
+[PRODUCER #1] Buffer count increased 	 Count: 8
+[PRODUCER #3] Buffer count increased 	 Count: 8
+[PRODUCER #4] Buffer count increased 	 Count: 8
+[PRODUCER #2] Buffer count increased 	 Count: 8
+[CONSUMER #2] Buffer count decreased 	 Count: 0
+[CONSUMER #1] Buffer count decreased 	 Count: 0
+[PRODUCER #3] Buffer count increased 	 Count: 8
+[PRODUCER #1] Buffer count increased 	 Count: 8
+[PRODUCER #4] Buffer count increased 	 Count: 8
+[PRODUCER #2] Buffer count increased 	 Count: 8
+[CONSUMER #2] Buffer count decreased 	 Count: 0
+[CONSUMER #1] Buffer count decreased 	 Count: 0
+[PRODUCER #3] Buffer count increased 	 Count: 8
+[PRODUCER #1] Buffer count increased 	 Count: 8
+[PRODUCER #4] Buffer count increased 	 Count: 8
+[PRODUCER #2] Buffer count increased 	 Count: 8
+[CONSUMER #2] Buffer count decreased 	 Count: 0
+[CONSUMER #1] Buffer count decreased 	 Count: 0
+[PRODUCER #1] Buffer count increased 	 Count: 8
+[PRODUCER #3] Buffer count increased 	 Count: 8
+[PRODUCER #4] Buffer count increased 	 Count: 8
+[PRODUCER #2] Buffer count increased 	 Count: 8
+[CONSUMER #2] Buffer count decreased 	 Count: 0
+[CONSUMER #1] Buffer count decreased 	 Count: 0
+[PRODUCER #3] Buffer count increased 	 Count: 8
+[PRODUCER #1] Buffer count increased 	 Count: 8
+[PRODUCER #2] Buffer count increased 	 Count: 8
+[PRODUCER #4] Buffer count increased 	 Count: 8
+[CONSUMER #2] Buffer count decreased 	 Count: 4
+[CONSUMER #1] Buffer count decreased 	 Count: 4
+[PRODUCER #1] Buffer count increased 	 Count: 8
+[PRODUCER #3] Buffer count increased 	 Count: 8
+[PRODUCER #2] Buffer count increased 	 Count: 8
+[PRODUCER #4] Buffer count increased 	 Count: 8
+[PRODUCER #3] Buffer count increased 	 Count: 7
+[PRODUCER #1] Buffer count increased 	 Count: 8
+[PRODUCER #4] Buffer count increased 	 Count: 8
+[PRODUCER #2] Buffer count increased 	 Count: 8
+[CONSUMER #2] Buffer count decreased 	 Count: 8
+[CONSUMER #1] Buffer count decreased 	 Count: 8
+--Producer #3 exited--
+--Producer #1 exited--
+--Producer #4 exited--
+--Producer #2 exited--
+[CONSUMER #2] Buffer count decreased 	 Count: 0
+[CONSUMER #1] Buffer count decreased 	 Count: 0
+--Consumer #2 exited--
+--Consumer #1 exited--
+====================
+End time: Wed Apr  4 07:51:31 2012
+Duration: 190 seconds
