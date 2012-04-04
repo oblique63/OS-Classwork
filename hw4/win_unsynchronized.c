@@ -1,6 +1,7 @@
 #include <stdio.h>
-#include <windows.h>
-#include "win_buffer_queue.h"
+#include <stdlib.h>
+#include <unistd.h>
+#include "unix_buffer_queue.h"
 
 BufferQueue buffer_queue;
 
@@ -14,19 +15,47 @@ void check(int expression, char *message) {
     }
 }
 
-void producer(void * producer_id) {
+// Adds 'items' # of buffers to the queue
+void push(int items) {
     int i;
+
+    for (i = 0; i < items; i++) {
+        // sleep to provoke race conditions
+        sleep(1);
+
+        if (buffer_queue.count < buffer_queue.size) {
+            buffer_queue.count += 1;
+            buffer_queue.queue[buffer_queue.count] = (Buffer) i;
+        }
+    }
+}
+
+// Removes 'items' # of buffers from the queue
+void pop(int items) {
+    int i;
+
+    for (i = 0; i < items; i++) {
+        if (buffer_queue.count > 0) {
+            buffer_queue.count -= 1;
+            buffer_queue.queue[buffer_queue.count] = (Buffer) 0;
+        }
+
+        // sleep to provoke race conditions
+        sleep(1);
+    }
+}
+
+void producer(void * producer_id) {
     int id = (int) producer_id;
 
     fprintf(stderr, "**Producer #%d started**\n", id);
     do {
-
-        for (i = 0; i < to_produce; i++)
-            push(&buffer_queue, i);  // add a value to the top of the queue
+        // add a value to the top of the queue
+        push(to_produce);
 
         fprintf(stderr, "[PRODUCER #%d] Buffer count increased \t Count: %d\n", id, buffer_queue.count);
 
-        Sleep(p_wait);
+        sleep(p_wait);
 
     } while (buffer_queue.count < buffer_queue.size);
 
@@ -34,18 +63,16 @@ void producer(void * producer_id) {
 }
 
 void consumer(void * consumer_id) {
-    int i;
     int id = (int) consumer_id;
 
     fprintf(stderr, "**Consumer #%d started**\n", id);
     do {
-
-        for (i = 0; i < to_consume; i++)
-            pop(&buffer_queue);  // remove a value from the top of the queue
+        // remove a value from the top of the queue
+        pop(to_consume);
 
         fprintf(stderr, "[CONSUMER #%d] Buffer count decreased \t Count: %d\n", id, buffer_queue.count);
 
-        Sleep(c_wait);
+        sleep(c_wait);
 
     } while (buffer_queue.count > 0);
 
@@ -54,9 +81,7 @@ void consumer(void * consumer_id) {
 
 int main(int argc, char *argv[]) {
 
-    int i;
     time_t start_time, end_time;
-    HANDLE *producers, *consumers;
 
     check(argc == 7,
         "Requires the arguments: \nBuffer Size, # of Producers, # of Consumers, # of Products, P-wait, C-wait\n");
@@ -73,40 +98,35 @@ int main(int argc, char *argv[]) {
 
     buffer_queue.queue = malloc(sizeof(Buffer) * buffer_queue.size);
 
-    producers = malloc(sizeof(HANDLE) * producer_count);
-    consumers = malloc(sizeof(HANDLE) * consumer_count);
+    pthread_t producers[producer_count];
+    pthread_t consumers[consumer_count];
 
     printf("Consumers to consume %d buffers\n", to_consume);
-    
+
     start_time = time(NULL);
     printf("Start time: %s", ctime(&start_time));
     printf("====================\n");
 
+    int i;
     for (i = 0; i < producer_count; i++)
-        producers[i] = CreateThread(NULL, 0, (void *) producer, NULL, 0, NULL);
+        pthread_create(&producers[i], NULL, (void *) producer, (void *) i+1);
 
     for (i = 0; i < consumer_count; i++)
-        consumers[i] = CreateThread(NULL, 0, (void *) consumer, NULL, 0, NULL);
+        pthread_create(&consumers[i], NULL, (void *) consumer, (void *) i+1);
 
 
-    for (i = 0; i < producer_count; i++) {
-        WaitForSingleObject(producers[i], INFINITE);
-        CloseHandle(producers[i]);
-    }
+    for (i = 0; i < producer_count; i++)
+        pthread_join(producers[i], NULL);
 
-    for (i = 0; i < consumer_count; i++) {
-        WaitForSingleObject(consumers[i], INFINITE);
-        CloseHandle(consumers[i]);
-    }
+    for (i = 0; i < consumer_count; i++)
+        pthread_join(consumers[i], NULL);
 
     end_time = time(NULL);
     printf("====================\n");
     printf("End time: %s", ctime(&end_time));
     printf("Duration: %ld seconds\n", end_time - start_time);
 
-    free(producers);
-    free(consumers);
     free(buffer_queue.queue);
-    
+
     return 0;
 }

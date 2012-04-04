@@ -9,59 +9,85 @@ int to_produce, to_consume, p_wait, c_wait;
 
 void check(int expression, char *message) {
     if (!expression) {
-        perror(message);
-        exit(-1);
+        DWORD error = GetLastError();
+        fprintf(stderr, "%s: %x\n", message, error);
+        CloseHandle(buffer_queue.lock);
+        CloseHandle(buffer_queue.has_full_buffers);
+        CloseHandle(buffer_queue.has_empty_buffers);
+        exit(error);
     }
 }
 
-void producer(void * producer_id) {
+
+// Adds 'items' # of buffers to the queue
+void push(int items) {
     int i;
+
+    WaitForSingleObject(buffer_queue.has_empty_buffers, 0);
+    WaitForSingleObject(buffer_queue.lock, INFINITE);
+
+    for (i = 0; i < items; i++) {
+        // sleep to provoke race conditions
+        Sleep(1);
+
+        if (buffer_queue.count < buffer_queue.size) {
+            buffer_queue.count += 1;
+            buffer_queue.queue[buffer_queue.count] = (Buffer) i;
+        }
+    }
+
+    ReleaseMutex(buffer_queue.lock);
+    ReleaseSemaphore(buffer_queue.has_full_buffers);
+}
+
+// Removes 'items' # of buffers from the queue
+void pop(int items) {
+    int i;
+
+    WaitForSingleObject(buffer_queue.has_full_buffers, 0);
+    WaitForSingleObject(buffer_queue.lock, INFINITE);
+
+    for (i = 0; i < items; i++) {
+        if (buffer_queue.count > 0) {
+            buffer_queue.count -= 1;
+            buffer_queue.queue[buffer_queue.count] = (Buffer) 0;
+        }
+
+        // sleep to provoke race conditions
+        Sleep(1);
+    }
+
+    ReleaseMutex(buffer_queue.lock);
+    ReleaseSemaphore(buffer_queue.has_empty_buffers);
+}
+
+void producer(void * producer_id) {
     int id = (int) producer_id;
 
     fprintf(stderr, "**Producer #%d started**\n", id);
     do {
+        // Busy wait
+        Sleep(p_wait);
 
-        // Wait() / P()
-        WaitForSingleObject(buffer_queue.has_new_empty_buffers, 0);
-        WaitForSingleObject(buffer_queue.lock, INFINITE);
-
-        for (i = 0; i < to_produce; i++)
-            push(&buffer_queue, i);  // add a value to the top of the queue
+        push(to_produce);
 
         fprintf(stderr, "[PRODUCER #%d] Buffer count increased \t Count: %d\n", id, buffer_queue.count);
 
-        // Signal() / V()
-        ReleaseMutex(buffer_queue.lock);
-        ReleaseSemaphore(buffer_queue.has_new_full_buffers, 1, NULL);
-        
-        Sleep(p_wait);
-
     } while (buffer_queue.count < buffer_queue.size);
 
-    fprintf(stderr, "--Producer #%d exited--", id);
+    fprintf(stderr, "--Producer #%d exited--\n", id);
 }
 
 void consumer(void * consumer_id) {
-    int i;
     int id = (int) consumer_id;
 
     fprintf(stderr, "**Consumer #%d started**\n", id);
     do {
+        Sleep(c_wait);
 
-        // Wait() / P()
-        WaitForSingleObject(buffer_queue.has_new_full_buffers, 0);
-        WaitForSingleObject(buffer_queue.lock, INFINITE);
-
-        for (i = 0; i < to_consume; i++)
-            pop(&buffer_queue);  // remove a value from the top of the queue
+        pop(to_consume);
 
         fprintf(stderr, "[CONSUMER #%d] Buffer count decreased \t Count: %d\n", id, buffer_queue.count);
-
-        // Signal() / V()
-        ReleaseMutex(buffer_queue.lock);
-        ReleaseSemaphore(buffer_queue.has_new_empty_buffers);
-        
-        Sleep(c_wait);
 
     } while (buffer_queue.count > 0);
 
@@ -82,7 +108,7 @@ int main(int argc, char *argv[]) {
     consumer_count = atoi(argv[3]);
 
     to_produce = atoi(argv[4]);
-    to_consume = producer_count * (to_produce / consumer_count);
+    to_consume = producer_count * (to_produce / consumer_count);  // X * P/C
 
     p_wait = atoi(argv[5]);
     c_wait = atoi(argv[6]);
@@ -96,13 +122,13 @@ int main(int argc, char *argv[]) {
     buffer_queue.lock = CreateMutex(NULL, FALSE, NULL);
 
     // Semaphore Initialization
-    buffer_queue.has_new_full_buffers =
+    buffer_queue.has_full_buffers =
             CreateSemaphore(NULL, 0, 0, NULL);
-    buffer_queue.has_new_empty_buffers =
+    buffer_queue.has_empty_buffers =
             CreateSemaphore(NULL, buffer_queue.size, buffer_queue.size, NULL);
-    
+
     printf("Consumers to consume %d buffers\n", to_consume);
-    
+
     start_time = time(NULL);
     printf("Start time: %s", ctime(&start_time));
     printf("====================\n");
@@ -123,7 +149,7 @@ int main(int argc, char *argv[]) {
         WaitForSingleObject(consumers[i], INFINITE);
         CloseHandle(consumers[i]);
     }
-
+    
     end_time = time(NULL);
     printf("====================\n");
     printf("End time: %s", ctime(&end_time));
@@ -133,8 +159,8 @@ int main(int argc, char *argv[]) {
     free(consumers);
     free(buffer_queue.queue);
     CloseHandle(buffer_queue.lock);
-    CloseHandle(buffer_queue.has_new_full_buffers);
-    CloseHandle(buffer_queue.has_new_empty_buffers);
-    
+    CloseHandle(buffer_queue.has_full_buffers);
+    CloseHandle(buffer_queue.has_empty_buffers);
+
     return 0;
 }
