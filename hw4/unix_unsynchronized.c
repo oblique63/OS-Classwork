@@ -15,38 +15,43 @@ void check(int expression, char *message) {
     }
 }
 
-// Adds a buffer to the queue
-void push(Buffer buffer) {
-    if (buffer_queue.count < buffer_queue.size) {  
-        buffer_queue.count += 1;
-        buffer_queue.queue[buffer_queue.count] = buffer;
-        //fprintf(stderr, "<<< PUSHING \t Count: %d\n", buffer_queue.count);
+// Adds 'items' # of buffers to the queue
+void push(int items) {
+    int i;
+
+    for (i = 0; i < items; i++) {
+        // sleep to provoke race conditions
+        sleep(1);
+
+        if (buffer_queue.count < buffer_queue.size) {
+            buffer_queue.count += 1;
+            buffer_queue.queue[buffer_queue.count] = (Buffer) i;
+        }
     }
 }
 
-// Removes a buffer from the queue
-void pop() {
-    sem_wait(&buffer_queue.has_full_buffers);
-    if (buffer_queue.count > 0) {
-        buffer_queue.count -= 1;
-        buffer_queue.queue[buffer_queue.count] = (Buffer) 0;
-        //fprintf(stderr, ">>> POPPING \t Count: %d\n", buffer_queue.count);
-        sem_post(&buffer_queue.has_empty_buffers);
+// Removes 'items' # of buffers from the queue
+void pop(int items) {
+    int i;
+
+    for (i = 0; i < items; i++) {
+        if (buffer_queue.count > 0) {
+            buffer_queue.count -= 1;
+            buffer_queue.queue[buffer_queue.count] = (Buffer) 0;
+        }
+
+        // sleep to provoke race conditions
+        sleep(1);
     }
 }
 
 void producer(void * producer_id) {
-    int i;
     int id = (int) producer_id;
 
     fprintf(stderr, "**Producer #%d started**\n", id);
     do {
-
-        for (i = 0; i < to_produce; i++) {
-            sleep(1);
-            // add a value to the top of the queue
-            push(i);
-        }
+        // add a value to the top of the queue
+        push(to_produce);
 
         fprintf(stderr, "[PRODUCER #%d] Buffer count increased \t Count: %d\n", id, buffer_queue.count);
 
@@ -58,17 +63,12 @@ void producer(void * producer_id) {
 }
 
 void consumer(void * consumer_id) {
-    int i;
     int id = (int) consumer_id;
 
     fprintf(stderr, "**Consumer #%d started**\n", id);
     do {
-
-        for (i = 0; i < to_consume; i++) {
-            // remove a value from the top of the queue
-            pop();
-            sleep(1);
-        }
+        // remove a value from the top of the queue
+        pop(to_consume);
 
         fprintf(stderr, "[CONSUMER #%d] Buffer count decreased \t Count: %d\n", id, buffer_queue.count);
 
@@ -102,7 +102,7 @@ int main(int argc, char *argv[]) {
     pthread_t consumers[consumer_count];
 
     printf("Consumers to consume %d buffers\n", to_consume);
-    
+
     start_time = time(NULL);
     printf("Start time: %s", ctime(&start_time));
     printf("====================\n");
