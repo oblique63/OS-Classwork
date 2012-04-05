@@ -88,9 +88,12 @@ void consumer(void * consumer_id) {
     fprintf(stderr, "--Consumer #%d exited--\n", id);
 }
 
+
 int main(int argc, char *argv[]) {
 
+    int i;
     time_t start_time, end_time;
+    HANDLE *producers, *consumers;
 
     check(argc == 7,
         "Requires the arguments: \nBuffer Size, # of Producers, # of Consumers, # of Products, P-wait, C-wait\n");
@@ -100,15 +103,15 @@ int main(int argc, char *argv[]) {
     consumer_count = atoi(argv[3]);
 
     to_produce = atoi(argv[4]);
-    to_consume = producer_count * (to_produce / consumer_count);
+    to_consume = producer_count * (to_produce / consumer_count);  // X * P/C
 
     p_wait = atoi(argv[5]);
     c_wait = atoi(argv[6]);
 
     buffer_queue.queue = malloc(sizeof(Buffer) * buffer_queue.size);
 
-    pthread_t producers[producer_count];
-    pthread_t consumers[consumer_count];
+    producers = malloc(sizeof(HANDLE) * producer_count);
+    consumers = malloc(sizeof(HANDLE) * consumer_count);
 
     printf("Consumers to consume %d buffers\n", to_consume);
 
@@ -116,26 +119,32 @@ int main(int argc, char *argv[]) {
     printf("Start time: %s", ctime(&start_time));
     printf("====================\n");
 
-    int i;
     for (i = 0; i < producer_count; i++)
-        pthread_create(&producers[i], NULL, (void *) producer, (void *) i+1);
+        producers[i] = CreateThread(NULL, 0, (void *) producer, NULL, 0, NULL);
 
     for (i = 0; i < consumer_count; i++)
-        pthread_create(&consumers[i], NULL, (void *) consumer, (void *) i+1);
+        consumers[i] = CreateThread(NULL, 0, (void *) consumer, NULL, 0, NULL);
 
 
-    for (i = 0; i < producer_count; i++)
-        pthread_join(producers[i], NULL);
+    for (i = 0; i < producer_count; i++) {
+        WaitForSingleObject(producers[i], INFINITE);
+        CloseHandle(producers[i]);
+    }
 
-    for (i = 0; i < consumer_count; i++)
-        pthread_join(consumers[i], NULL);
-
+    for (i = 0; i < consumer_count; i++) {
+        WaitForSingleObject(consumers[i], INFINITE);
+        CloseHandle(consumers[i]);
+    }
+    
     end_time = time(NULL);
     printf("====================\n");
     printf("End time: %s", ctime(&end_time));
     printf("Duration: %ld seconds\n", end_time - start_time);
 
+    free(producers);
+    free(consumers);
     free(buffer_queue.queue);
 
     return 0;
 }
+

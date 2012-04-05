@@ -1,0 +1,40 @@
+%comment{This unsynchronized output is noticeably facing race conditions as}
+%comment{Producers and Consumers try to write over the same queue slot other}
+%comment{threads are trying to modify.}
+> win_unsynchronized 8 4 2 3 32 32
+Consumers to consume 4 buffers
+Start time: Wed Apr  4 21:46:22 2012
+====================
+**Producer #2 started**
+**Producer #1 started**
+**Producer #3 started**
+**Consumer #1 started**
+**Producer #4 started**
+**Consumer #2 started**
+[PRODUCER #1] Buffers added to queue 		 Count: 6
+[PRODUCER #2] Buffers added to queue 		 Count: 6 
+[PRODUCER #4] Buffers added to queue 		 Count: 5 
+[PRODUCER #3] Buffers added to queue 		 Count: 5 
+[CONSUMER #1] Buffers removed from queue     Count: 4
+[CONSUMER #2] Buffers removed from queue 	 Count: 4
+[PRODUCER #3] Buffers added to queue 		 Count: 8
+--Producer #3 exited--
+[PRODUCER #1] Buffers added to queue 		Count: 8
+--Producer #1 exited--
+[PRODUCER #4] Buffers added to queue 		 Count: 8
+--Producer #4 exited--
+[PRODUCER #2] Buffers added to queue 		 Count: 7
+[CONSUMER #2] Buffers removed from queue     Count: 3
+[CONSUMER #1] Buffers removed from queue     Count: 3
+[PRODUCER #2] Buffers added to queue 		 Count: 2
+[CONSUMER #1] Buffers removed from queue     Count: 0
+--Consumer #1 exited--
+[CONSUMER #2] Buffers removed from queue     Count: 0
+--Consumer #2 exited--
+[PRODUCER #2] Buffers added to queue 		 Count: 3
+[PRODUCER #2] Buffers added to queue 		 Count: 6
+[PRODUCER #2] Buffers added to queue 		 Count: 8
+--Producer #2 exited--
+====================
+End time: Wed Apr  4 21:49:27 2012
+Duration: 185 seconds

@@ -56,7 +56,7 @@ and 'dequeue' methods that effectively prevent race conditions by means of count
 strategy is documented in the \textsl{Pseudo Code} in \textbf{Appendix I}.
 
 This code has been tested to work under \textsl{Windows}, \textsl{Gentoo Linux}, and \textsl{Mac OSX}.
-The source for the Unix implementation under listed in \textbf{Appendix II}, and \textbf{Appendix IV} for the Windows version.
+The source for the Unix implementation under listed in \textbf{Appendix II}, and \textbf{Appendix V} for the Windows version.
 
 
 \section*{Design \& Implementation}
@@ -189,8 +189,17 @@ consumer() {
 \includeoutput{output/unix_synchronized.txt}
 
 
+%----{ STRACE }--------------------------------------------------------------------------
+\append{IV} {Strace Output}
+
+\filename{Unsynchronized}
+\includeoutput{output/unix_unsynchronized_strace.txt}
+
+\filename{Synchronized}
+\includeoutput{output/unix_synchronized_strace.txt}
+
 %----{ WINDOWS }-------------------------------------------------------------------------
-\append{IV} {Windows Source Code}
+\append{V} {Windows Source Code}
 
 \filename{Buffer Queue}
 \includesource{c}{win_buffer_queue.h}
@@ -202,22 +211,13 @@ consumer() {
 \includesource{c}{win_synchronized.c}
 
 
-\append{V} {Windows Output}
+\append{VI} {Windows Output}
 
 \filename{Unsynchronized}
-%\includeoutput{output/win_unsynchronized.txt}
+\includeoutput{output/win_unsynchronized.txt}
 
 \filename{Synchronized}
-%\includeoutput{output/win_synchronized.txt}
+\includeoutput{output/win_synchronized.txt}
 
-
-%----{ STRACE }--------------------------------------------------------------------------
-\append{VI} {Strace Output}
-
-\filename{Unsynchronized}
-\includeoutput{output/unix_unsynchronized_strace.txt}
-
-\filename{Synchronized}
-\includeoutput{output/unix_synchronized_strace.txt}
 
 \end{document}

@@ -1,0 +1,45 @@
+%comment{In this synchronized version, the Producers are now producing the exact}
+%comment{qunatity they were specified to produce.}
+
+> win_synchronized 8 4 2 %comment{3} 18 18
+%comment{Consumers to consume 4 buffers}
+Start time: Wed Apr  4 22:15:31 2012
+====================
+**Producer #1 started**
+**Producer #2 started**
+**Producer #3 started**
+**Consumer #1 started**
+**Producer #4 started**
+**Consumer #2 started**
+[PRODUCER #1] Buffers added to queue 		 Count: 3   
+[PRODUCER #2] Buffers added to queue 		 Count: 6    
+[PRODUCER #4] Buffers added to queue 		 Count: 8   
+--Producer #4 exited--                                  
+[PRODUCER #3] Buffers added to queue 		 Count: 8
+--Producer #3 exited--
+[CONSUMER #1] Buffers removed from queue     Count: 4
+[CONSUMER #2] Buffers removed from queue     Count: 0
+--Consumer #2 exited--
+[PRODUCER #1] Buffers added to queue 		 Count: 3
+[PRODUCER #2] Buffers added to queue 		 Count: 6
+[CONSUMER #1] Buffers removed from queue     Count: 2
+[PRODUCER #1] Buffers added to queue 		 Count: 5
+[PRODUCER #2] Buffers added to queue 		 Count: 8
+--Producer #2 exited--
+[CONSUMER #1] Buffers removed from queue     Count: 4
+[PRODUCER #1] Buffers added to queue 		 Count: 7
+[CONSUMER #1] Buffers removed from queue     Count: 3
+[PRODUCER #1] Buffers added to queue 		 Count: 6
+[CONSUMER #1] Buffers removed from queue     Count: 2
+[PRODUCER #1] Buffers added to queue 		 Count: 5
+[CONSUMER #1] Buffers removed from queue     Count: 1
+[PRODUCER #1] Buffers added to queue 		 Count: 4
+[CONSUMER #1] Buffers removed from queue     Count: 0
+--Consumer #1 exited--
+[PRODUCER #1] Buffers added to queue 		 Count: 3
+[PRODUCER #1] Buffers added to queue 		 Count: 6
+[PRODUCER #1] Buffers added to queue 		 Count: 8
+--Producer #1 exited--
+====================
+End time: Wed Apr  4 22:18:40 2012
+Duration: 181 seconds

@@ -37,7 +37,7 @@ void push(int items, int *buffer_count) {
 
     *buffer_count = buffer_queue.count;
     ReleaseMutex(buffer_queue.lock);
-    ReleaseSemaphore(buffer_queue.has_full_buffers);
+    ReleaseSemaphore(buffer_queue.has_full_buffers, 0, NULL);
 }
 
 // Removes 'items' # of buffers from the queue
@@ -58,7 +58,7 @@ void pop(int items, int *buffer_count) {
 
     *buffer_count = buffer_queue.count;
     ReleaseMutex(buffer_queue.lock);
-    ReleaseSemaphore(buffer_queue.has_empty_buffers);
+    ReleaseSemaphore(buffer_queue.has_empty_buffers, 0, NULL);
 }
 
 void producer(void * producer_id) {
