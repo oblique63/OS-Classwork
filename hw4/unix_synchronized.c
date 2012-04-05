@@ -18,76 +18,81 @@ void check(int expression, char *message) {
 }
 
 // Adds 'items' # of buffers to the queue
-void push(int items) {
+void push(int items, int *buffer_count) {
     int i;
 
     sem_wait(&buffer_queue.has_empty_buffers);
     pthread_mutex_lock(&buffer_queue.lock);
 
-    for (i = 0; i < items; i++) {
+    for (i = 0; i < items && buffer_queue.count < buffer_queue.size; i++) {
         // sleep to provoke race conditions
         sleep(1);
 
-        if (buffer_queue.count < buffer_queue.size) {
-            buffer_queue.count += 1;
-            buffer_queue.queue[buffer_queue.count] = (Buffer) i;
-        }
+        buffer_queue.queue[buffer_queue.in] = (Buffer) i;
+        buffer_queue.in = (buffer_queue.in+1) % buffer_queue.size;
+        buffer_queue.count += 1;
     }
 
+    *buffer_count = buffer_queue.count;
     pthread_mutex_unlock(&buffer_queue.lock);
     sem_post(&buffer_queue.has_full_buffers);
 }
 
 // Removes 'items' # of buffers from the queue
-void pop(int items) {
+void pop(int items, int *buffer_count) {
     int i;
-
+    
     sem_wait(&buffer_queue.has_full_buffers);
     pthread_mutex_lock(&buffer_queue.lock);
 
-    for (i = 0; i < items; i++) {
-        if (buffer_queue.count > 0) {
-            buffer_queue.count -= 1;
-            buffer_queue.queue[buffer_queue.count] = (Buffer) 0;
-        }
+    for (i = 0; i < items && buffer_queue.count > 0; i++) {
+        buffer_queue.queue[buffer_queue.out] = (Buffer) 0;
+        buffer_queue.out = (buffer_queue.out+1) % buffer_queue.size;
+        buffer_queue.count -= 1;
 
         // sleep to provoke race conditions
         sleep(1);
     }
-
+    
+    *buffer_count = buffer_queue.count;
     pthread_mutex_unlock(&buffer_queue.lock);
     sem_post(&buffer_queue.has_empty_buffers);
 }
 
 void producer(void * producer_id) {
     int id = (int) producer_id;
+    // local copy of the buffer count to prevent race conditions
+    int buffer_count;
 
     fprintf(stderr, "**Producer #%d started**\n", id);
     do {
         // Busy wait
         sleep(p_wait);
 
-        push(to_produce);
+        push(to_produce, &buffer_count);
 
-        fprintf(stderr, "[PRODUCER #%d] Buffer count increased \t Count: %d\n", id, buffer_queue.count);
+        fprintf(stderr, "[PRODUCER #%d] Buffers added to queue \t\t Count: %d\n", id, buffer_count);
 
-    } while (buffer_queue.count < buffer_queue.size);
+    } while (buffer_count < buffer_queue.size);
 
     fprintf(stderr, "--Producer #%d exited--\n", id);
 }
 
 void consumer(void * consumer_id) {
     int id = (int) consumer_id;
+    // local copy of the buffer count to prevent race conditions
+    int buffer_count;
 
     fprintf(stderr, "**Consumer #%d started**\n", id);
     do {
+        // Busy wait
         sleep(c_wait);
 
-        pop(to_consume);
+        pop(to_consume, &buffer_count);
 
-        fprintf(stderr, "[CONSUMER #%d] Buffer count decreased \t Count: %d\n", id, buffer_queue.count);
+        fprintf(stderr, "[CONSUMER #%d] Buffers removed from queue \t Count: %d\n", id, buffer_count);
 
-    } while (buffer_queue.count > 0);
+    } while (buffer_count > 0);
 
     fprintf(stderr, "--Consumer #%d exited--\n", id);
 }

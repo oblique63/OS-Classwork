@@ -8,6 +8,9 @@ typedef struct {
     Buffer *queue;
     int size;
     int count;
+    
+    int in;
+    int out;
 
     // Counting semaphores
     sem_t has_empty_buffers;
@@ -15,6 +18,5 @@ typedef struct {
 
     // Mutex lock
     pthread_mutex_t lock;
-    //sem_t lock;
         
 } BufferQueue;

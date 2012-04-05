@@ -20,76 +20,78 @@ void check(int expression, char *message) {
 
 
 // Adds 'items' # of buffers to the queue
-void push(int items) {
+void push(int items, int *buffer_count) {
     int i;
 
     WaitForSingleObject(buffer_queue.has_empty_buffers, 0);
     WaitForSingleObject(buffer_queue.lock, INFINITE);
 
-    for (i = 0; i < items; i++) {
+    for (i = 0; i < items && buffer_queue.count < buffer_queue.size; i++) {
         // sleep to provoke race conditions
         Sleep(1);
 
-        if (buffer_queue.count < buffer_queue.size) {
-            buffer_queue.count += 1;
-            buffer_queue.queue[buffer_queue.count] = (Buffer) i;
-        }
+        buffer_queue.queue[buffer_queue.in] = (Buffer) i;
+        buffer_queue.in = (buffer_queue.in+1) % buffer_queue.size;
+        buffer_queue.count += 1;
     }
 
+    *buffer_count = buffer_queue.count;
     ReleaseMutex(buffer_queue.lock);
     ReleaseSemaphore(buffer_queue.has_full_buffers);
 }
 
 // Removes 'items' # of buffers from the queue
-void pop(int items) {
+void pop(int items, int *buffer_count) {
     int i;
 
     WaitForSingleObject(buffer_queue.has_full_buffers, 0);
     WaitForSingleObject(buffer_queue.lock, INFINITE);
 
-    for (i = 0; i < items; i++) {
-        if (buffer_queue.count > 0) {
-            buffer_queue.count -= 1;
-            buffer_queue.queue[buffer_queue.count] = (Buffer) 0;
-        }
+    for (i = 0; i < items && buffer_queue.count > 0; i++) {
+        buffer_queue.queue[buffer_queue.out] = (Buffer) 0;
+        buffer_queue.out = (buffer_queue.out+1) % buffer_queue.size;
+        buffer_queue.count -= 1;
 
         // sleep to provoke race conditions
         Sleep(1);
     }
 
+    *buffer_count = buffer_queue.count;
     ReleaseMutex(buffer_queue.lock);
     ReleaseSemaphore(buffer_queue.has_empty_buffers);
 }
 
 void producer(void * producer_id) {
     int id = (int) producer_id;
+    int buffer_count;
 
     fprintf(stderr, "**Producer #%d started**\n", id);
     do {
         // Busy wait
         Sleep(p_wait);
 
-        push(to_produce);
+        push(to_produce, &buffer_count);
 
-        fprintf(stderr, "[PRODUCER #%d] Buffer count increased \t Count: %d\n", id, buffer_queue.count);
+        fprintf(stderr, "[PRODUCER #%d] Buffers added to queue \t\t Count: %d\n", id, buffer_queue.count);
 
-    } while (buffer_queue.count < buffer_queue.size);
+    } while (buffer_count < buffer_queue.size);
 
     fprintf(stderr, "--Producer #%d exited--\n", id);
 }
 
 void consumer(void * consumer_id) {
     int id = (int) consumer_id;
+    int buffer_count;
 
     fprintf(stderr, "**Consumer #%d started**\n", id);
     do {
         Sleep(c_wait);
 
-        pop(to_consume);
+        pop(to_consume, &buffer_count);
 
-        fprintf(stderr, "[CONSUMER #%d] Buffer count decreased \t Count: %d\n", id, buffer_queue.count);
+        fprintf(stderr, "[CONSUMER #%d] Buffers removed from queue \t Count: %d\n", id, buffer_queue.count);
 
-    } while (buffer_queue.count > 0);
+    } while (buffer_count > 0);
 
     fprintf(stderr, "--Consumer #%d exited--\n", id);
 }

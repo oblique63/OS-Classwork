@@ -1,0 +1,711 @@
+$ strace -f ./unix_synchronized 8 4 2 3 16 16
+execve("./unix_synchronized", ["./unix_synchronized", "8", "4", "2", "3", "16", "16"], [/* 29 vars */]) = 0
+brk(0)                                  = 0x8c17000
+mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb7792000
+access("/etc/ld.so.preload", R_OK)      = -1 ENOENT (No such file or directory)
+open("/etc/ld.so.cache", O_RDONLY)      = 3
+fstat64(3, {st_mode=S_IFREG|0644, st_size=26678, ...}) = 0
+mmap2(NULL, 26678, PROT_READ, MAP_PRIVATE, 3, 0) = 0xb778b000
+close(3)                                = 0
+open("/lib/libpthread.so.0", O_RDONLY)  = 3
+read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\240\\\0\0004\0\0\0"..., 512) = 512
+fstat64(3, {st_mode=S_IFREG|0755, st_size=121260, ...}) = 0
+mmap2(NULL, 102924, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb7771000
+mprotect(0xb7786000, 4096, PROT_NONE)   = 0
+mmap2(0xb7787000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x15) = 0xb7787000
+mmap2(0xb7789000, 4620, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0xb7789000
+close(3)                                = 0
+open("/lib/libc.so.6", O_RDONLY)        = 3
+read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\360\243\1\0004\0\0\0"..., 512) = 512
+fstat64(3, {st_mode=S_IFREG|0755, st_size=1425820, ...}) = 0
+mmap2(NULL, 1432104, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb7613000
+mmap2(0xb776b000, 12288, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x158) = 0xb776b000
+mmap2(0xb776e000, 10792, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0xb776e000
+close(3)                                = 0
+mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb7612000
+set_thread_area({entry_number:-1 -> 6, base_addr:0xb76126c0, limit:1048575, seg_32bit:1, contents:0, read_exec_only:0, limit_in_pages:1, seg_not_present:0, useable:1}) = 0
+mprotect(0xb776b000, 8192, PROT_READ)   = 0
+mprotect(0xb7787000, 4096, PROT_READ)   = 0
+mprotect(0x804a000, 4096, PROT_READ)    = 0
+mprotect(0xb77b0000, 4096, PROT_READ)   = 0
+munmap(0xb778b000, 26678)               = 0
+set_tid_address(0xb7612728)             = 12356
+set_robust_list(0xb7612730, 0xc)        = 0
+futex(0xbfb07be0, FUTEX_WAKE_PRIVATE, 1) = 0
+futex(0xbfb07be0, FUTEX_WAIT_BITSET_PRIVATE|FUTEX_CLOCK_REALTIME, 1, NULL, bfb07bf0) = -1 EAGAIN (Resource temporarily unavailable)
+rt_sigaction(SIGRTMIN, {0xb7776670, [], SA_SIGINFO}, NULL, 8) = 0
+rt_sigaction(SIGRT_1, {0xb77766f0, [], SA_RESTART|SA_SIGINFO}, NULL, 8) = 0
+rt_sigprocmask(SIG_UNBLOCK, [RTMIN RT_1], NULL, 8) = 0
+getrlimit(RLIMIT_STACK, {rlim_cur=8192*1024, rlim_max=RLIM_INFINITY}) = 0
+uname({sys="Linux", node="netlab4", ...}) = 0
+brk(0)                                  = 0x8c17000
+brk(0x8c38000)                          = 0x8c38000
+fstat64(1, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 8), ...}) = 0
+mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb7791000
+%comment{========== Start of Output ==========}
+write(1, "Consumers to consume 4 buffers\n", 31Consumers to consume 4 buffers
+) = 31
+time(NULL)                              = 1333606131
+open("/etc/localtime", O_RDONLY)        = 3
+fstat64(3, {st_mode=S_IFREG|0644, st_size=2819, ...}) = 0
+fstat64(3, {st_mode=S_IFREG|0644, st_size=2819, ...}) = 0
+mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb7790000
+read(3, "TZif2\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\4\0\0\0\4\0\0\0\0"..., 4096) = 2819
+_llseek(3, -24, [2795], SEEK_CUR)       = 0
+read(3, "\nPST8PDT,M3.2.0,M11.1.0\n", 4096) = 24
+close(3)                                = 0
+munmap(0xb7790000, 4096)                = 0
+write(1, "Start time: Wed Apr  4 23:08:51 "..., 37Start time: Wed Apr  4 23:08:51 2012
+) = 37
+write(1, "====================\n", 21====================
+)  = 21
+mmap2(NULL, 8392704, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0xb6e11000
+mprotect(0xb6e11000, 4096, PROT_NONE)   = 0
+clone(Process 12357 attached
+child_stack=0xb7611494, flags=CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_SETTLS|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID, parent_tidptr=0xb7611bd8, {entry_number:6, base_addr:0xb7611b70, limit:1048575, seg_32bit:1, contents:0, read_exec_only:0, limit_in_pages:1, seg_not_present:0, useable:1}, child_tidptr=0xb7611bd8) = 12357
+[pid 12356] mmap2(NULL, 8392704, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0 <unfinished ...>
+[pid 12357] set_robust_list(0xb7611be0, 0xc <unfinished ...>
+[pid 12356] <... mmap2 resumed> )       = 0xb6610000
+[pid 12357] <... set_robust_list resumed> ) = 0
+[pid 12357] write(2, "**Producer #1 started**\n", 24**Producer #1 started**
+ <unfinished ...>
+[pid 12356] mprotect(0xb6610000, 4096, PROT_NONE <unfinished ...>
+[pid 12357] <... write resumed> )       = 24
+[pid 12356] <... mprotect resumed> )    = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD],  <unfinished ...>
+[pid 12356] clone( <unfinished ...>
+[pid 12357] <... rt_sigprocmask resumed> [], 8) = 0
+Process 12358 attached (waiting for parent)
+[pid 12357] rt_sigaction(SIGCHLD, NULL, Process 12358 resumed (parent 12356 ready)
+ <unfinished ...>
+[pid 12358] set_robust_list(0xb6e10be0, 0xc <unfinished ...>
+[pid 12357] <... rt_sigaction resumed> {SIG_DFL, [], 0}, 8) = 0
+[pid 12358] <... set_robust_list resumed> ) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [],  <unfinished ...>
+[pid 12358] write(2, "**Producer #2 started**\n", 24**Producer #2 started**
+ <unfinished ...>
+[pid 12357] <... rt_sigprocmask resumed> NULL, 8) = 0
+[pid 12358] <... write resumed> )       = 24
+[pid 12357] nanosleep({16, 0},  <unfinished ...>
+[pid 12358] rt_sigprocmask(SIG_BLOCK, [CHLD],  <unfinished ...>
+[pid 12356] <... clone resumed> child_stack=0xb6e10494, flags=CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_SETTLS|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID, parent_tidptr=0xb6e10bd8, {entry_number:6, base_addr:0xb6e10b70, limit:1048575, seg_32bit:1, contents:0, read_exec_only:0, limit_in_pages:1, seg_not_present:0, useable:1}, child_tidptr=0xb6e10bd8) = 12358
+[pid 12358] <... rt_sigprocmask resumed> [], 8) = 0
+[pid 12356] mmap2(NULL, 8392704, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0 <unfinished ...>
+[pid 12358] rt_sigaction(SIGCHLD, NULL,  <unfinished ...>
+[pid 12356] <... mmap2 resumed> )       = 0xb5e0f000
+[pid 12358] <... rt_sigaction resumed> {SIG_DFL, [], 0}, 8) = 0
+[pid 12356] mprotect(0xb5e0f000, 4096, PROT_NONE <unfinished ...>
+[pid 12358] rt_sigprocmask(SIG_SETMASK, [],  <unfinished ...>
+[pid 12356] <... mprotect resumed> )    = 0
+[pid 12358] <... rt_sigprocmask resumed> NULL, 8) = 0
+[pid 12356] clone( <unfinished ...>
+[pid 12358] nanosleep({16, 0}, Process 12359 attached (waiting for parent)
+Process 12359 resumed (parent 12356 ready)
+ <unfinished ...>
+[pid 12359] set_robust_list(0xb660fbe0, 0xc <unfinished ...>
+[pid 12356] <... clone resumed> child_stack=0xb660f494, flags=CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_SETTLS|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID, parent_tidptr=0xb660fbd8, {entry_number:6, base_addr:0xb660fb70, limit:1048575, seg_32bit:1, contents:0, read_exec_only:0, limit_in_pages:1, seg_not_present:0, useable:1}, child_tidptr=0xb660fbd8) = 12359
+[pid 12359] <... set_robust_list resumed> ) = 0
+[pid 12356] mmap2(NULL, 8392704, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0 <unfinished ...>
+[pid 12359] write(2, "**Producer #3 started**\n", 24**Producer #3 started**
+ <unfinished ...>
+[pid 12356] <... mmap2 resumed> )       = 0xb560e000
+[pid 12359] <... write resumed> )       = 24
+[pid 12356] mprotect(0xb560e000, 4096, PROT_NONE <unfinished ...>
+[pid 12359] rt_sigprocmask(SIG_BLOCK, [CHLD],  <unfinished ...>
+[pid 12356] <... mprotect resumed> )    = 0
+[pid 12359] <... rt_sigprocmask resumed> [], 8) = 0
+[pid 12356] clone( <unfinished ...>
+[pid 12359] rt_sigaction(SIGCHLD, NULL, Process 12360 attached (waiting for parent)
+{SIG_DFL, [], 0}, 8) = 0
+Process 12360 resumed (parent 12356 ready)
+[pid 12360] set_robust_list(0xb5e0ebe0, 0xc <unfinished ...>
+[pid 12359] rt_sigprocmask(SIG_SETMASK, [],  <unfinished ...>
+[pid 12360] <... set_robust_list resumed> ) = 0
+[pid 12359] <... rt_sigprocmask resumed> NULL, 8) = 0
+[pid 12360] write(2, "**Producer #4 started**\n", 24**Producer #4 started**
+ <unfinished ...>
+[pid 12359] nanosleep({16, 0},  <unfinished ...>
+[pid 12360] <... write resumed> )       = 24
+[pid 12356] <... clone resumed> child_stack=0xb5e0e494, flags=CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_SETTLS|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID, parent_tidptr=0xb5e0ebd8, {entry_number:6, base_addr:0xb5e0eb70, limit:1048575, seg_32bit:1, contents:0, read_exec_only:0, limit_in_pages:1, seg_not_present:0, useable:1}, child_tidptr=0xb5e0ebd8) = 12360
+[pid 12360] rt_sigprocmask(SIG_BLOCK, [CHLD],  <unfinished ...>
+[pid 12356] mmap2(NULL, 8392704, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0 <unfinished ...>
+[pid 12360] <... rt_sigprocmask resumed> [], 8) = 0
+[pid 12356] <... mmap2 resumed> )       = 0xb4e0d000
+[pid 12360] rt_sigaction(SIGCHLD, NULL,  <unfinished ...>
+[pid 12356] mprotect(0xb4e0d000, 4096, PROT_NONE <unfinished ...>
+[pid 12360] <... rt_sigaction resumed> {SIG_DFL, [], 0}, 8) = 0
+[pid 12356] <... mprotect resumed> )    = 0
+[pid 12360] rt_sigprocmask(SIG_SETMASK, [],  <unfinished ...>
+[pid 12356] clone( <unfinished ...>
+[pid 12360] <... rt_sigprocmask resumed> NULL, 8) = 0
+Process 12361 attached (waiting for parent)
+[pid 12360] nanosleep({16, 0}, Process 12361 resumed (parent 12356 ready)
+ <unfinished ...>
+[pid 12361] set_robust_list(0xb560dbe0, 0xc <unfinished ...>
+[pid 12356] <... clone resumed> child_stack=0xb560d494, flags=CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_SETTLS|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID, parent_tidptr=0xb560dbd8, {entry_number:6, base_addr:0xb560db70, limit:1048575, seg_32bit:1, contents:0, read_exec_only:0, limit_in_pages:1, seg_not_present:0, useable:1}, child_tidptr=0xb560dbd8) = 12361
+[pid 12361] <... set_robust_list resumed> ) = 0
+[pid 12356] mmap2(NULL, 8392704, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0 <unfinished ...>
+[pid 12361] write(2, "**Consumer #1 started**\n", 24**Consumer #1 started**
+ <unfinished ...>
+[pid 12356] <... mmap2 resumed> )       = 0xb460c000
+[pid 12361] <... write resumed> )       = 24
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD],  <unfinished ...>
+[pid 12356] mprotect(0xb460c000, 4096, PROT_NONE <unfinished ...>
+[pid 12361] <... rt_sigprocmask resumed> [], 8) = 0
+[pid 12356] <... mprotect resumed> )    = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL,  <unfinished ...>
+[pid 12356] clone( <unfinished ...>
+[pid 12361] <... rt_sigaction resumed> {SIG_DFL, [], 0}, 8) = 0
+Process 12362 attached (waiting for parent)
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], Process 12362 resumed (parent 12356 ready)
+ <unfinished ...>
+[pid 12362] set_robust_list(0xb4e0cbe0, 0xc <unfinished ...>
+[pid 12361] <... rt_sigprocmask resumed> NULL, 8) = 0
+[pid 12362] <... set_robust_list resumed> ) = 0
+[pid 12361] nanosleep({16, 0},  <unfinished ...>
+[pid 12362] write(2, "**Consumer #2 started**\n", 24**Consumer #2 started**
+ <unfinished ...>
+[pid 12356] <... clone resumed> child_stack=0xb4e0c494, flags=CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_SETTLS|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID, parent_tidptr=0xb4e0cbd8, {entry_number:6, base_addr:0xb4e0cb70, limit:1048575, seg_32bit:1, contents:0, read_exec_only:0, limit_in_pages:1, seg_not_present:0, useable:1}, child_tidptr=0xb4e0cbd8) = 12362
+[pid 12362] <... write resumed> )       = 24
+[pid 12356] futex(0xb7611bd8, FUTEX_WAIT, 12357, NULL <unfinished ...>
+[pid 12362] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12362] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12362] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12362] nanosleep({16, 0},  <unfinished ...>
+[pid 12357] <... nanosleep resumed> 0xb7611354) = 0
+[pid 12358] <... nanosleep resumed> 0xb6e10354) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD],  <unfinished ...>
+[pid 12358] futex(0x804b0d4, FUTEX_WAIT_PRIVATE, 2, NULL <unfinished ...>
+[pid 12357] <... rt_sigprocmask resumed> [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [],  <unfinished ...>
+[pid 12359] <... nanosleep resumed> 0xb660f354) = 0
+[pid 12357] <... rt_sigprocmask resumed> NULL, 8) = 0
+[pid 12359] futex(0x804b0d4, FUTEX_WAIT_PRIVATE, 2, NULL <unfinished ...>
+[pid 12357] nanosleep({1, 0},  <unfinished ...>
+[pid 12360] <... nanosleep resumed> 0xb5e0e354) = 0
+[pid 12360] futex(0x804b0d4, FUTEX_WAIT_PRIVATE, 2, NULL <unfinished ...>
+[pid 12361] <... nanosleep resumed> 0xb560d354) = 0
+[pid 12361] futex(0x804b0c4, FUTEX_WAIT_PRIVATE, 0, NULL <unfinished ...>
+[pid 12362] <... nanosleep resumed> 0xb4e0c354) = 0
+[pid 12362] futex(0x804b0c4, FUTEX_WAIT_PRIVATE, 0, NULL <unfinished ...>
+[pid 12357] <... nanosleep resumed> 0xb7611324) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0}, 0xb7611324) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0}, 0xb7611324) = 0
+[pid 12357] futex(0x804b0d4, FUTEX_WAKE_PRIVATE, 1 <unfinished ...>
+[pid 12358] <... futex resumed> )       = 0
+[pid 12358] rt_sigprocmask(SIG_BLOCK, [CHLD],  <unfinished ...>
+[pid 12357] <... futex resumed> )       = 1
+[pid 12358] <... rt_sigprocmask resumed> [], 8) = 0
+[pid 12358] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] futex(0x804b0c4, FUTEX_WAKE_PRIVATE, 1 <unfinished ...>
+[pid 12358] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12358] nanosleep({1, 0},  <unfinished ...>
+[pid 12357] <... futex resumed> )       = 1
+[pid 12361] <... futex resumed> )       = 0
+[pid 12357] write(2, "[PRODUCER #1] Buffers added to q"..., 49 <unfinished ...>
+[pid 12361] futex(0x804b0d4, FUTEX_WAIT_PRIVATE, 2, NULL[PRODUCER #1] Buffers added to queue 		 Count: 3
+ <unfinished ...>
+[pid 12357] <... write resumed> )       = 49
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({16, 0},  <unfinished ...>
+[pid 12358] <... nanosleep resumed> 0xb6e10324) = 0
+[pid 12358] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12358] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12358] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12358] nanosleep({1, 0}, 0xb6e10324) = 0
+[pid 12358] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12358] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12358] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12358] nanosleep({1, 0}, 0xb6e10324) = 0
+[pid 12358] futex(0x804b0d4, FUTEX_WAKE_PRIVATE, 1 <unfinished ...>
+[pid 12359] <... futex resumed> )       = 0
+[pid 12359] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12359] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12358] <... futex resumed> )       = 1
+[pid 12359] rt_sigprocmask(SIG_SETMASK, [],  <unfinished ...>
+[pid 12358] futex(0x804b0c4, FUTEX_WAKE_PRIVATE, 1 <unfinished ...>
+[pid 12359] <... rt_sigprocmask resumed> NULL, 8) = 0
+[pid 12358] <... futex resumed> )       = 1
+[pid 12359] nanosleep({1, 0},  <unfinished ...>
+[pid 12358] write(2, "[PRODUCER #2] Buffers added to q"..., 49[PRODUCER #2] Buffers added to queue 		 Count: 6
+ <unfinished ...>
+[pid 12362] <... futex resumed> )       = 0
+[pid 12358] <... write resumed> )       = 49
+[pid 12362] futex(0x804b0d4, FUTEX_WAIT_PRIVATE, 2, NULL <unfinished ...>
+[pid 12358] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12358] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12358] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12358] nanosleep({16, 0},  <unfinished ...>
+[pid 12359] <... nanosleep resumed> 0xb660f324) = 0
+[pid 12359] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12359] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12359] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12359] nanosleep({1, 0}, 0xb660f324) = 0
+[pid 12359] futex(0x804b0d4, FUTEX_WAKE_PRIVATE, 1 <unfinished ...>
+[pid 12360] <... futex resumed> )       = 0
+[pid 12360] futex(0x804b0d4, FUTEX_WAKE_PRIVATE, 1) = 1
+[pid 12361] <... futex resumed> )       = 0
+[pid 12360] write(2, "[PRODUCER #4] Buffers added to q"..., 49[PRODUCER #4] Buffers added to queue 		 Count: 8
+ <unfinished ...>
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD],  <unfinished ...>
+[pid 12360] <... write resumed> )       = 49
+[pid 12361] <... rt_sigprocmask resumed> [], 8) = 0
+[pid 12360] write(2, "--Producer #4 exited--\n", 23--Producer #4 exited--
+ <unfinished ...>
+[pid 12361] rt_sigaction(SIGCHLD, NULL,  <unfinished ...>
+[pid 12360] <... write resumed> )       = 23
+[pid 12361] <... rt_sigaction resumed> {SIG_DFL, [], 0}, 8) = 0
+[pid 12360] madvise(0xb560e000, 8372224, MADV_DONTNEED <unfinished ...>
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [],  <unfinished ...>
+[pid 12360] <... madvise resumed> )     = 0
+[pid 12361] <... rt_sigprocmask resumed> NULL, 8) = 0
+[pid 12360] _exit(0)                    = ?
+Process 12360 detached
+[pid 12361] nanosleep({1, 0},  <unfinished ...>
+[pid 12359] <... futex resumed> )       = 1
+[pid 12359] write(2, "[PRODUCER #3] Buffers added to q"..., 49[PRODUCER #3] Buffers added to queue 		 Count: 8
+) = 49
+[pid 12359] write(2, "--Producer #3 exited--\n", 23--Producer #3 exited--
+) = 23
+[pid 12359] madvise(0xb5e0f000, 8372224, MADV_DONTNEED) = 0
+[pid 12359] _exit(0)                    = ?
+Process 12359 detached
+[pid 12361] <... nanosleep resumed> 0xb560d324) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] futex(0x804b0d4, FUTEX_WAKE_PRIVATE, 1) = 1
+[pid 12362] <... futex resumed> )       = 0
+[pid 12361] write(2, "[CONSUMER #1] Buffers removed fr"..., 52[CONSUMER #1] Buffers removed from queue 	 Count: 4
+ <unfinished ...>
+[pid 12362] rt_sigprocmask(SIG_BLOCK, [CHLD],  <unfinished ...>
+[pid 12361] <... write resumed> )       = 52
+[pid 12362] <... rt_sigprocmask resumed> [], 8) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD],  <unfinished ...>
+[pid 12362] rt_sigaction(SIGCHLD, NULL,  <unfinished ...>
+[pid 12361] <... rt_sigprocmask resumed> [], 8) = 0
+[pid 12362] <... rt_sigaction resumed> {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12362] rt_sigprocmask(SIG_SETMASK, [],  <unfinished ...>
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [],  <unfinished ...>
+[pid 12362] <... rt_sigprocmask resumed> NULL, 8) = 0
+[pid 12361] <... rt_sigprocmask resumed> NULL, 8) = 0
+[pid 12362] nanosleep({1, 0},  <unfinished ...>
+[pid 12361] nanosleep({16, 0},  <unfinished ...>
+[pid 12362] <... nanosleep resumed> 0xb4e0c324) = 0
+[pid 12362] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12362] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12362] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12362] nanosleep({1, 0}, 0xb4e0c324) = 0
+[pid 12362] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12362] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12362] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12362] nanosleep({1, 0}, 0xb4e0c324) = 0
+[pid 12362] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12362] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12362] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12362] nanosleep({1, 0}, 0xb4e0c324) = 0
+[pid 12362] futex(0x804b0d4, FUTEX_WAKE_PRIVATE, 1) = 0
+[pid 12362] write(2, "[CONSUMER #2] Buffers removed fr"..., 52[CONSUMER #2] Buffers removed from queue 	 Count: 0
+) = 52
+[pid 12362] write(2, "--Consumer #2 exited--\n", 23--Consumer #2 exited--
+) = 23
+[pid 12362] madvise(0xb460c000, 8372224, MADV_DONTNEED) = 0
+[pid 12362] _exit(0)                    = ?
+Process 12362 detached
+[pid 12357] <... nanosleep resumed> 0xb7611354) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0}, 0xb7611324) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0}, 0xb7611324) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0},  <unfinished ...>
+[pid 12358] <... nanosleep resumed> 0xb6e10354) = 0
+[pid 12358] futex(0x804b0d4, FUTEX_WAIT_PRIVATE, 2, NULL <unfinished ...>
+[pid 12357] <... nanosleep resumed> 0xb7611324) = 0
+[pid 12357] futex(0x804b0d4, FUTEX_WAKE_PRIVATE, 1 <unfinished ...>
+[pid 12358] <... futex resumed> )       = 0
+[pid 12358] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12358] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] <... futex resumed> )       = 1
+[pid 12358] rt_sigprocmask(SIG_SETMASK, [],  <unfinished ...>
+[pid 12357] write(2, "[PRODUCER #1] Buffers added to q"..., 49[PRODUCER #1] Buffers added to queue 		 Count: 3
+ <unfinished ...>
+[pid 12358] <... rt_sigprocmask resumed> NULL, 8) = 0
+[pid 12357] <... write resumed> )       = 49
+[pid 12358] nanosleep({1, 0},  <unfinished ...>
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({16, 0},  <unfinished ...>
+[pid 12358] <... nanosleep resumed> 0xb6e10324) = 0
+[pid 12358] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12358] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12358] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12358] nanosleep({1, 0}, 0xb6e10324) = 0
+[pid 12358] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12358] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12358] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12358] nanosleep({1, 0}, 0xb6e10324) = 0
+[pid 12358] futex(0x804b0d4, FUTEX_WAKE_PRIVATE, 1) = 0
+[pid 12358] write(2, "[PRODUCER #2] Buffers added to q"..., 49[PRODUCER #2] Buffers added to queue 		 Count: 6
+) = 49
+[pid 12358] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12358] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12358] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12358] nanosleep({16, 0},  <unfinished ...>
+[pid 12361] <... nanosleep resumed> 0xb560d354) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] write(2, "[CONSUMER #1] Buffers removed fr"..., 52[CONSUMER #1] Buffers removed from queue 	 Count: 2
+) = 52
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({16, 0},  <unfinished ...>
+[pid 12357] <... nanosleep resumed> 0xb7611354) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0}, 0xb7611324) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0}, 0xb7611324) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0},  <unfinished ...>
+[pid 12358] <... nanosleep resumed> 0xb6e10354) = 0
+[pid 12357] <... nanosleep resumed> 0xb7611324) = 0
+[pid 12358] futex(0x804b0d4, FUTEX_WAIT_PRIVATE, 2, NULL <unfinished ...>
+[pid 12357] futex(0x804b0d4, FUTEX_WAKE_PRIVATE, 1 <unfinished ...>
+[pid 12358] <... futex resumed> )       = -1 EAGAIN (Resource temporarily unavailable)
+[pid 12357] <... futex resumed> )       = 0
+[pid 12358] rt_sigprocmask(SIG_BLOCK, [CHLD],  <unfinished ...>
+[pid 12357] write(2, "[PRODUCER #1] Buffers added to q"..., 49[PRODUCER #1] Buffers added to queue 		 Count: 5
+ <unfinished ...>
+[pid 12358] <... rt_sigprocmask resumed> [], 8) = 0
+[pid 12357] <... write resumed> )       = 49
+[pid 12358] rt_sigaction(SIGCHLD, NULL,  <unfinished ...>
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD],  <unfinished ...>
+[pid 12358] <... rt_sigaction resumed> {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] <... rt_sigprocmask resumed> [], 8) = 0
+[pid 12358] rt_sigprocmask(SIG_SETMASK, [],  <unfinished ...>
+[pid 12357] rt_sigaction(SIGCHLD, NULL,  <unfinished ...>
+[pid 12358] <... rt_sigprocmask resumed> NULL, 8) = 0
+[pid 12357] <... rt_sigaction resumed> {SIG_DFL, [], 0}, 8) = 0
+[pid 12358] nanosleep({1, 0},  <unfinished ...>
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({16, 0},  <unfinished ...>
+[pid 12358] <... nanosleep resumed> 0xb6e10324) = 0
+[pid 12358] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12358] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12358] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12358] nanosleep({1, 0}, 0xb6e10324) = 0
+[pid 12358] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12358] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12358] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12358] nanosleep({1, 0}, 0xb6e10324) = 0
+[pid 12358] futex(0x804b0d4, FUTEX_WAKE_PRIVATE, 1) = 0
+[pid 12358] write(2, "[PRODUCER #2] Buffers added to q"..., 49[PRODUCER #2] Buffers added to queue 		 Count: 8
+) = 49
+[pid 12358] write(2, "--Producer #2 exited--\n", 23--Producer #2 exited--
+) = 23
+[pid 12358] madvise(0xb6610000, 8372224, MADV_DONTNEED) = 0
+[pid 12358] _exit(0)                    = ?
+Process 12358 detached
+[pid 12361] <... nanosleep resumed> 0xb560d354) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] write(2, "[CONSUMER #1] Buffers removed fr"..., 52[CONSUMER #1] Buffers removed from queue 	 Count: 4
+) = 52
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({16, 0},  <unfinished ...>
+[pid 12357] <... nanosleep resumed> 0xb7611354) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0}, 0xb7611324) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0}, 0xb7611324) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0}, 0xb7611324) = 0
+[pid 12357] write(2, "[PRODUCER #1] Buffers added to q"..., 49[PRODUCER #1] Buffers added to queue 		 Count: 7
+) = 49
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({16, 0},  <unfinished ...>
+[pid 12361] <... nanosleep resumed> 0xb560d354) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] write(2, "[CONSUMER #1] Buffers removed fr"..., 52[CONSUMER #1] Buffers removed from queue 	 Count: 3
+) = 52
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({16, 0},  <unfinished ...>
+[pid 12357] <... nanosleep resumed> 0xb7611354) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0}, 0xb7611324) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0}, 0xb7611324) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0}, 0xb7611324) = 0
+[pid 12357] write(2, "[PRODUCER #1] Buffers added to q"..., 49[PRODUCER #1] Buffers added to queue 		 Count: 6
+) = 49
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({16, 0},  <unfinished ...>
+[pid 12361] <... nanosleep resumed> 0xb560d354) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] write(2, "[CONSUMER #1] Buffers removed fr"..., 52[CONSUMER #1] Buffers removed from queue 	 Count: 2
+) = 52
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({16, 0},  <unfinished ...>
+[pid 12357] <... nanosleep resumed> 0xb7611354) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0}, 0xb7611324) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0}, 0xb7611324) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0}, 0xb7611324) = 0
+[pid 12357] write(2, "[PRODUCER #1] Buffers added to q"..., 49[PRODUCER #1] Buffers added to queue 		 Count: 5
+) = 49
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({16, 0},  <unfinished ...>
+[pid 12361] <... nanosleep resumed> 0xb560d354) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] write(2, "[CONSUMER #1] Buffers removed fr"..., 52[CONSUMER #1] Buffers removed from queue 	 Count: 1
+) = 52
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({16, 0},  <unfinished ...>
+[pid 12357] <... nanosleep resumed> 0xb7611354) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0}, 0xb7611324) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0}, 0xb7611324) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0}, 0xb7611324) = 0
+[pid 12357] write(2, "[PRODUCER #1] Buffers added to q"..., 49[PRODUCER #1] Buffers added to queue 		 Count: 4
+) = 49
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({16, 0},  <unfinished ...>
+[pid 12361] <... nanosleep resumed> 0xb560d354) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12361] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12361] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12361] nanosleep({1, 0}, 0xb560d324) = 0
+[pid 12361] write(2, "[CONSUMER #1] Buffers removed fr"..., 52[CONSUMER #1] Buffers removed from queue 	 Count: 0
+) = 52
+[pid 12361] write(2, "--Consumer #1 exited--\n", 23--Consumer #1 exited--
+) = 23
+[pid 12361] madvise(0xb4e0d000, 8372224, MADV_DONTNEED) = 0
+[pid 12361] _exit(0)                    = ?
+Process 12361 detached
+[pid 12357] <... nanosleep resumed> 0xb7611354) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0}, 0xb7611324) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0}, 0xb7611324) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0}, 0xb7611324) = 0
+[pid 12357] write(2, "[PRODUCER #1] Buffers added to q"..., 49[PRODUCER #1] Buffers added to queue 		 Count: 3
+) = 49
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({16, 0}, 0xb7611354) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0}, 0xb7611324) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0}, 0xb7611324) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0}, 0xb7611324) = 0
+[pid 12357] write(2, "[PRODUCER #1] Buffers added to q"..., 49[PRODUCER #1] Buffers added to queue 		 Count: 6
+) = 49
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({16, 0}, 0xb7611354) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0}, 0xb7611324) = 0
+[pid 12357] rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+[pid 12357] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 12357] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 12357] nanosleep({1, 0}, 0xb7611324) = 0
+[pid 12357] write(2, "[PRODUCER #1] Buffers added to q"..., 49[PRODUCER #1] Buffers added to queue 		 Count: 8
+) = 49
+[pid 12357] write(2, "--Producer #1 exited--\n", 23--Producer #1 exited--
+) = 23
+[pid 12357] madvise(0xb6e11000, 8372224, MADV_DONTNEED) = 0
+[pid 12357] _exit(0)                    = ?
+Process 12357 detached
+<... futex resumed> )                   = 0
+munmap(0xb6e11000, 8392704)             = 0
+munmap(0xb6610000, 8392704)             = 0
+time(NULL)                              = 1333606320
+write(1, "====================\n", 21====================
+)  = 21
+stat64("/etc/localtime", {st_mode=S_IFREG|0644, st_size=2819, ...}) = 0
+write(1, "End time: Wed Apr  4 23:12:00 20"..., 35End time: Wed Apr  4 23:12:00 2012
+) = 35
+write(1, "Duration: 189 seconds\n", 22Duration: 189 seconds
+) = 22
+exit_group(0)                           = ?

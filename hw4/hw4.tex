@@ -46,38 +46,40 @@
 
 %---{ Main Content }--------------------------------------------------------------------
 \section*{Assignment Description}
+For this assignment, we were tasked with implementing a solution to the 'Producer-Consumer' problem, to gain further insight into the
+usage of semaphores for synchronizing concurrent tasks.  First we had to implement the basic data structure that is necessary to tackle
+the problem, which is a queue of buffers. This data structure, is then  manipulated by multiple concurrent threads all trying to either add or remove
+values to the queue in traditional 'Last-In-First-Out' fashion. Those threads trying to add to the queue were the 'Producers', and those removing
+buffers from the queue were the 'Consumers' in this scenario.  The problem then lies in managing these threads so that they access and manipulate
+the buffer queue in an orderly fashion, that has the Consumers consume after the Producers produce, and vice versa.  Thus we had to implement 'enqueue' 
+and 'dequeue' methods that effectively prevent race conditions by means of counting semaphores and a mutex. The outline for this synchronization
+strategy is documented in the \textsl{Pseudo Code} in \textbf{Appendix I}.
 
+This code has been tested to work under \textsl{Windows}, \textsl{Gentoo Linux}, and \textsl{Mac OSX}.
+The source for the Unix implementation under listed in \textbf{Appendix II}, and \textbf{Appendix IV} for the Windows version.
 
-% This assignment built off our last one dealing with multiple concurrent processes and threads; however, now we had to prevent the race
-% conditions we induced in the last assignment. We were to keep the various design choices that led to the unsynchronized, interleaved output
-% (such as the various \texttt{sleep} calls), and wrap them with signal and mutex based synchronization methods; as the goal was now to learn
-% about how to ensure that a concurrent program executes how we want it to.  The tasks performed by the concurrent child processes/threads
-% (printing out the values from 1-10 [processes], and adding to 100 [threads]) now make up the critical sections of the code, and their execution
-% is now managed by semaphores (as described in the \textsl{Pseudo Code} in \textbf{Appendix I}), ensuring a synchronized sequential execution.
-% Additionally, we were also asked to induce deadlocks in our newly synchronized solutions, to point out another potential pitfall of concurrent
-% programming.
-%
-% This code has been tested to work under \textsl{Windows}, \textsl{Gentoo Linux}, and \textsl{Mac OSX}.
-% The source for the Unix implementation under listed in \textbf{Appendix II}, and \textbf{Appendix IV} for the Windows version.
 
 \section*{Design \& Implementation}
+I attempted to design this implementation with an emphasis on modularity, having my \texttt{BufferQueue} structure be shared across the synchronized
+and unsyncronized versions of the program. I also kept a very clear separation of tasks between the functions, letting my \texttt{enqueue} and \texttt{dequeue} 
+functions handle all the synchronization needed to manipulate the \texttt{BufferQueue} smoothly, while letting my \texttt{producer} and \texttt{consumer}
+methods handle the threading and exit conditions. In order to achieve this, I had to store a local copy of the buffer queue's counter variable in each of the
+threads, to ensure that race conditions didn't have an effect on the exit conditions needed to terminate the threads.
 
-% My goal with the design of my implementations was simply to be clear and concise about the mechanics involved, and what is going on in the code.
-% The basic logic for the synchronization closely follows the specifications laid out in the pseudo code for both the Unix and Windows implementations.
-% The only minor deviation is in the Windows deadlock version of the threaded program, where I actively lock the mutex in the parent before executing a
-% single child (and thus quickly invoke a \texttt{p()}- \texttt{p()} deadlock), as opposed to simply omitting the \texttt{v()} call to send a signal to the following process.
-% Aside from that, the Windows and Unix implementations of synchronous multi-threading are virtually identical.
 
 \section*{Testing Strategy}
+The testing strategy I used in developing this implementation, was to simply disperse \texttt{fprintf} calls to \texttt{stderr} whenever a \texttt{enqueue} or
+\texttt{dequeue} operation was performed, outputting the current number of filled buffers, and the contents of each buffer that was \texttt{enqueue}'d and 
+\texttt{dequeue}'d. With this information, I could visually scan and determine the order in which the operations were executing, and whether or not the threads 
+were performing their tasks properly (i.e. checking if the Consumers were consuming the values produced by the Producers in 'LIFO' order).
 
 
 \section*{Improvements}
+The main way I would improve this implementation, would be to unify all the \texttt{BufferQueue} related functions in the \texttt{BufferQueue} header file itself,
+giving the functions options to either use synchronization or not, and to augment the header file with C-Pre-Processor directives to determine whether to use the 
+Windows implementation, or the Unix implementation of the \texttt{BufferQueue}.  I would also probably implement proper queue and buffer structures for the 
+\texttt{BufferQueue}, as opposed to the current implementation of a plain integer array with fancy \texttt{enqueue} and \texttt{dequeue} methods.
 
-% The main improvement I would probably make, would be to rewrite the Unix process synchronization using a fuller semaphore construct, to make it
-% clearer to see what is going on logically, as opposed to just using the raw \texttt{kill()} and \texttt{signal()} calls. If the programs were also
-% to simply stand on their own as examples of concurrent programming, I would take out the various unnecessary elements that were meant to invoke
-% race conditions in the previous assignment (such as the calls to \texttt{sleep()}), to prevent unnecessary confusion about the factors in play
-% when synchronizing multiple threads/processes.
 
 %---{ Appendices }-----------------------------------------------------------------------
 \newpage
@@ -89,9 +91,12 @@
 \begin{verbatim}
 
 BufferQueue {
-    Buffer queue;
+    Buffer queue[];
     int size;
     int count;
+
+    int in;
+    int out;
 
     // Counting semaphores
     Semaphore empty;
@@ -108,8 +113,9 @@ enqueue(buffers) {
     P(BufferQueue.lock);
 
     for (buffer in buffers) {
+        BufferQueue.queue[BufferQueue.in] = buffer;
+        BufferQueue.in = (BufferQueue.in+1) % BufferQueue.size;
         BufferQueue.count++;
-        BufferQueue.queue[BufferQueue.count] = buffer;
     }
 
     // Unlock the mutex
@@ -125,8 +131,9 @@ dequeue(buffers) {
     P(BufferQueue.lock);
 
     for (buffer in buffers) {
+        BufferQueue.queue[BufferQueue.out] = NULL;
+        BufferQueue.out = (BufferQueue.out+1) % BufferQueue.size;
         BufferQueue.count--;
-        BufferQueue.queue[BufferQueue.count] = NULL;
     }
     
     // Unlock the mutex
@@ -142,19 +149,19 @@ dequeue(buffers) {
 \begin{scriptsize}
 \begin{verbatim}
 producer() {
-    while (BufferQueue.count < BufferQueue.size) {
+    do {
         spin_wait();
 
         enqueue(buffers_to_produce);
-    }
+    } while (BufferQueue.count < BufferQueue.size);
 }
 
 consumer() {
-    while (BufferQueue.count < BufferQueue.size) {
+    do {
         spin_wait();
 
         dequeue(buffers_to_consume);
-    }
+    } while (BufferQueue.count > 0);
 }
 \end{verbatim}
 \end{scriptsize}
@@ -172,7 +179,7 @@ consumer() {
 \filename{Synchronized}
 \includesource{c}{unix_synchronized.c}
 
-
+\newpage
 \append{III} {Unix Output}
 
 \filename{Unsynchronized}
@@ -198,10 +205,10 @@ consumer() {
 \append{V} {Windows Output}
 
 \filename{Unsynchronized}
-\includeoutput{output/win_unsynchronized.txt}
+%\includeoutput{output/win_unsynchronized.txt}
 
 \filename{Synchronized}
-\includeoutput{output/win_synchronized.txt}
+%\includeoutput{output/win_synchronized.txt}
 
 
 %----{ STRACE }--------------------------------------------------------------------------
