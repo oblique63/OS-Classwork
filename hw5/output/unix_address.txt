@@ -1,0 +1,22 @@
+$ ./unix_address 219986
+Address: 
+    Decimal: 219986 
+    Octal: 655522
+Page Number: 
+    Decimal: 6 
+    Octal: 6
+Offset: 
+    Decimal: 23378 
+    Octal: 55522
+
+
+$ ./unix_address 219986 16
+Address: 
+    Decimal: 219986 
+    Octal: 655522
+Page Number: 
+    Decimal: 13 
+    Octal: 51
+Offset: 
+    Decimal: 6994 
+    Octal: 15522
