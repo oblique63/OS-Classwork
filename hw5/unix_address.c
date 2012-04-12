@@ -20,7 +20,6 @@ void check(int expression, char *message) {
 }
 
 void decimal_to_octal(int decimal, char* octal) {
-    int ascii_offset = 48;
     int octal_digit;
     int digit_count;
     
@@ -32,13 +31,14 @@ void decimal_to_octal(int decimal, char* octal) {
     // Calculate Octal number, from least to most significant digit
     for (i = 0; decimal > 0 && i < BYTES; i++) {
         octal_digit = decimal % 8;
-        octal[i] = octal_digit + ascii_offset;
+        octal[i] = octal_digit + '0';  // converts to ASCII digit
         decimal /= 8;
     }
+    
     digit_count = i - 1;
 
     // Reverse Octal string
-    for (i = 0; i <= digit_count/2; i++) {
+    for (i = 0; i < digit_count/2; i++) {
         temp = octal[i];
         octal[i] = octal[digit_count-i];
         octal[digit_count-i] = temp;        
