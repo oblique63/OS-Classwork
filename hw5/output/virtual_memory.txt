@@ -1,0 +1,65 @@
+$ ./virtual_memory
+=== Using 1 Page Frames ===
+FIFO: 91 page faults
+LRU:  91 page faults
+OPT:  91 page faults
+
+=== Using 2 Page Frames ===
+FIFO: 86 page faults
+LRU:  87 page faults
+OPT:  72 page faults
+
+=== Using 3 Page Frames ===
+FIFO: 76 page faults
+LRU:  77 page faults
+OPT:  58 page faults
+
+=== Using 4 Page Frames ===
+FIFO: 70 page faults
+LRU:  71 page faults
+OPT:  49 page faults
+
+=== Using 5 Page Frames ===
+FIFO: 64 page faults
+LRU:  63 page faults
+OPT:  40 page faults
+
+=== Using 6 Page Frames ===
+FIFO: 58 page faults
+LRU:  60 page faults
+OPT:  34 page faults
+
+=== Using 7 Page Frames ===
+FIFO: 50 page faults
+LRU:  50 page faults
+OPT:  29 page faults
+
+=== Using 8 Page Frames ===
+FIFO: 40 page faults
+LRU:  42 page faults
+OPT:  25 page faults
+
+=== Using 9 Page Frames ===
+FIFO: 30 page faults
+LRU:  39 page faults
+OPT:  26 page faults
+
+=== Using 10 Page Frames ===
+FIFO: 26 page faults
+LRU:  30 page faults
+OPT:  25 page faults
+
+=== Using 11 Page Frames ===
+FIFO: 22 page faults
+LRU:  20 page faults
+OPT:  21 page faults
+
+=== Using 12 Page Frames ===
+FIFO: 15 page faults
+LRU:  18 page faults
+OPT:  22 page faults
+
+=== Using 13 Page Frames ===
+FIFO: 13 page faults
+LRU:  17 page faults
+OPT:  20 page faults

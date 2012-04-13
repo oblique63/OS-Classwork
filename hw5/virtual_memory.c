@@ -10,11 +10,29 @@ int number_of_frames;
 int *page_frames;
 
 //----{ Helper Functions }------------------------------------------------------
+
+void print_array(int *array, int size,  char *name) {
+    int i;
+    printf("----- \n%s:  ", name);
+    for (i = 0; i < size; i++)
+        printf("%d ", array[i]);
+    printf("\n-----\n");
+}
+
 void populate_reference() {
     int i;
+    //printf("POPULATING:  ");
     for (i = 0; i < REFERENCE_SIZE; i++) {
         page_reference[i] = (random() % MAX_PAGE_NUMBER) + 1;
+        //printf("%d ", page_reference[i]);
     }
+    //printf("\n");
+}
+
+void clear_page_frames() {
+    int i;
+    for (i = 0; i < number_of_frames; i++)
+        page_frames[i] = -1;
 }
 
 int in_page_frames(int page_number) {
@@ -25,6 +43,7 @@ int in_page_frames(int page_number) {
             return frame+1;
     }
 
+    //printf("%d is not in page_frames\n", page_number);
     return 0;
 }
 
@@ -35,17 +54,27 @@ int get_furthest_reference(int starting_index, int page_number) {
             return i;
     }
 
-    return -1;
+    return REFERENCE_SIZE;
 }
 
-// pushes new frame index into stack, shift older numbers down.
-// Assumes stack is full, and of length 'number_of_frames'.
+// pushes/moves frame_index to the top of the stack, shifts older numbers down as needed.
 void push(int *stack, int frame_index) {
-    int i;
-    for (i = 1; i < number_of_frames; i++)
+    
+    int i, shifting_start = 0;
+    for (i = 0; i < number_of_frames && shifting_start == 0; i++) {
+        if (stack[i] == frame_index)
+            shifting_start = i;
+    }
+    
+    for (i = shifting_start+1; i < number_of_frames; i++)
         stack[i-1] = stack[i];
 
     stack[number_of_frames-1] = frame_index;
+
+    //printf("LRU STACK:  ");
+    //for (i=0; i < number_of_frames; i++)
+    //    printf("%d ", stack[i]);
+    //printf("\n");
 }
 
 
@@ -55,22 +84,24 @@ int FIFO() {
     int page_stored = 0;
 
     frame = 0;
+    page_faults = 0;
     reference_index = 0;
-    for (page_faults = 0; reference_index < REFERENCE_SIZE; page_faults++) {
+    while (reference_index < REFERENCE_SIZE) {
 
         page_stored = 0;
         while (!page_stored && reference_index < REFERENCE_SIZE) {
             page_number = page_reference[reference_index];
-
+            
             if (!in_page_frames(page_number)) {
                 page_frames[frame] = page_number;
+                page_faults += 1;
                 page_stored = 1;
             }
 
             reference_index += 1;
         }
 
-        if (frame < number_of_frames)
+        if (frame+1 < number_of_frames)
             frame += 1;
         else
             frame = 0;
@@ -85,8 +116,9 @@ int LRU() {
     int empty_frames = number_of_frames;
     int page_stored = 0;
 
+    page_faults = 0;
     reference_index = 0;
-    for (page_faults = 0; reference_index < REFERENCE_SIZE; page_faults++) {
+    while (reference_index < REFERENCE_SIZE) {
 
         page_stored = 0;
         while (!page_stored && reference_index < REFERENCE_SIZE) {
@@ -96,8 +128,9 @@ int LRU() {
                 frame = number_of_frames - empty_frames;
 
                 page_frames[frame] = page_number;
-                least_referenced[frame] = frame;
+                least_referenced[frame] =  frame;
 
+                page_faults += 1;
                 empty_frames -= 1;
             }
 
@@ -106,6 +139,9 @@ int LRU() {
 
                 if (!frame) {
                     page_frames[ least_referenced[0] ] = page_number;
+                    frame = least_referenced[0]+1;
+                    
+                    page_faults += 1;
                     page_stored = 1;
                 }
 
@@ -125,8 +161,9 @@ int OPT() {
     int empty_frames = number_of_frames;
     int page_stored = 0;
 
+    page_faults = 0;
     reference_index = 0;
-    for (page_faults = 0; reference_index < REFERENCE_SIZE; page_faults++) {
+    while (reference_index < REFERENCE_SIZE) {
 
         page_stored = 0;
         while (!page_stored && reference_index < REFERENCE_SIZE) {
@@ -137,6 +174,7 @@ int OPT() {
 
                 page_frames[frame] = page_number;
 
+                page_faults += 1;
                 empty_frames -= 1;
             }
 
@@ -145,22 +183,29 @@ int OPT() {
 
                 if (!frame) {
                     page_frames[furthest_indexed_frame] = page_number;
+                    page_faults += 1;
                     page_stored = 1;
-                }
-
-                // Update the furthest index
-                furthest_index = -1;
-                for (frame = 0; frame < number_of_frames; frame++) {
-                    index = get_furthest_reference(reference_index+1, page_number);
-                    
-                    if (index > furthest_index) {
-                        furthest_index = index;
-                        furthest_indexed_frame = frame;
-                    }
                 }
             }
 
             reference_index += 1;
+            
+            // Update the furthest index
+            furthest_index = -1;
+            for (frame = 0; frame < (number_of_frames - empty_frames); frame++) {
+                index = get_furthest_reference(reference_index, page_frames[frame]);
+                
+                if (index > furthest_index) {
+                    furthest_index = index;
+                    furthest_indexed_frame = frame;
+                }
+            }
+            //print_array(page_reference, REFERENCE_SIZE, "REFERENCE");
+            //printf("Page Number = %d\n", page_number);
+            //printf("FURTHEST REFERENCE INDEX: %d\n", furthest_index);
+            // 
+            //print_array(page_frames, number_of_frames, "FRAME");
+            //printf("Furthest indexed frame: %d\n\>>>>\n", furthest_indexed_frame);
         }
     }
 
@@ -175,6 +220,7 @@ int main() {
 
     for (number_of_frames = 1; number_of_frames <= MAX_PAGE_FRAMES; number_of_frames++) {
         page_frames = realloc(page_frames, number_of_frames * sizeof(int));
+        clear_page_frames();
 
         printf("=== Using %d Page Frames ===\n", number_of_frames);
         printf("FIFO: %d page faults\n", FIFO());
