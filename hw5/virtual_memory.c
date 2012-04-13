@@ -82,8 +82,11 @@ int LRU() {
 
             if (empty_frames > 0) {
                 frame = number_of_frames - empty_frames;
+                
                 page_frames[frame] = page_number;
                 least_referenced[frame] = frame;
+                
+                empty_frames -= 1;
             }
 
             else {
@@ -120,9 +123,9 @@ int main() {
         page_frames = calloc(number_of_frames, sizeof(int));
 
         printf("\n=== Using %d Page Frames ===\n", number_of_frames);
-        printf("FIFO: %d page faults\n", FIFO(number_of_frames));
-        printf("LRU:  %d page faults\n", LRU(number_of_frames));
-        printf("OPT:  %d page faults\n", OPT(number_of_frames);
+        printf("FIFO: %d page faults\n", FIFO());
+        printf("LRU:  %d page faults\n", LRU());
+        printf("OPT:  %d page faults\n", OPT();
 
         free(page_frames);
     }
