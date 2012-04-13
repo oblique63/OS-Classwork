@@ -1,6 +1,6 @@
 CFLAGS=-Wall -Wextra -g -lm
 
-FILES = unix_address virtual_memory
+FILES = unix_address virtual_memory virtual_memory_to_csv
 
 PDF = hw5.tex
 
