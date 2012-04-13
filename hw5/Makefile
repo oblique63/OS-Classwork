@@ -1,4 +1,4 @@
-CFLAGS=-Wall -Wextra -g -lpthread
+CFLAGS=-Wall -Wextra -g -lm
 
 FILES = unix_address virtual_memory
 
