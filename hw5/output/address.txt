@@ -1,0 +1,49 @@
+%comment{Unix output, using 32kb page size.}
+$ ./address 219986
+Address: 
+    Decimal: 219986 
+    Octal: 655522
+Page Number: 
+    Decimal: 6 
+    Octal: 6
+Offset: 
+    Decimal: 23378 
+    Octal: 55522
+
+%comment{Windows output, using a 16kb page size. The page number increases as the number of}
+%comment{bits allocated for it increases by 2, and conversely shrinks the available bits}
+%comment{left over for the offset, resulting in a smaller value for it.}
+> address 219986 16
+Address: 
+    Decimal: 219986 
+    Octal: 655522
+Page Number: 
+    Decimal: 13 
+    Octal: 51
+Offset: 
+    Decimal: 6994 
+    Octal: 15522
+
+
+$ ./address 319986
+Address: 
+    Decimal: 319986 
+    Octal: 1160762
+Page Number: 
+    Decimal: 9 
+    Octal: 11
+Offset: 
+    Decimal: 25074 
+    Octal: 60762
+
+
+$ ./address 419986
+Address: 
+    Decimal: 419986 
+    Octal: 1464222
+Page Number: 
+    Decimal: 12 
+    Octal: 14
+Offset: 
+    Decimal: 26770 
+    Octal: 64222

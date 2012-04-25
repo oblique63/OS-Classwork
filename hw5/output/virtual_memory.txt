@@ -1,4 +1,7 @@
 ./virtual_memory
+%comment{As expected for a 100-item reference string with no repeated adjacent values,}
+%comment{using 1 page frame results in 100 page faults because no two consecutive page}
+%comment{references are the same, and so they are all swapped out.}
 === Using 1 Page Frames ===
 FIFO: 100 page faults
 LRU:  100 page faults
@@ -59,6 +62,8 @@ FIFO: 16 page faults
 LRU:  18 page faults
 OPT:  21 page faults
 
+%comment{As expected for the FIFO algorithm, when the number of frames is the same as}
+%comment{the maximum possible page number, it results in the same number of page faults.}
 === Using 13 Page Frames ===
 FIFO: 13 page faults
 LRU:  17 page faults

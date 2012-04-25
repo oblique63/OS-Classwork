@@ -11,14 +11,6 @@ int *page_frames;
 
 //----{ Helper Functions }------------------------------------------------------
 
-//void print_array(int *array, int size,  char *name) {
-//    int i;
-//    printf("----- \n%s:  ", name);
-//    for (i = 0; i < size; i++)
-//        printf("%d ", array[i]);
-//    printf("\n-----\n");
-//}
-
 void populate_reference() {
     int i, value;
     for (i = 0; i < REFERENCE_SIZE; i++) {
@@ -45,7 +37,6 @@ int in_page_frames(int page_number) {
             return frame+1;
     }
 
-    //printf("%d is not in page_frames\n", page_number);
     return 0;
 }
 
@@ -73,7 +64,6 @@ void push(int *stack, int frame_index) {
 
     stack[number_of_frames-1] = frame_index;
 
-    //print_array(stack, number_of_frames, "LRU STACK");
 }
 
 
@@ -199,12 +189,6 @@ int OPT() {
                     furthest_indexed_frame = frame;
                 }
             }
-            //print_array(page_reference, REFERENCE_SIZE, "REFERENCE");
-            //printf("Page Number = %d\n", page_number);
-            //printf("FURTHEST REFERENCE INDEX: %d\n", furthest_index);
-            // 
-            //print_array(page_frames, number_of_frames, "FRAME");
-            //printf("Furthest indexed frame: %d\n\>>>>\n", furthest_indexed_frame);
         }
     }
 
@@ -214,7 +198,6 @@ int OPT() {
 //----{ Main }------------------------------------------------------------------
 int main() {
     populate_reference();
-    //print_array(page_reference, REFERENCE_SIZE, "PAGE REFERENCE");
 
     page_frames = malloc(sizeof(int));
 

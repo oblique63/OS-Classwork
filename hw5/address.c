@@ -47,7 +47,7 @@ void decimal_to_octal(int decimal, char* octal) {
     digit_count = i - 1;
 
     // Reverse Octal string
-    for (i = 0; i < digit_count/2; i++) {
+    for (i = 0; i <= digit_count/2; i++) {
         temp = octal[i];
         octal[i] = octal[digit_count-i];
         octal[digit_count-i] = temp;
@@ -56,7 +56,7 @@ void decimal_to_octal(int decimal, char* octal) {
 
 int main(int argc, char *argv[]) {
     INT64 address, page_number, offset;
-    char *octal_address, *octal_page_number, *octal_offset;
+    static char *octal_address, *octal_page_number, *octal_offset;
 
     check(argc > 1, "Needs an address");
 
