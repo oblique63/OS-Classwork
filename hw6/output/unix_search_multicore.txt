@@ -1,0 +1,38 @@
+$ ./unix_search 18 0
+SEARCH KEY: 240351
+[Partition 1] Result: -1
+
+Time: 0.000000 seconds
+
+$ ./unix_search 18 1
+SEARCH KEY: 240351
+[Partition 1] Result: -1
+[Partition 2] Result: -1
+
+Time: 0.000000 seconds
+
+$ ./unix_search 18 2
+SEARCH KEY: 492092
+[Partition 1] Result: -1
+[Partition 2] Result: -1
+[Partition 3] Result: -1
+[Partition 4] Result: -1
+
+Time: 0.000000 seconds
+
+$ ./unix_search 18 3
+SEARCH KEY: 143556
+[Partition 1] Result: 47297
+[Partition 2] Result: 70044
+[Partition 3] Result: -1
+[Partition 4] Result: -1
+[Partition 5] Result: -1
+[Partition 6] Result: -1
+[Partition 7] Result: -1
+[Partition 8] Result: -1
+
+Search Key found in partition 1 at index 47297
+Index contents: 143556
+Errors: 1
+
+Time: 0.000000 seconds

@@ -56,7 +56,7 @@ void search_array(void *current_partition) {
 
 int main(int argc, char *argv[]) {
     int i;
-    int error_count = -1;
+    int error_count = 0;
     int partition_with_key = -1;
     pthread_t *threads;
     clock_t start_time, end_time;
@@ -97,8 +97,10 @@ int main(int argc, char *argv[]) {
         printf("[Partition %d] Result: %d\n", i+1, search_results[i]);
 
         if (search_results[i] != -1) {
-            partition_with_key = i+1;
-            error_count += 1;
+            if (partition_with_key == -1)
+                partition_with_key = i+1;
+            else
+                error_count += 1;
         }
     }
 

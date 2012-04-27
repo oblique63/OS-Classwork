@@ -1,6 +1,6 @@
 CFLAGS=-Wall -Wextra -g -lpthread -lm
 
-FILES = unix_search
+FILES = unix_search unix_search_auto
 
 PDF = hw6.tex
 
