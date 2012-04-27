@@ -3,7 +3,7 @@
 #include <math.h>
 #include <unistd.h>
 #include <pthread.h>
-#include <time.h>
+#include <sys/time.h>
 
 #define MAX_N 3
 
@@ -56,8 +56,8 @@ int main(int argc, char *argv[]) {
     int error_count;
     int partition_with_key;
     pthread_t *threads;
-    clock_t start_time, end_time;
-    double total_time;
+    struct timeval start_time, end_time;
+    long int total_time;
     FILE *results;
 
 
@@ -94,7 +94,7 @@ int main(int argc, char *argv[]) {
 
         printf("SEARCH KEY: %d\n", search_key);
 
-        start_time = clock();
+        gettimeofday(&start_time, NULL);
 
         for (i=1; i <= array_partitions; i++)
             pthread_create(&threads[i-1], NULL, (void*) search_array, (void*) i);
@@ -102,8 +102,8 @@ int main(int argc, char *argv[]) {
         for (i=0; i < array_partitions; i++)
             pthread_join(threads[i], NULL);
 
-        end_time = clock();
-        total_time = ((double) (end_time - start_time)) / CLOCKS_PER_SEC;
+        gettimeofday(&end_time, NULL);
+        total_time = end_time.tv_usec - start_time.tv_usec;
 
         error_count = 0;
         partition_with_key = -1;
@@ -124,9 +124,9 @@ int main(int argc, char *argv[]) {
             printf("Errors: %d\n", error_count);
         }
 
-        printf("\nTime: %f seconds\n", total_time);
+        printf("\nTime: %ld micro-seconds\n", total_time);
 
-        fprintf(results, "%d,%f\n", array_partitions, total_time);
+        fprintf(results, "%d,%ld\n", array_partitions, total_time);
     }
 
     fclose(results);

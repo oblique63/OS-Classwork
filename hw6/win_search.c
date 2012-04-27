@@ -18,8 +18,9 @@ int random_int_range;
 
 void check(int expression, char *message) {
     if (!expression) {
-        perror(message);
-        exit(-1);
+        DWORD error = GetLastError();
+        fprintf(stderr, "%s: %x\n", message, error);
+        exit(error);
     }
 }
 
@@ -49,9 +50,8 @@ int main(int argc, char *argv[]) {
     int i;
     int error_count = 0;
     int partition_with_key = -1;
-    pthread_t *threads;
-    struct timeval start_time, end_time;
-    long int total_time;
+    HANDLE *threads;
+    DWORD64 start_time, end_time, total_time, clock_frequency;
 
     check(argc == 3, "Needs P and N values");
 
@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
 
     array = malloc(sizeof(int) * array_size);
     search_results = malloc(sizeof(int) * array_partitions);
-    threads = malloc(sizeof(pthread_t) * array_partitions);
+    threads = malloc(sizeof(HANDLE) * array_partitions);
 
     // limit random-ness of the integers to a reasonable domain
     // that may actually be found once in a while
@@ -73,16 +73,17 @@ int main(int argc, char *argv[]) {
 
     printf("SEARCH KEY: %d\n", search_key);
 
-    gettimeofday(&start_time, NULL);
+    QueryPerformanceFrequency(&clock_frequency);
+    QueryPerformanceCounter(&start_time);
 
     for (i=1; i <= array_partitions; i++)
-        pthread_create(&threads[i-1], NULL, (void*) search_array, (void*) i);
+        threads[i-1] = CreateThread(NULL, 0, (void *) search_array, (void*) i, 0, NULL);
 
     for (i=0; i < array_partitions; i++)
-        pthread_join(threads[i], NULL);
+        WaitForSingleObject(threads[i], INFINITE);
 
-    gettimeofday(&end_time, NULL);
-    total_time = end_time.tv_usec - start_time.tv_usec;
+    QueryPerformanceCounter(&end_time);
+    total_time = (end_time - start_time) / clock_frequency;
 
     for (i=0; i < array_partitions; i++) {
         printf("[Partition %d] Result: %d\n", i+1, search_results[i]);

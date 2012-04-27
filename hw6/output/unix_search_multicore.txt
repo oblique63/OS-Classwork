@@ -3,28 +3,32 @@ $ ./unix_search 18 0
 SEARCH KEY: 240351
 [Partition 1] Result: -1
 
-Time: 0.000000 seconds
+Time: 1570 micro-seconds
 
 $ ./unix_search 18 1
 SEARCH KEY: 240351
 [Partition 1] Result: -1
 [Partition 2] Result: -1
 
-Time: 0.000000 seconds
+Time: 692 micro-seconds
 
 $ ./unix_search 18 2
-SEARCH KEY: 492092
+SEARCH KEY: 1280
 [Partition 1] Result: -1
 [Partition 2] Result: -1
 [Partition 3] Result: -1
-[Partition 4] Result: -1
+[Partition 4] Result: 267003
 
-Time: 0.000000 seconds
+Search Key found in partition 4 at index 267003
+Index contents: 1280
+Errors: 0
+
+Time: 656 micro-seconds
 
 $ ./unix_search 18 3
-SEARCH KEY: 143556
-[Partition 1] Result: 47297
-[Partition 2] Result: 70044
+SEARCH KEY: 62614
+[Partition 1] Result: -1
+[Partition 2] Result: -1
 [Partition 3] Result: -1
 [Partition 4] Result: -1
 [Partition 5] Result: -1
@@ -32,8 +36,4 @@ SEARCH KEY: 143556
 [Partition 7] Result: -1
 [Partition 8] Result: -1
 
-Search Key found in partition 1 at index 47297
-Index contents: 143556
-Errors: 1
-
-Time: 0.000000 seconds
+Time: 794 micro-seconds

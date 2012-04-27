@@ -91,10 +91,13 @@ I would improve it by using linked-lists instead of arrays, to make better use o
 \newpage
 
 %----{ Unix }--------------------------------------------------------------------------
-\append{I} {Unix Source Code}
+% threads joining / waiting for threads == synchronization for pseudocode
+% use time of day, time val struct
+
+\append{II} {Unix Source Code}
 \includesource{c}{unix_search.c}
 
-\append{II} {Unix Output}
+\append{III} {Unix Output}
 \filename{Single-core}
 \includeoutput{output/unix_search_singlecore.txt}
 
@@ -102,19 +105,19 @@ I would improve it by using linked-lists instead of arrays, to make better use o
 \includeoutput{output/unix_search_multicore.txt}
 
 %----{ Windows }--------------------------------------------------------------------------
-\append{III} {Windows Source Code}
+\append{IV} {Windows Source Code}
 %\includesource{c}{win_search.c}
 
-\append{IV} {Windows Output}
+\append{V} {Windows Output}
 \filename{Single-core}
 %\includeoutput{output/win_search_singlecore.txt}
 
 \filename{Multi-core}
 %\includeoutput{output/win_search_multicore.txt}
 
-%\append{V} {Graph}
-% 
-% 
+%\append{VI} {Graph}
+% Time (Y) vs # of Threads (x)
+% seperate graphs
 %\includegraphics[scale=0.7]{output/graph.png}
 
 
