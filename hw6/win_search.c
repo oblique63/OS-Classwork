@@ -1,5 +1,4 @@
 #include <windows.h>
-#include <math.h>
 
 int *array;
 int array_size;
@@ -23,7 +22,7 @@ void check(int expression, char *message) {
 void populate_array() {
     int i;
     for (i = 0; i < array_size; i++)
-        array[i] = random() % random_int_range;
+        array[i] = rand() % random_int_range;
 }
 
 void search_array(void *current_partition) {
@@ -64,9 +63,9 @@ int main(int argc, char *argv[]) {
     // that may actually be found once in a while
     random_int_range = array_size * 2;
 
-    srandom ( time(NULL) );
+    srand( time(NULL) );
     populate_array();
-    search_key = random() % random_int_range;
+    search_key = rand() % random_int_range;
 
     printf("SEARCH KEY: %d\n", search_key);
 
@@ -80,7 +79,7 @@ int main(int argc, char *argv[]) {
         WaitForSingleObject(threads[i], INFINITE);
 
     QueryPerformanceCounter(&end_time);
-    total_time = (end_time.QuadPart - start_time.QuadPart) / clock_frequency.QuadPart;
+    total_time = (end_time.QuadPart - start_time.QuadPart) / (clock_frequency.QuadPart * 1.0);
 
     for (i=0; i < array_partitions; i++) {
         printf("[Partition %d] Result: %d\n", i+1, search_results[i]);

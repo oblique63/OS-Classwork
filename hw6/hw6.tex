@@ -94,6 +94,34 @@ I would improve it by using linked-lists instead of arrays, to make better use o
 % threads joining / waiting for threads == synchronization for pseudocode
 % use time of day, time val struct
 
+\append{I} {Pseudocode}
+
+\begin{scriptsize}
+\begin{verbatim}
+semaphore s;
+int threads[];
+
+search_array() {
+    // search array for search key
+    P(s);
+}
+
+main() {
+    initialize_semaphore(s);
+
+    for (thread in threads) {
+        start_thread(thread, search_array)
+    }
+
+    for (thread in threads) {
+        V(s);
+        end_thread(thread);
+    }
+}
+\end{verbatim}
+\end{scriptsize}
+
+
 \append{II} {Unix Source Code}
 \includesource{c}{unix_search.c}
 
@@ -106,7 +134,7 @@ I would improve it by using linked-lists instead of arrays, to make better use o
 
 %----{ Windows }--------------------------------------------------------------------------
 \append{IV} {Windows Source Code}
-%\includesource{c}{win_search.c}
+\includesource{c}{win_search.c}
 
 \append{V} {Windows Output}
 \filename{Single-core}
