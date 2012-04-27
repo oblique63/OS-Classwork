@@ -1,9 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <windows.h>
 #include <math.h>
-#include <unistd.h>
-#include <pthread.h>
-#include <sys/time.h>
 
 int *array;
 int array_size;
@@ -51,7 +47,8 @@ int main(int argc, char *argv[]) {
     int error_count = 0;
     int partition_with_key = -1;
     HANDLE *threads;
-    DWORD64 start_time, end_time, total_time, clock_frequency;
+    LARGE_INTEGER start_time, end_time, clock_frequency;
+    double total_time;
 
     check(argc == 3, "Needs P and N values");
 
@@ -83,7 +80,7 @@ int main(int argc, char *argv[]) {
         WaitForSingleObject(threads[i], INFINITE);
 
     QueryPerformanceCounter(&end_time);
-    total_time = (end_time - start_time) / clock_frequency;
+    total_time = (end_time.QuadPart - start_time.QuadPart) / clock_frequency.QuadPart;
 
     for (i=0; i < array_partitions; i++) {
         printf("[Partition %d] Result: %d\n", i+1, search_results[i]);
