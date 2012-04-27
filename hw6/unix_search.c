@@ -5,14 +5,15 @@
 #include <pthread.h>
 
 int *array;
-int *search_results;
 
 int search_key;
-int random_int_range;
-int partition_size;
+int *search_results;
 
-unsigned long int array_size;
-unsigned long int array_partitions;
+int random_int_range;
+
+int array_size;
+int array_partitions;
+int partition_size;
 
 
 void check(int expression, char *message) {
@@ -23,24 +24,24 @@ void check(int expression, char *message) {
 }
 
 void populate_array() {
-    unsigned int i;
+    int i;
     for (i = 0; i < array_size; i++)
         array[i] = random() % random_int_range;
 }
 
 void search_array(void *current_partition) {
     int partition = (int) current_partition;
-    unsigned long int i;
-    unsigned long int starting_point = (partition_size *  partition) - 1;
-    unsigned long int max_search_index = starting_point + partition_size;
+    int i;
+    int starting_point = (partition_size *  partition) - 1;
+    int max_search_index = starting_point + partition_size;
 
     // check to see if the search key has been found already
-    int last_result = -1;
-    for (i = 0; last_result == -1 && i < partition-1; i++)
-        last_result = search_results[i];
+    //int last_result = -1;
+    //for (i = 0; last_result == -1 && i < partition-1; i++)
+    //    last_result = search_results[i];
 
     // if the search key hasn't been found yet
-    if (last_result == -1) {
+    //if (last_result == -1) {
 
         for (i = starting_point; i < max_search_index; i++) {
             if (array[i] == search_key) {
@@ -51,11 +52,12 @@ void search_array(void *current_partition) {
         }
 
         search_results[partition-1] = -1;
-    }
+    //}
 }
 
 int main(int argc, char *argv[]) {
-    unsigned int i;
+    int i;
+    int partition_with_key = -1;
     pthread_t *threads;
 
     check(argc == 3, "Needs P and N values");
@@ -79,8 +81,8 @@ int main(int argc, char *argv[]) {
     printf("SEARCH KEY: %d\n", search_key);
 
     // no search results have been evaluated yet, so clear them all to -1
-    for (i=0; i < array_partitions; i++)
-        search_results[i] = -1;
+    //for (i=0; i < array_partitions; i++)
+    //    search_results[i] = -1;
 
     for (i=1; i <= array_partitions; i++)
         pthread_create(&threads[i-1], NULL, (void*) search_array, (void*) i);
@@ -88,8 +90,17 @@ int main(int argc, char *argv[]) {
     for (i=0; i < array_partitions; i++)
         pthread_join(threads[i], NULL);
 
-    for (i=0; i < array_partitions; i++)
-        printf("[%d] Result: %d\n", i, search_results[i]);
+    for (i=0; i < array_partitions; i++) {
+        printf("[Partition %d] Result: %d\n", i+1, search_results[i]);
+
+        if (search_results[i] != -1)
+            partition_with_key = i+1;
+    }
+
+    if (partition_with_key != -1) {
+        printf("\nSearch Key found in partition %d at index %d\n", partition_with_key, search_results[partition_with_key-1]);
+        printf("Index contents: %d\n", array[ search_results[partition_with_key-1] ]);
+    }
 
     free(array);
     free(search_results);

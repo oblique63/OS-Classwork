@@ -1,4 +1,4 @@
-CFLAGS=-Wall -Wextra -g -lpthread
+CFLAGS=-Wall -Wextra -g -lpthread -lm
 
 FILES = unix_search
 
