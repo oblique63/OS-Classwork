@@ -3,17 +3,17 @@
 #include <math.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <time.h>
 
 int *array;
+int array_size;
+int array_partitions;
+int partition_size;
 
 int search_key;
 int *search_results;
 
 int random_int_range;
-
-int array_size;
-int array_partitions;
-int partition_size;
 
 
 void check(int expression, char *message) {
@@ -45,7 +45,6 @@ void search_array(void *current_partition) {
 
         for (i = starting_point; i < max_search_index; i++) {
             if (array[i] == search_key) {
-                //printf("FOUND at index %d, partition %d\n", i, partition);
                 search_results[partition-1] = i;
                 return;
             }
@@ -57,8 +56,11 @@ void search_array(void *current_partition) {
 
 int main(int argc, char *argv[]) {
     int i;
+    int error_count = -1;
     int partition_with_key = -1;
     pthread_t *threads;
+    clock_t start_time, end_time;
+    double total_time;
 
     check(argc == 3, "Needs P and N values");
 
@@ -79,29 +81,35 @@ int main(int argc, char *argv[]) {
     search_key = random() % random_int_range;
 
     printf("SEARCH KEY: %d\n", search_key);
-
-    // no search results have been evaluated yet, so clear them all to -1
-    //for (i=0; i < array_partitions; i++)
-    //    search_results[i] = -1;
-
+    
+    start_time = clock();
+    
     for (i=1; i <= array_partitions; i++)
         pthread_create(&threads[i-1], NULL, (void*) search_array, (void*) i);
 
     for (i=0; i < array_partitions; i++)
         pthread_join(threads[i], NULL);
-
+    
+    end_time = clock();
+    total_time = ((double) (end_time - start_time)) / CLOCKS_PER_SEC;
+    
     for (i=0; i < array_partitions; i++) {
         printf("[Partition %d] Result: %d\n", i+1, search_results[i]);
 
-        if (search_results[i] != -1)
+        if (search_results[i] != -1) {
             partition_with_key = i+1;
+            error_count += 1;
+        }
     }
 
     if (partition_with_key != -1) {
         printf("\nSearch Key found in partition %d at index %d\n", partition_with_key, search_results[partition_with_key-1]);
         printf("Index contents: %d\n", array[ search_results[partition_with_key-1] ]);
+        printf("Errors: %d\n", error_count);
     }
 
+    printf("\nTime: %f seconds\n", total_time);
+    
     free(array);
     free(search_results);
     free(threads);
