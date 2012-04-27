@@ -1,3 +1,4 @@
+%comment{Ran on a dual-core machine}
 $ ./unix_search 18 0
 SEARCH KEY: 240351
 [Partition 1] Result: -1

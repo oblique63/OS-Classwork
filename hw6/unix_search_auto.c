@@ -41,23 +41,14 @@ void search_array(void *current_partition) {
     int starting_point = (partition_size *  partition) - 1;
     int max_search_index = starting_point + partition_size;
 
-    // check to see if the search key has been found already
-    //int last_result = -1;
-    //for (i = 0; last_result == -1 && i < partition-1; i++)
-    //    last_result = search_results[i];
-
-    // if the search key hasn't been found yet
-    //if (last_result == -1) {
-
-        for (i = starting_point; i < max_search_index; i++) {
-            if (array[i] == search_key) {
-                search_results[partition-1] = i;
-                return;
-            }
+    for (i = starting_point; i < max_search_index; i++) {
+        if (array[i] == search_key) {
+            search_results[partition-1] = i;
+            return;
         }
+    }
 
-        search_results[partition-1] = -1;
-    //}
+    search_results[partition-1] = -1;
 }
 
 int main(int argc, char *argv[]) {
@@ -69,12 +60,12 @@ int main(int argc, char *argv[]) {
     double total_time;
     FILE *results;
 
-    
+
     if (strcmp(argv[1], "single") == 0)
         results = fopen("output/unix_search_singlecore.csv", "w");
     else
         results = fopen("output/unix_search_multicore.csv", "w");
-    
+
     fprintf(results, "Threads,Time\n");
 
     P = 18;
@@ -104,7 +95,7 @@ int main(int argc, char *argv[]) {
         printf("SEARCH KEY: %d\n", search_key);
 
         start_time = clock();
-        
+
         for (i=1; i <= array_partitions; i++)
             pthread_create(&threads[i-1], NULL, (void*) search_array, (void*) i);
 

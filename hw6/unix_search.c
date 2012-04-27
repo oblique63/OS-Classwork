@@ -35,23 +35,14 @@ void search_array(void *current_partition) {
     int starting_point = (partition_size *  partition) - 1;
     int max_search_index = starting_point + partition_size;
 
-    // check to see if the search key has been found already
-    //int last_result = -1;
-    //for (i = 0; last_result == -1 && i < partition-1; i++)
-    //    last_result = search_results[i];
-
-    // if the search key hasn't been found yet
-    //if (last_result == -1) {
-
-        for (i = starting_point; i < max_search_index; i++) {
-            if (array[i] == search_key) {
-                search_results[partition-1] = i;
-                return;
-            }
+    for (i = starting_point; i < max_search_index; i++) {
+        if (array[i] == search_key) {
+            search_results[partition-1] = i;
+            return;
         }
+    }
 
-        search_results[partition-1] = -1;
-    //}
+    search_results[partition-1] = -1;
 }
 
 int main(int argc, char *argv[]) {
@@ -81,18 +72,18 @@ int main(int argc, char *argv[]) {
     search_key = random() % random_int_range;
 
     printf("SEARCH KEY: %d\n", search_key);
-    
+
     start_time = clock();
-    
+
     for (i=1; i <= array_partitions; i++)
         pthread_create(&threads[i-1], NULL, (void*) search_array, (void*) i);
 
     for (i=0; i < array_partitions; i++)
         pthread_join(threads[i], NULL);
-    
+
     end_time = clock();
     total_time = ((double) (end_time - start_time)) / CLOCKS_PER_SEC;
-    
+
     for (i=0; i < array_partitions; i++) {
         printf("[Partition %d] Result: %d\n", i+1, search_results[i]);
 
@@ -111,7 +102,7 @@ int main(int argc, char *argv[]) {
     }
 
     printf("\nTime: %f seconds\n", total_time);
-    
+
     free(array);
     free(search_results);
     free(threads);
