@@ -24,6 +24,7 @@ SEARCH KEY: 279480
 [Partition 3] Result: -1
 [Partition 4] Result: -1
 
+%comment{noticeable performance degradation upon having to handle more threads}
 Time: 7501 micro-seconds
 
 

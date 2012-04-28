@@ -1,4 +1,5 @@
-%comment{Run on a dual-core machine.}
+%comment{Ran on a dual-core machine. Shows relatively consistent performance times}
+%comment{relative to the single-core machine.}
 > win_search 18 0
 SEARCH KEY: 83244
 [Partition 1] Result: 118077

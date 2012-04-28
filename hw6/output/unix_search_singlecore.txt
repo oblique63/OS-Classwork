@@ -4,12 +4,14 @@ SEARCH KEY: 240351
 
 Time: 1908 ms
 
+
 $ ./unix_search 18 1
 SEARCH KEY: 313542
 [Partition 1] Result: -1
 [Partition 2] Result: -1
 
 Time: 1471 micro-seconds
+
 
 $ ./unix_search 18 2
 SEARCH KEY: 240789
@@ -20,9 +22,10 @@ SEARCH KEY: 240789
 
 Search Key found in partition 1 at index 85063
 Index contents: 240789
-Errors: 1
+Errors: 1            %comment{<--- duplicate key in partition 2 marked as error}
 
 Time: 1587 micro-seconds
+
 
 $ ./unix_search 18 3
 SEARCH KEY: 316558

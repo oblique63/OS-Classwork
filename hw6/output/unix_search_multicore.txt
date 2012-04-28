@@ -1,9 +1,11 @@
-%comment{Ran on a dual-core machine}
+%comment{Ran on a dual-core machine. Handles multiple threads better than the}
+%comment{single-core processor.}
 $ ./unix_search 18 0
 SEARCH KEY: 240351
 [Partition 1] Result: -1
 
 Time: 1570 micro-seconds
+
 
 $ ./unix_search 18 1
 SEARCH KEY: 240351
@@ -11,6 +13,7 @@ SEARCH KEY: 240351
 [Partition 2] Result: -1
 
 Time: 692 micro-seconds
+
 
 $ ./unix_search 18 2
 SEARCH KEY: 1280
@@ -23,7 +26,9 @@ Search Key found in partition 4 at index 267003
 Index contents: 1280
 Errors: 0
 
+%comment{Performance improves with multi-threading}
 Time: 656 micro-seconds
+
 
 $ ./unix_search 18 3
 SEARCH KEY: 62614
