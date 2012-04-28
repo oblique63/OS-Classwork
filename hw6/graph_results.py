@@ -14,20 +14,33 @@ plt.xlabel("Threads")
 plt.ylabel("Time (micro-seconds)")
 
 plt.title("Unix Single-core")
-plt.plot(unix_single.times, unix_single.threads, color='g', linestyle='-', marker='o')
+plt.plot(unix_single.threads, unix_single.time, color='g', linestyle='-', marker='o')
 plt.savefig('output/unix_singlecore_graph')
+plt.close()
+
+#plt.yscale('log', basey=2)
+plt.xlabel("Threads")
+plt.ylabel("Time (micro-seconds)")
 
 plt.title("Unix Dual-core")
-plt.plot(unix_multi.times, unix_multi.threads, color='r', linestyle='-', marker='o')
+plt.plot(unix_multi.threads, unix_multi.time, color='r', linestyle='-', marker='o')
 plt.savefig('output/unix_multicore_graph')
+plt.close()
 
+#plt.yscale('log', basey=2)
+plt.xlabel("Threads")
+plt.ylabel("Time (micro-seconds)")
 
 plt.title("Windows Single-core")
-plt.plot(win_single.times, win_single.threads, color='b', linestyle='-', marker='o')
+plt.plot(win_single.threads, win_single.time, color='b', linestyle='-', marker='o')
 plt.savefig('output/win_singlecore_graph')
+plt.close()
+
+#plt.yscale('log', basey=2)
+plt.xlabel("Threads")
+plt.ylabel("Time (micro-seconds)")
 
 plt.title("Windows Dual-core")
-plt.plot(win_multi.times, win_multi.threads, color='y', linestyle='-', marker='o')
+plt.plot(win_multi.threads, win_multi.time, color='y', linestyle='-', marker='o')
 plt.savefig('output/win_multicore_graph')
-
 plt.close()

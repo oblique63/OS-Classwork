@@ -71,10 +71,10 @@ results as expected, but for the Windows implementation however, there wasn't a 
 microseconds with the Win32 API for the performance measurement portion of the assignment. Instead, the API provides access to the CPU's 
 internal clock counter, which is what I used to then extrapolate a simple approximation of the algorithm's elapsed time in microseconds.  
 Another obstacle with the Windows implementation was the limited range of the platform's \texttt{rand()} function, which is prone to causing 
-many 'error' results with duplicate keys at the array sizes we were dealing with. The array's size of 2^{18} was roughly an order of magnitude 
-larger than the largest value produced by the \textt{rand()} function, so in order to minimize the possibility of errors while still maintaining 
+many 'error' results with duplicate keys at the array sizes we were dealing with. The array's size of $2^{18}$ was roughly an order of magnitude 
+larger than the largest value produced by the \texttt{rand()} function, so in order to minimize the possibility of errors while still maintaining 
 a reasonable chance for the array to contain the search key, I multiplied the results of two calls to \texttt{rand()} together, and restricted 
-their domain to twice the size of the array; i.e. 2(2^{18}).
+their domain to twice the size of the array; i.e. 2($2^{18}$).
 
 
 \section*{Results}
@@ -88,7 +88,7 @@ on systems with low memory.
 
 
 %---{ Appendices }-----------------------------------------------------------------------
-\newpage
+%\newpage
 
 %----{ Unix }--------------------------------------------------------------------------
 
@@ -156,11 +156,12 @@ main() {
 
 \append{VI} {Graphs}
 % Time (Y) vs # of Threads (x)
-\includegraphics[scale=0.5]{output/unix_singlecore_graph.png}
-\includegraphics[scale=0.5]{output/unix_multicore_graph.png}
 
-\includegraphics[scale=0.5]{output/win_singlecore_graph.png}
-\includegraphics[scale=0.5]{output/win_multicore_graph.png}
+
+\includegraphics[scale=0.4]{output/unix_singlecore_graph.png} 
+\includegraphics[scale=0.4]{output/unix_multicore_graph.png}
+\includegraphics[scale=0.4]{output/win_singlecore_graph.png} 
+\includegraphics[scale=0.4]{output/win_multicore_graph.png}
 
 
 \end{document}
