@@ -32,8 +32,8 @@ void populate_array() {
 void search_array(void *current_partition) {
     int partition = (int) current_partition;
     int i;
-    int starting_point = (partition_size *  partition) - 1;
-    int max_search_index = starting_point + partition_size;
+    int starting_point = partition_size *  (partition-1);
+    int max_search_index = (starting_point + partition_size) - 1;
 
     for (i = starting_point; i < max_search_index; i++) {
         if (array[i] == search_key) {

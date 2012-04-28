@@ -38,8 +38,8 @@ void populate_array() {
 void search_array(void *current_partition) {
     int partition = (int) current_partition;
     int i;
-    int starting_point = (partition_size *  partition) - 1;
-    int max_search_index = starting_point + partition_size;
+    int starting_point = partition_size *  (partition-1);
+    int max_search_index = (starting_point + partition_size) - 1;
 
     for (i = starting_point; i < max_search_index; i++) {
         if (array[i] == search_key) {
@@ -58,13 +58,18 @@ int main(int argc, char *argv[]) {
     pthread_t *threads;
     struct timeval start_time, end_time;
     long int total_time;
-    FILE *results;
+    FILE *results, *output;
 
 
-    if (strcmp(argv[1], "single") == 0)
+    if (argc > 1 && strcmp(argv[1], "single") == 0) {
         results = fopen("output/unix_search_singlecore.csv", "w");
-    else
+        output = fopen("output/unix_search_singlecore.txt", "w");
+    }
+
+    else {
         results = fopen("output/unix_search_multicore.csv", "w");
+        output = fopen("output/unix_search_multicore.txt", "w");
+    }
 
     fprintf(results, "Threads,Time\n");
 
@@ -91,8 +96,10 @@ int main(int argc, char *argv[]) {
         search_key = random() % random_int_range;
 
         printf("\n$ ./unix_search %d %d\n", P, N);
+        fprintf(output, "\n$ ./unix_search %d %d\n", P, N);
 
         printf("SEARCH KEY: %d\n", search_key);
+        fprintf(output, "SEARCH KEY: %d\n", search_key);
 
         gettimeofday(&start_time, NULL);
 
@@ -109,6 +116,7 @@ int main(int argc, char *argv[]) {
         partition_with_key = -1;
         for (i=0; i < array_partitions; i++) {
             printf("[Partition %d] Result: %d\n", i+1, search_results[i]);
+            fprintf(output, "[Partition %d] Result: %d\n", i+1, search_results[i]);
 
             if (search_results[i] != -1) {
                 if (partition_with_key == -1)
@@ -122,14 +130,21 @@ int main(int argc, char *argv[]) {
             printf("\nSearch Key found in partition %d at index %d\n", partition_with_key, search_results[partition_with_key-1]);
             printf("Index contents: %d\n", array[ search_results[partition_with_key-1] ]);
             printf("Errors: %d\n", error_count);
+
+            fprintf(output, "\nSearch Key found in partition %d at index %d\n", partition_with_key, search_results[partition_with_key-1]);
+            fprintf(output, "Index contents: %d\n", array[ search_results[partition_with_key-1] ]);
+            fprintf(output, "Errors: %d\n", error_count);
         }
 
         printf("\nTime: %ld micro-seconds\n", total_time);
+        fprintf(output, "\nTime: %ld micro-seconds\n", total_time);
 
         fprintf(results, "%d,%ld\n", array_partitions, total_time);
     }
 
     fclose(results);
+    fclose(output);
+
     free(array);
     free(search_results);
     free(threads);

@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <math.h>
 
 int *array;
 int array_size;
@@ -14,22 +15,26 @@ int random_int_range;
 void check(int expression, char *message) {
     if (!expression) {
         DWORD error = GetLastError();
-        fprintf(stderr, "%s: %x\n", message, error);
+        printf("%s: %x\n", message, error);
         exit(error);
     }
+}
+
+int random() {
+    return (rand() * rand()) % random_int_range;
 }
 
 void populate_array() {
     int i;
     for (i = 0; i < array_size; i++)
-        array[i] = rand() % random_int_range;
+        array[i] = random();
 }
 
 void search_array(void *current_partition) {
     int partition = (int) current_partition;
     int i;
-    int starting_point = (partition_size *  partition) - 1;
-    int max_search_index = starting_point + partition_size;
+    int starting_point = partition_size *  (partition-1);
+    int max_search_index = (starting_point + partition_size) - 1;
 
     for (i = starting_point; i < max_search_index; i++) {
         if (array[i] == search_key) {
@@ -48,6 +53,7 @@ int main(int argc, char *argv[]) {
     HANDLE *threads;
     LARGE_INTEGER start_time, end_time, clock_frequency;
     double total_time;
+    int total_time_rounded;
 
     check(argc == 3, "Needs P and N values");
 
@@ -63,13 +69,14 @@ int main(int argc, char *argv[]) {
     // that may actually be found once in a while
     random_int_range = array_size * 2;
 
-    srand( time(NULL) );
+    srand((unsigned) time(NULL));
     populate_array();
-    search_key = rand() % random_int_range;
+    search_key = random();
 
-    printf("SEARCH KEY: %d\n", search_key);
+    printf("SEARCH KEY: %ld\n", search_key);
 
     QueryPerformanceFrequency(&clock_frequency);
+    
     QueryPerformanceCounter(&start_time);
 
     for (i=1; i <= array_partitions; i++)
@@ -77,12 +84,17 @@ int main(int argc, char *argv[]) {
 
     for (i=0; i < array_partitions; i++)
         WaitForSingleObject(threads[i], INFINITE);
-
+    
     QueryPerformanceCounter(&end_time);
-    total_time = (end_time.QuadPart - start_time.QuadPart) / (clock_frequency.QuadPart * 1.0);
+
+    total_time = (double) (end_time.QuadPart - start_time.QuadPart) / clock_frequency.QuadPart;
+
+    // convert to micro-seconds
+    total_time *= 1000000.0;
+    total_time_rounded = total_time + 0.5;
 
     for (i=0; i < array_partitions; i++) {
-        printf("[Partition %d] Result: %d\n", i+1, search_results[i]);
+        printf("[Partition %ld] Result: %ld\n", i+1, search_results[i]);
 
         if (search_results[i] != -1) {
             if (partition_with_key == -1)
@@ -93,12 +105,12 @@ int main(int argc, char *argv[]) {
     }
 
     if (partition_with_key != -1) {
-        printf("\nSearch Key found in partition %d at index %d\n", partition_with_key, search_results[partition_with_key-1]);
-        printf("Index contents: %d\n", array[ search_results[partition_with_key-1] ]);
-        printf("Errors: %d\n", error_count);
+        printf("\nSearch Key found in partition %ld at index %ld\n", partition_with_key, search_results[partition_with_key-1]);
+        printf("Index contents: %ld\n", array[ search_results[partition_with_key-1] ]);
+        printf("Errors: %ld\n", error_count);
     }
 
-    printf("\nTime: %ld micro-seconds\n", total_time);
+    printf("\nTime: %ld micro-seconds\n", total_time_rounded);
 
     free(array);
     free(search_results);

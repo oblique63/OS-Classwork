@@ -1,0 +1,46 @@
+%comment{Run on a dual-core machine.}
+> win_search 18 0
+SEARCH KEY: 83244
+[Partition 1] Result: 118077
+
+Search Key found in partition 1 at index 118077
+Index contents: 83244
+Errors: 0
+
+Time: 1205 micro-seconds
+
+
+> win_search 18 1
+SEARCH KEY: 56793
+[Partition 1] Result: -1
+[Partition 2] Result: -1
+
+Time: 1692 micro-seconds
+
+
+> win_search 18 2
+SEARCH KEY: 254544
+[Partition 1] Result: -1
+[Partition 2] Result: -1
+[Partition 3] Result: 187938
+[Partition 4] Result: -1
+
+Search Key found in partition 3 at index 187938
+Index contents: 254544
+Errors: 0
+
+Time: 2205 micro-seconds
+
+
+> win_search 18 3
+SEARCH KEY: 274324
+[Partition 1] Result: -1
+[Partition 2] Result: -1
+[Partition 3] Result: -1
+[Partition 4] Result: -1
+[Partition 5] Result: -1
+[Partition 6] Result: -1
+[Partition 7] Result: -1
+[Partition 8] Result: -1
+
+Time: 3578 micro-seconds
