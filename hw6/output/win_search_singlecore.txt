@@ -1,0 +1,46 @@
+> win_search 18 0
+SEARCH KEY: 245696
+[Partition 1] Result: 112135
+
+Search Key found in partition 1 at index 112135
+Index contents: 245696
+Errors: 0
+
+Time: 1835 micro-seconds
+
+
+> win_search 18 1
+SEARCH KEY: 198085
+[Partition 1] Result: -1
+[Partition 2] Result: -1
+
+Time: 1993 micro-seconds
+
+
+> win_search 18 2
+SEARCH KEY: 279480
+[Partition 1] Result: -1
+[Partition 2] Result: -1
+[Partition 3] Result: -1
+[Partition 4] Result: -1
+
+Time: 7501 micro-seconds
+
+
+> win_search 18 3
+SEARCH KEY: 261372
+[Partition 1] Result: -1
+[Partition 2] Result: -1
+[Partition 3] Result: -1
+[Partition 4] Result: -1
+[Partition 5] Result: 158093
+[Partition 6] Result: -1
+[Partition 7] Result: -1
+[Partition 8] Result: -1
+
+Search Key found in partition 5 at index 158093
+Index contents: 261372
+
+Errors: 0
+
+Time: 2354 micro-seconds
