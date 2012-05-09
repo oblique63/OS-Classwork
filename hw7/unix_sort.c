@@ -12,6 +12,7 @@ int partition_size;
 
 int *minimums;
 
+
 void check(int expression, char *message) {
     if (!expression) {
         perror(message);
@@ -71,13 +72,28 @@ int get_next() {
     return min_value;
 }
 
+int time_difference (struct timeval start_time, struct timeval end_time) {
+    if (end_time.tv_usec < start_time.tv_usec) {
+        int nsec = (start_time.tv_usec - end_time.tv_usec) / 1000000 + 1;
+        start_time.tv_usec -= 1000000 * nsec;
+        start_time.tv_sec += nsec;
+    }
+
+    if (end_time.tv_usec - start_time.tv_usec > 1000000) {
+        int nsec = (end_time.tv_usec - start_time.tv_usec) / 1000000;
+        start_time.tv_usec += 1000000 * nsec;
+        start_time.tv_sec -= nsec;
+    }
+
+    return end_time.tv_usec - start_time.tv_usec;
+}
 
 int main(int argc, char *argv[]) {
     int i;
     int *sorted_array;
     pthread_t *threads;
     struct timeval start_time, end_time;
-    long int total_time;
+    unsigned long int total_time;
 
     check(argc == 3, "Needs P and N values");
 
@@ -108,9 +124,10 @@ int main(int argc, char *argv[]) {
     }
 
     gettimeofday(&end_time, NULL);
-    total_time = end_time.tv_usec - start_time.tv_usec;
+    total_time = time_difference(start_time, end_time);
 
     puts("Sort was successful.");
+    printf("Start: %ld    End: %ld\n", start_time.tv_usec, end_time.tv_usec);
     printf("Time: %ld micro-seconds\n", total_time);
 
     free(array);
