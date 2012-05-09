@@ -24,14 +24,15 @@ void populate_array() {
     // that may actually be found once in a while
     int random_int_range = array_size * 2;
     int i;
-    
+
+    srandom ( time(NULL) );
     for (i = 0; i < array_size; i++)
         array[i] = random() % random_int_range;
 }
 
 // Insertion Sort
-void sort_partition(void *current_partition) {
-    int partition = (int) current_partition;
+void sort_partition(void *current_partition_index) {
+    int partition = (int) current_partition_index;
     int starting_index = partition_size *  partition;
     int ending_index = (starting_index + partition_size) - 1;
     int i, j, smaller_value;
@@ -89,7 +90,6 @@ int main(int argc, char *argv[]) {
     minimums = malloc(sizeof(int) * array_partitions);
     threads = malloc(sizeof(pthread_t) * array_partitions);
 
-    srandom ( time(NULL) );
     populate_array();
 
     gettimeofday(&start_time, NULL);
