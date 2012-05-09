@@ -1,0 +1,18 @@
+$ ./unix_sort 18 0
+Sort was successful.
+Time: 131159 micro-seconds
+
+
+$ ./unix_sort 18 1
+Sort was successful.
+Time: 473734 micro-seconds
+
+
+$ ./unix_sort 18 2
+Sort was successful.
+Time: 266852 micro-seconds
+
+
+$ ./unix_sort 18 3
+Sort was successful.
+Time: 154344 micro-seconds

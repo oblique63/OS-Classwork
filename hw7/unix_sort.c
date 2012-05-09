@@ -10,11 +10,7 @@ int array_size;
 int array_partitions;
 int partition_size;
 
-//int search_key;
 int *minimums;
-
-int random_int_range;
-
 
 void check(int expression, char *message) {
     if (!expression) {
@@ -24,42 +20,48 @@ void check(int expression, char *message) {
 }
 
 void populate_array() {
+    // limit random-ness of the integers to a reasonable domain
+    // that may actually be found once in a while
+    int random_int_range = array_size * 2;
     int i;
+    
     for (i = 0; i < array_size; i++)
         array[i] = random() % random_int_range;
 }
 
-//void search_array(void *current_partition) {
-//    int partition = (int) current_partition;
-//    int i;
-//    int starting_point = partition_size *  (partition-1);
-//    int max_search_index = (starting_point + partition_size) - 1;
-// 
-//    for (i = starting_point; i < max_search_index; i++) {
-//        if (array[i] == search_key) {
-//            search_results[partition-1] = i;
-//            return;
-//        }
-//    }
-// 
-//    search_results[partition-1] = -1;
-//}
-
+// Insertion Sort
 void sort_partition(void *current_partition) {
     int partition = (int) current_partition;
-    int starting_index = partition_size *  (partition-1);
-    int ending_index = (starting_point + partition_size) - 1;
-    
+    int starting_index = partition_size *  partition;
+    int ending_index = (starting_index + partition_size) - 1;
+    int i, j, smaller_value;
+
+    for (i = starting_index+1; i <= ending_index; i++) {
+        if (array[i] < array[i-1]) {
+            smaller_value = array[i];
+
+            for (j = i; array[j-1] > smaller_value && j > starting_index; j--) {
+                array[j] = array[j-1];
+            }
+
+            array[j] = smaller_value;
+        }
+    }
+
+    minimums[partition] = starting_index;
 }
 
 int get_next() {
     int min_value = minimums[0];
     int min_index = 0;
+    int value = -1;
     int i;
 
     for (i = 1; i < array_partitions; i++) {
-        if (minimums[i] < min) {
-            min_value = array[minimums[i]];
+        value = array[ minimums[i] ];
+
+        if (value < min_value) {
+            min_value = value;
             min_index = i;
         }
     }
@@ -68,10 +70,10 @@ int get_next() {
     return min_value;
 }
 
+
 int main(int argc, char *argv[]) {
     int i;
-    //int error_count = 0;
-    //int partition_with_key = -1;
+    int *sorted_array;
     pthread_t *threads;
     struct timeval start_time, end_time;
     long int total_time;
@@ -83,50 +85,36 @@ int main(int argc, char *argv[]) {
     partition_size = array_size / array_partitions;
 
     array = malloc(sizeof(int) * array_size);
+    sorted_array = malloc(sizeof(int) * array_size);
     minimums = malloc(sizeof(int) * array_partitions);
     threads = malloc(sizeof(pthread_t) * array_partitions);
 
-    // limit random-ness of the integers to a reasonable domain
-    // that may actually be found once in a while
-    random_int_range = array_size * 2;
-
     srandom ( time(NULL) );
     populate_array();
-    //search_key = random() % random_int_range;
-
-    //printf("SEARCH KEY: %d\n", search_key);
 
     gettimeofday(&start_time, NULL);
 
-    for (i=1; i <= array_partitions; i++)
-        pthread_create(&threads[i-1], NULL, (void*) search_array, (void*) i);
+    for (i=0; i < array_partitions; i++)
+        pthread_create(&threads[i], NULL, (void*) sort_partition, (void*) i);
 
     for (i=0; i < array_partitions; i++)
         pthread_join(threads[i], NULL);
 
+    for (i=0; i < array_size; i++) {
+        sorted_array[i] = get_next();
+
+        if (i > 0)
+            check(sorted_array[i] >= sorted_array[i-1], "There was an error sorting the array");
+    }
+
     gettimeofday(&end_time, NULL);
     total_time = end_time.tv_usec - start_time.tv_usec;
 
-    //for (i=0; i < array_partitions; i++) {
-    //    printf("[Partition %d] Result: %d\n", i+1, minimums[i]);
-    // 
-    //    if (minimums[i] != -1) {
-    //        if (partition_with_key == -1)
-    //            partition_with_key = i+1;
-    //        else
-    //            error_count += 1;
-    //    }
-    //}
-
-    //if (partition_with_key != -1) {
-    //    printf("\nSearch Key found in partition %d at index %d\n", partition_with_key, minimums[partition_with_key-1]);
-    //    printf("Index contents: %d\n", array[ minimums[partition_with_key-1] ]);
-    //    printf("Errors: %d\n", error_count);
-    //}
-
-    printf("\nTime: %ld micro-seconds\n", total_time);
+    puts("Sort was successful.");
+    printf("Time: %ld micro-seconds\n", total_time);
 
     free(array);
+    free(sorted_array);
     free(minimums);
     free(threads);
 
