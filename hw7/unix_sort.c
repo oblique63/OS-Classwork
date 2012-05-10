@@ -21,8 +21,6 @@ void check(int expression, char *message) {
 }
 
 void populate_array() {
-    // limit random-ness of the integers to a reasonable domain
-    // that may actually be found once in a while
     int random_int_range = array_size * 2;
     int i;
 
@@ -56,13 +54,14 @@ void sort_partition(void *current_partition_index) {
 int get_next() {
     int min_value = minimums[0];
     int min_index = 0;
-    int value = -1;
-    int i;
+    int value = 0;
+    int i, max_partition_index;
 
     for (i = 1; i < array_partitions; i++) {
         value = array[ minimums[i] ];
+        max_partition_index = ((i+1) * partition_size) - 1;
 
-        if (value < min_value) {
+        if (value < min_value && minimums[i] < max_partition_index) {
             min_value = value;
             min_index = i;
         }
@@ -72,6 +71,7 @@ int get_next() {
     return min_value;
 }
 
+// Returns elapsed time in micro-seconds
 int time_difference (struct timeval start_time, struct timeval end_time) {
     if (end_time.tv_usec < start_time.tv_usec) {
         int nsec = (start_time.tv_usec - end_time.tv_usec) / 1000000 + 1;
@@ -87,6 +87,7 @@ int time_difference (struct timeval start_time, struct timeval end_time) {
 
     return end_time.tv_usec - start_time.tv_usec;
 }
+
 
 int main(int argc, char *argv[]) {
     int i;

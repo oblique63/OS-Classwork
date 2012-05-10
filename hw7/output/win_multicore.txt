@@ -1,0 +1,15 @@
+> win_sort 18 0
+Sort was successful.
+Time: 142432703 micro-seconds
+
+> win_sort 18 1
+Sort was successful.
+Time: 64851097 micro-seconds
+
+> win_sort 18 2
+Sort was successful.
+Time: 15683104 micro-seconds
+
+> win_sort 18 3
+Sort was successful.
+Time: 7024778 micro-seconds
