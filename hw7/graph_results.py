@@ -8,14 +8,14 @@ win_single = csv2rec('output/csv/win_singlecore.csv', delimiter=',')
 win_multi = csv2rec('output/csv/win_multicore.csv', delimiter=',')
 
 # Page Faults vs Number of Frames
-#plt.yscale('log', basey=2)
 
+#plt.yscale('log', basey=2)
 plt.xlabel("Threads")
 plt.ylabel("Time (micro-seconds)")
 
 plt.title("Unix Single-core")
 plt.plot(unix_single.threads, unix_single.time, color='g', linestyle='-', marker='o')
-plt.savefig('output/graphs/unix_singlecore_graph')
+plt.savefig('output/graphs/unix_singlecore')
 plt.close()
 
 #plt.yscale('log', basey=2)
@@ -24,7 +24,7 @@ plt.ylabel("Time (micro-seconds)")
 
 plt.title("Unix Dual-core")
 plt.plot(unix_multi.threads, unix_multi.time, color='r', linestyle='-', marker='o')
-plt.savefig('output/graphs/unix_multicore_graph')
+plt.savefig('output/graphs/unix_multicore')
 plt.close()
 
 #plt.yscale('log', basey=2)
@@ -33,7 +33,7 @@ plt.ylabel("Time (micro-seconds)")
 
 plt.title("Windows Single-core")
 plt.plot(win_single.threads, win_single.time, color='b', linestyle='-', marker='o')
-plt.savefig('output/graphs/win_singlecore_graph')
+plt.savefig('output/graphs/win_singlecore')
 plt.close()
 
 #plt.yscale('log', basey=2)
@@ -42,5 +42,5 @@ plt.ylabel("Time (micro-seconds)")
 
 plt.title("Windows Dual-core")
 plt.plot(win_multi.threads, win_multi.time, color='y', linestyle='-', marker='o')
-plt.savefig('output/graphs/win_multicore_graph')
+plt.savefig('output/graphs/win_multicore')
 plt.close()

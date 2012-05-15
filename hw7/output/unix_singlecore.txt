@@ -1,18 +1,20 @@
+%comment{The program successfully finished executing for every trial,}
+%comment{demonstrating that the array did in fact get sorted.}
 $ ./unix_sort 18 0
 Sort was successful.
-Time: 396417 micro-seconds
+Time: 996590 micro-seconds
 
 
 $ ./unix_sort 18 1
 Sort was successful.
-Time: 870921 micro-seconds
+Time: 859857 micro-seconds
 
 
 $ ./unix_sort 18 2
 Sort was successful.
-Time: 310619 micro-seconds
+Time: 264755 micro-seconds
 
 
 $ ./unix_sort 18 3
 Sort was successful.
-Time: 828213 micro-seconds
+Time: 345964 micro-seconds   %comment{<-- The single-core machine noticeably struggles running 8 concurrent threads}

@@ -47,14 +47,12 @@
 
 %---{ Main Content }--------------------------------------------------------------------
 \section*{Assignment Description}
-%For this assignment, we were to explore concurrency+parallelism using single and multiple core environments, through the monitoring 
-%of performance when running concurrent programs. Our task was to implement a multi-threaded searching algorithm that partitions a
-%large data set into a specified number of chunks, and searches them concurrently for a search key.  We then had to measure the performance
-%of the algorithm in both Windows and Unix environments with Single and Multiple CPU cores.  The focus of the monitoring was to compare
-%the advantages of running concurrent code in a parallel multi-core environment, as opposed to a single-core environment. To aid in this
-%comparison, we graphed the performances of all the different systems as functions of the program's number of threads, versus the time
-%they took to complete. The results supported the notion that multiple parallel processor systems are more efficient at executing concurrent 
-%code than single core systems.
+Similar to our last project, this assignment was centered around the performance comparison of concurrent/parallel programs running 
+on single and multi-core (in my case, Dual-core) unix/windows systems. Instead of searching however, we were to concurrently sort the 
+different partitions of the array using the Insertion Sort algorithm, and retrieve the final sorted results dynamically using a 
+\texttt{get\_next} function that incrementally retrieved the minimum of the smallest values from each of the sorted partitions. We were 
+then to graph the results of running these programs on single and multi-core systems, again to visually compare the benefits of being able 
+to run concurrent tasks in parallel. 
 
  
 This code has been tested to work under \textsl{Windows}, \textsl{Gentoo Linux}, and \textsl{Mac OSX}.
@@ -64,26 +62,31 @@ And the graphs for the outputs of the different systems are located under \textb
 
 
 \section*{Design \& Implementation}
-%The design of the program is fairly simple and straightforward; I wrote the implementations just as they ere outlined in the Pseudocode.
-%The threads each search a separate partition of the data set, and store their results in another array, which is then searched for
-%errors as it is being output to the user. In Unix there wasn't much trouble getting the algorithm to run and yield it's performance 
-%results as expected, but for the Windows implementation however, there wasn't a straightforward way to truly accurately measure time in 
-%microseconds with the Win32 API for the performance measurement portion of the assignment. Instead, the API provides access to the CPU's 
-%internal clock counter, which is what I used to then extrapolate a simple approximation of the algorithm's elapsed time in microseconds.  
-%Another obstacle with the Windows implementation was the limited range of the platform's \texttt{rand()} function, which is prone to causing 
-%many 'error' results with duplicate keys at the array sizes we were dealing with. The array's size of $2^{18}$ was roughly an order of magnitude 
-%larger than the largest value produced by the \texttt{rand()} function, so in order to minimize the possibility of errors while still maintaining 
-%a reasonable chance for the array to contain the search key, I multiplied the results of two calls to \texttt{rand()} together, and restricted 
-%their domain to twice the size of the array; i.e. 2($2^{18}$).
+The design of these programs is rather simple, and fully outlined in the Pseudocode provided. The partitions are sorted just as their
+respective threads are spawned, and then once all the partitions are sorted, the parent thread regains control and starts filling up
+a new \texttt{sorted\_array} iteratively, using consecutive calls to the \texttt{get\_next} function. While filling up the \texttt{sorted\_array},
+each value is passed through a custom assertion function to ensure that the values produced are in-fact sorted in non-decreasing order; if
+the assertion check were to fail, the user is notified of the sorting error, and the program exits.  The \texttt{get\_next} functions similarly
+to the one provided in the original assignment prompt, with the minor exception that mines also checks to make sure that the indices being
+stored in the \texttt{minimums} array are valid for their respective partitions, so as to not accidentally step on the results of other 
+partitions, or receive an out-of-bounds exception.
 
 
 \section*{Results}
-As for the results of the performance tests, the single-core systems performed as expected, handling the algorithm with 1 thread better than with multiple threads, but the Windows single-core machine seemed to have experienced a noticeably higher spike when attempting to run 4 or more threads. Both of the multi-core tests were performed on Dual-core systems, and both performed about the same in handling multiple threads better than the single-core system.
+These programs were noticeably slower than the search-based counterparts we programmed in our last assignment, as expected; but it became apparent
+that sorting algorithms (like Insertion Sort) lend themselves to better scalability with more concurrent/parallel systems. Concurrency mimics
+the 'Divide and Conquer' method of problem solving, thus making each sub-problem smaller and quicker to solve. In the case of Insertion Sort,
+this is due to the partitions requiring significantly less shifting of values every time an insertion is needed, than if the sort were performed
+over the whole array.
+
+Overall, the Windows and Unix implementations performed rather similarly, but there seemed to be a larger performance discrepancy between the unix machines, 
+with the single-core one in particular showing clear signs of struggle handling multiple threads; while the windows version's single-core results were very 
+consistent with its dual-core results.
 
 
 \section*{Improvements}
 Like for the last assignment, I would switch to using a linked-list instead of the array for the generated values to improve memory usage. Additionally, instead of storing and keeping
-track of the entire sorted array at the end, I could switch to using a 2-item array for storing the \textsl{current} and \textsl{previous} values returned from the \texttt{get_next} function,
+track of the entire sorted array at the end, I could switch to using a 2-item array for storing the \textsl{current} and \textsl{previous} values returned from the \texttt{get\_next} function,
 which is all that should be needed to determine whether any of the values are not in sorted order; implementing this should cut down on memory usage a great deal.
 
 
@@ -126,7 +129,7 @@ main() {
     for (i = 0; i < array_size; i++) {
         sorted_array[i] = get_next();
 
-        assert(sorted_array[i] >= sorted_array[i-1], "ERROR: Array is not sorted right");
+        assert(sorted_array[i] >= sorted_array[i-1], "ERROR: Array was not sorted right");
     }
 }
 \end{verbatim}
@@ -138,10 +141,10 @@ main() {
 
 \append{III} {Unix Output}
 \filename{Single-core}
-\includeoutput{output/unix_sort_singlecore.txt}
+\includeoutput{output/unix_singlecore.txt}
 
 \filename{Multi-core}
-\includeoutput{output/unix_sort_multicore.txt}
+\includeoutput{output/unix_multicore.txt}
 
 %----{ Windows }--------------------------------------------------------------------------
 \append{IV} {Windows Source Code}
@@ -149,10 +152,10 @@ main() {
 
 \append{V} {Windows Output}
 \filename{Single-core}
-\includeoutput{output/win_sort_singlecore.txt}
+\includeoutput{output/win_singlecore.txt}
 
 \filename{Multi-core}
-\includeoutput{output/win_sort_multicore.txt}
+\includeoutput{output/win_multicore.txt}
 
 \append{VI} {Graphs}
 % Time (Y) vs # of Threads (x)

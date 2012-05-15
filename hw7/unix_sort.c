@@ -128,7 +128,6 @@ int main(int argc, char *argv[]) {
     total_time = time_difference(start_time, end_time);
 
     puts("Sort was successful.");
-    printf("Start: %ld    End: %ld\n", start_time.tv_usec, end_time.tv_usec);
     printf("Time: %ld micro-seconds\n", total_time);
 
     free(array);

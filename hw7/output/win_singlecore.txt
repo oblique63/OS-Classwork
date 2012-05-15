@@ -1,14 +1,20 @@
+%comment{The windows implementation had no noticeable peaks in its}
+%comment{performance, and improved predictably with the addition}
+%comment{of more threads}
 > win_sort 18 0
 Sort was successful.
 Time: 159437142 micro-seconds
+
 
 > win_sort 18 1
 Sort was successful.
 Time: 79228630 micro-seconds
 
+
 > win_sort 18 2
 Sort was successful.
 Time: 39271068 micro-seconds
+
 
 > win_sort 18 3
 Sort was successful.

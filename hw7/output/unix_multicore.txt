@@ -1,18 +1,20 @@
+%comment{The dual-core system experienced a very noticeable boost}
+%comment{in performance with the addition of more threads}
 $ ./unix_sort 18 0
 Sort was successful.
-Time: 131159 micro-seconds
+Time: 889714 micro-seconds
 
 
 $ ./unix_sort 18 1
 Sort was successful.
-Time: 473734 micro-seconds
+Time: 431031 micro-seconds  %comment{<-- over twice as fast as the single thread run}
 
 
 $ ./unix_sort 18 2
 Sort was successful.
-Time: 266852 micro-seconds
+Time: 422423 micro-seconds
 
 
 $ ./unix_sort 18 3
 Sort was successful.
-Time: 154344 micro-seconds
+Time: 264813 micro-seconds
